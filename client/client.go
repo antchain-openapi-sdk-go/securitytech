@@ -6,11 +6,12 @@ import (
 	util "github.com/alibabacloud-go/tea-utils/v2/service"
 	"github.com/alibabacloud-go/tea/tea"
 	antchainutil "github.com/antchain-openapi-sdk-go/antchain-util/service"
+	"io"
 )
 
-/**
- * Model for initing client
- */
+// Description:
+//
+// Model for initing client
 type Config struct {
 	// accesskey id
 	AccessKeyId *string `json:"accessKeyId,omitempty" xml:"accessKeyId,omitempty"`
@@ -19,26 +20,66 @@ type Config struct {
 	// security token
 	SecurityToken *string `json:"securityToken,omitempty" xml:"securityToken,omitempty"`
 	// http protocol
+	//
+	// example:
+	//
+	// http
 	Protocol *string `json:"protocol,omitempty" xml:"protocol,omitempty"`
 	// read timeout
+	//
+	// example:
+	//
+	// 10
 	ReadTimeout *int `json:"readTimeout,omitempty" xml:"readTimeout,omitempty"`
 	// connect timeout
+	//
+	// example:
+	//
+	// 10
 	ConnectTimeout *int `json:"connectTimeout,omitempty" xml:"connectTimeout,omitempty"`
 	// http proxy
+	//
+	// example:
+	//
+	// http://localhost
 	HttpProxy *string `json:"httpProxy,omitempty" xml:"httpProxy,omitempty"`
 	// https proxy
+	//
+	// example:
+	//
+	// https://localhost
 	HttpsProxy *string `json:"httpsProxy,omitempty" xml:"httpsProxy,omitempty"`
 	// endpoint
+	//
+	// example:
+	//
+	// cs.aliyuncs.com
 	Endpoint *string `json:"endpoint,omitempty" xml:"endpoint,omitempty"`
 	// proxy white list
+	//
+	// example:
+	//
+	// http://localhost
 	NoProxy *string `json:"noProxy,omitempty" xml:"noProxy,omitempty"`
 	// max idle conns
+	//
+	// example:
+	//
+	// 3
 	MaxIdleConns *int `json:"maxIdleConns,omitempty" xml:"maxIdleConns,omitempty"`
 	// user agent
+	//
+	// example:
+	//
+	// Alibabacloud/1
 	UserAgent *string `json:"userAgent,omitempty" xml:"userAgent,omitempty"`
 	// socks5 proxy
 	Socks5Proxy *string `json:"socks5Proxy,omitempty" xml:"socks5Proxy,omitempty"`
 	// socks5 network
+	//
+	// example:
+	//
+	// TCP
 	Socks5NetWork *string `json:"socks5NetWork,omitempty" xml:"socks5NetWork,omitempty"`
 	// 长链接最大空闲时长
 	MaxIdleTimeMillis *int `json:"maxIdleTimeMillis,omitempty" xml:"maxIdleTimeMillis,omitempty"`
@@ -148,11 +189,215 @@ func (s *Config) SetMaxRequestsPerHost(v int) *Config {
 	return s
 }
 
+// 商户入驻-省/市/区编码
+type MaoDistrictCode struct {
+	// 行政区划编码
+	// example:
+	//
+	// 行政区划编码
+	Code *string `json:"code,omitempty" xml:"code,omitempty" require:"true"`
+	// 行政区划名称
+	// example:
+	//
+	// 行政区划名称
+	Name *string `json:"name,omitempty" xml:"name,omitempty" require:"true"`
+}
+
+func (s MaoDistrictCode) String() string {
+	return tea.Prettify(s)
+}
+
+func (s MaoDistrictCode) GoString() string {
+	return s.String()
+}
+
+func (s *MaoDistrictCode) SetCode(v string) *MaoDistrictCode {
+	s.Code = &v
+	return s
+}
+
+func (s *MaoDistrictCode) SetName(v string) *MaoDistrictCode {
+	s.Name = &v
+	return s
+}
+
+// 商户入驻-执照有效期
+type MaoLicenseValidPeriod struct {
+	// 营业执照有效期-起
+	// example:
+	//
+	// 营业执照有效期-起
+	StartDate *string `json:"start_date,omitempty" xml:"start_date,omitempty"`
+	// 营业执照有效期-止
+	// example:
+	//
+	// 营业执照有效期-止
+	EndDate *string `json:"end_date,omitempty" xml:"end_date,omitempty"`
+}
+
+func (s MaoLicenseValidPeriod) String() string {
+	return tea.Prettify(s)
+}
+
+func (s MaoLicenseValidPeriod) GoString() string {
+	return s.String()
+}
+
+func (s *MaoLicenseValidPeriod) SetStartDate(v string) *MaoLicenseValidPeriod {
+	s.StartDate = &v
+	return s
+}
+
+func (s *MaoLicenseValidPeriod) SetEndDate(v string) *MaoLicenseValidPeriod {
+	s.EndDate = &v
+	return s
+}
+
+// 商户入驻联系人
+type MaoContact struct {
+	// 联系人姓名
+	// example:
+	//
+	// 联系人姓名
+	Name *string `json:"name,omitempty" xml:"name,omitempty" require:"true"`
+	// 联系人手机号
+	// example:
+	//
+	// 联系人手机号
+	Phone *string `json:"phone,omitempty" xml:"phone,omitempty" require:"true"`
+	// 联系人邮箱
+	// example:
+	//
+	// 联系人邮箱
+	Email *string `json:"email,omitempty" xml:"email,omitempty" require:"true"`
+	// 联系人身份证号
+	// example:
+	//
+	// 联系人身份证号
+	IdCard *string `json:"id_card,omitempty" xml:"id_card,omitempty"`
+	// 角色
+	// example:
+	//
+	// 角色
+	Role *string `json:"role,omitempty" xml:"role,omitempty"`
+}
+
+func (s MaoContact) String() string {
+	return tea.Prettify(s)
+}
+
+func (s MaoContact) GoString() string {
+	return s.String()
+}
+
+func (s *MaoContact) SetName(v string) *MaoContact {
+	s.Name = &v
+	return s
+}
+
+func (s *MaoContact) SetPhone(v string) *MaoContact {
+	s.Phone = &v
+	return s
+}
+
+func (s *MaoContact) SetEmail(v string) *MaoContact {
+	s.Email = &v
+	return s
+}
+
+func (s *MaoContact) SetIdCard(v string) *MaoContact {
+	s.IdCard = &v
+	return s
+}
+
+func (s *MaoContact) SetRole(v string) *MaoContact {
+	s.Role = &v
+	return s
+}
+
+// 商户入驻-图片
+type MaoImages struct {
+	// 营业执照
+	// example:
+	//
+	// 营业执照
+	BusinessLicense *string `json:"business_license,omitempty" xml:"business_license,omitempty" require:"true"`
+	// 门头照
+	// example:
+	//
+	// 门头照
+	Storefront *string `json:"storefront,omitempty" xml:"storefront,omitempty"`
+	// 环境照
+	// example:
+	//
+	// 环境照
+	Environment *string `json:"environment,omitempty" xml:"environment,omitempty"`
+	// 前台照
+	// example:
+	//
+	// 前台照
+	FrontDesk *string `json:"front_desk,omitempty" xml:"front_desk,omitempty"`
+	// 法人身份证人像面
+	// example:
+	//
+	// 法人身份证人像面
+	IdCardFront *string `json:"id_card_front,omitempty" xml:"id_card_front,omitempty"`
+	// 法人身份证国徽面
+	// example:
+	//
+	// 法人身份证国徽面
+	IdCardBack *string `json:"id_card_back,omitempty" xml:"id_card_back,omitempty"`
+}
+
+func (s MaoImages) String() string {
+	return tea.Prettify(s)
+}
+
+func (s MaoImages) GoString() string {
+	return s.String()
+}
+
+func (s *MaoImages) SetBusinessLicense(v string) *MaoImages {
+	s.BusinessLicense = &v
+	return s
+}
+
+func (s *MaoImages) SetStorefront(v string) *MaoImages {
+	s.Storefront = &v
+	return s
+}
+
+func (s *MaoImages) SetEnvironment(v string) *MaoImages {
+	s.Environment = &v
+	return s
+}
+
+func (s *MaoImages) SetFrontDesk(v string) *MaoImages {
+	s.FrontDesk = &v
+	return s
+}
+
+func (s *MaoImages) SetIdCardFront(v string) *MaoImages {
+	s.IdCardFront = &v
+	return s
+}
+
+func (s *MaoImages) SetIdCardBack(v string) *MaoImages {
+	s.IdCardBack = &v
+	return s
+}
+
 // 风险数据
 type RiskData struct {
 	// 模型/标签编号
+	// example:
+	//
+	// ·
 	ResultKey *string `json:"result_key,omitempty" xml:"result_key,omitempty" require:"true"`
 	// 模型分/标签值
+	// example:
+	//
+	// ·
 	ResultValue *string `json:"result_value,omitempty" xml:"result_value,omitempty" require:"true"`
 }
 
@@ -174,11 +419,253 @@ func (s *RiskData) SetResultValue(v string) *RiskData {
 	return s
 }
 
+// 行业资质
+type MaoQualification struct {
+	// 资质类型码
+	// example:
+	//
+	// 资质类型码
+	Key *string `json:"key,omitempty" xml:"key,omitempty"`
+	// 资质图片地址
+	// example:
+	//
+	// 资质图片地址
+	Url *string `json:"url,omitempty" xml:"url,omitempty"`
+}
+
+func (s MaoQualification) String() string {
+	return tea.Prettify(s)
+}
+
+func (s MaoQualification) GoString() string {
+	return s.String()
+}
+
+func (s *MaoQualification) SetKey(v string) *MaoQualification {
+	s.Key = &v
+	return s
+}
+
+func (s *MaoQualification) SetUrl(v string) *MaoQualification {
+	s.Url = &v
+	return s
+}
+
+// 商户入驻经营地址
+type MaoOperateAddress struct {
+	// 省
+	// example:
+	//
+	// undefined
+	Province *MaoDistrictCode `json:"province,omitempty" xml:"province,omitempty" require:"true"`
+	// 市
+	// example:
+	//
+	// undefined
+	City *MaoDistrictCode `json:"city,omitempty" xml:"city,omitempty" require:"true"`
+	// 区
+	// example:
+	//
+	// undefined
+	District *MaoDistrictCode `json:"district,omitempty" xml:"district,omitempty" require:"true"`
+	// 详细地址
+	// example:
+	//
+	// 详细地址
+	Address *string `json:"address,omitempty" xml:"address,omitempty" require:"true"`
+	// 经度
+	// example:
+	//
+	// 经度
+	Longitude *string `json:"longitude,omitempty" xml:"longitude,omitempty"`
+	// 纬度
+	// example:
+	//
+	// 纬度
+	Latitude *string `json:"latitude,omitempty" xml:"latitude,omitempty"`
+}
+
+func (s MaoOperateAddress) String() string {
+	return tea.Prettify(s)
+}
+
+func (s MaoOperateAddress) GoString() string {
+	return s.String()
+}
+
+func (s *MaoOperateAddress) SetProvince(v *MaoDistrictCode) *MaoOperateAddress {
+	s.Province = v
+	return s
+}
+
+func (s *MaoOperateAddress) SetCity(v *MaoDistrictCode) *MaoOperateAddress {
+	s.City = v
+	return s
+}
+
+func (s *MaoOperateAddress) SetDistrict(v *MaoDistrictCode) *MaoOperateAddress {
+	s.District = v
+	return s
+}
+
+func (s *MaoOperateAddress) SetAddress(v string) *MaoOperateAddress {
+	s.Address = &v
+	return s
+}
+
+func (s *MaoOperateAddress) SetLongitude(v string) *MaoOperateAddress {
+	s.Longitude = &v
+	return s
+}
+
+func (s *MaoOperateAddress) SetLatitude(v string) *MaoOperateAddress {
+	s.Latitude = &v
+	return s
+}
+
+// 结算账户
+type MaoSettleAccount struct {
+	// 结算账户类型
+	// example:
+	//
+	// 结算账户类型
+	SettlementAccountType *string `json:"settlement_account_type,omitempty" xml:"settlement_account_type,omitempty" require:"true"`
+	// 收款账户户名
+	// example:
+	//
+	// 收款账户户名
+	SettlementAccountName *string `json:"settlement_account_name,omitempty" xml:"settlement_account_name,omitempty" require:"true"`
+	// 银行账户号
+	// example:
+	//
+	// 银行账户号
+	AccountNo *string `json:"account_no,omitempty" xml:"account_no,omitempty" require:"true"`
+	// 开户行总行名称
+	// example:
+	//
+	// 开户行总行名称
+	BankName *string `json:"bank_name,omitempty" xml:"bank_name,omitempty" require:"true"`
+	// 开户行总行编码
+	// example:
+	//
+	// 开户行总行编码
+	BankCode *string `json:"bank_code,omitempty" xml:"bank_code,omitempty"`
+	// 开户行支行名称
+	// example:
+	//
+	// 开户行支行名称
+	BankBranchName *string `json:"bank_branch_name,omitempty" xml:"bank_branch_name,omitempty"`
+	// 开户支行编码
+	// example:
+	//
+	// 开户支行编码
+	BankBranchCode *string `json:"bank_branch_code,omitempty" xml:"bank_branch_code,omitempty"`
+	// 开户行所在省
+	// example:
+	//
+	// 开户行所在省
+	BankProvince *string `json:"bank_province,omitempty" xml:"bank_province,omitempty" require:"true"`
+	// 开户行所在市
+	// example:
+	//
+	// 开户行所在市
+	BankCity *string `json:"bank_city,omitempty" xml:"bank_city,omitempty" require:"true"`
+	// 银行卡照片 URL
+	// example:
+	//
+	// 银行卡照片 URL
+	BankCardImage *string `json:"bank_card_image,omitempty" xml:"bank_card_image,omitempty"`
+	// 开户许可证照片 URL
+	// example:
+	//
+	// 开户许可证照片 URL
+	OpenPermitImage *string `json:"open_permit_image,omitempty" xml:"open_permit_image,omitempty"`
+	// 银联号
+	// example:
+	//
+	// 银联号
+	UnionpayNumber *string `json:"unionpay_number,omitempty" xml:"unionpay_number,omitempty"`
+}
+
+func (s MaoSettleAccount) String() string {
+	return tea.Prettify(s)
+}
+
+func (s MaoSettleAccount) GoString() string {
+	return s.String()
+}
+
+func (s *MaoSettleAccount) SetSettlementAccountType(v string) *MaoSettleAccount {
+	s.SettlementAccountType = &v
+	return s
+}
+
+func (s *MaoSettleAccount) SetSettlementAccountName(v string) *MaoSettleAccount {
+	s.SettlementAccountName = &v
+	return s
+}
+
+func (s *MaoSettleAccount) SetAccountNo(v string) *MaoSettleAccount {
+	s.AccountNo = &v
+	return s
+}
+
+func (s *MaoSettleAccount) SetBankName(v string) *MaoSettleAccount {
+	s.BankName = &v
+	return s
+}
+
+func (s *MaoSettleAccount) SetBankCode(v string) *MaoSettleAccount {
+	s.BankCode = &v
+	return s
+}
+
+func (s *MaoSettleAccount) SetBankBranchName(v string) *MaoSettleAccount {
+	s.BankBranchName = &v
+	return s
+}
+
+func (s *MaoSettleAccount) SetBankBranchCode(v string) *MaoSettleAccount {
+	s.BankBranchCode = &v
+	return s
+}
+
+func (s *MaoSettleAccount) SetBankProvince(v string) *MaoSettleAccount {
+	s.BankProvince = &v
+	return s
+}
+
+func (s *MaoSettleAccount) SetBankCity(v string) *MaoSettleAccount {
+	s.BankCity = &v
+	return s
+}
+
+func (s *MaoSettleAccount) SetBankCardImage(v string) *MaoSettleAccount {
+	s.BankCardImage = &v
+	return s
+}
+
+func (s *MaoSettleAccount) SetOpenPermitImage(v string) *MaoSettleAccount {
+	s.OpenPermitImage = &v
+	return s
+}
+
+func (s *MaoSettleAccount) SetUnionpayNumber(v string) *MaoSettleAccount {
+	s.UnionpayNumber = &v
+	return s
+}
+
 // 两轮车一体机销售信息
 type SimSalesInfo struct {
 	// 销售对外业务id
+	// example:
+	//
+	//
 	SalesId *string `json:"sales_id,omitempty" xml:"sales_id,omitempty" require:"true"`
 	// 销售角色 法人:TWEV_STORE_MANAGER/销售:TWEV_SALES
+	// example:
+	//
+	// TWEV_STORE_MANAGER
 	SalesType *string `json:"sales_type,omitempty" xml:"sales_type,omitempty" require:"true"`
 }
 
@@ -203,13 +690,22 @@ func (s *SimSalesInfo) SetSalesType(v string) *SimSalesInfo {
 // 商品供应方信息
 type PoiMallPointSupplierInfo struct {
 	// 供应方名称
+	// example:
+	//
+	// 爱肯拿
 	SupplierName *string `json:"supplier_name,omitempty" xml:"supplier_name,omitempty"`
 	// 供应方类型
 	// 门店：STORE
 	// 平台：PLATFORM
 	// 供应商：SUPPLIER
+	// example:
+	//
+	// STORE
 	SupplierType *string `json:"supplier_type,omitempty" xml:"supplier_type,omitempty"`
 	// 供应方编码
+	// example:
+	//
+	// 0
 	SupplierCode *string `json:"supplier_code,omitempty" xml:"supplier_code,omitempty"`
 }
 
@@ -239,13 +735,22 @@ func (s *PoiMallPointSupplierInfo) SetSupplierCode(v string) *PoiMallPointSuppli
 // 积分商城商品供应方信息
 type PointSupplierInfo struct {
 	// 供应方名称
+	// example:
+	//
+	// 爱肯拿
 	SupplierName *string `json:"supplier_name,omitempty" xml:"supplier_name,omitempty"`
 	// 供应方类型：
 	// 门店：STORE
 	// 平台：PLATFORM
 	// 供应商：SUPPLIER
+	// example:
+	//
+	// STORE
 	SupplierType *string `json:"supplier_type,omitempty" xml:"supplier_type,omitempty"`
 	// 供应方编码
+	// example:
+	//
+	// 0
 	SupplierCode *string `json:"supplier_code,omitempty" xml:"supplier_code,omitempty"`
 }
 
@@ -275,6 +780,9 @@ func (s *PointSupplierInfo) SetSupplierCode(v string) *PointSupplierInfo {
 // ekyt响应头
 type ResponseHead struct {
 	// 请求唯一标识
+	// example:
+	//
+	// 91440300892305861T
 	RequestId *string `json:"request_id,omitempty" xml:"request_id,omitempty" require:"true"`
 }
 
@@ -291,11 +799,216 @@ func (s *ResponseHead) SetRequestId(v string) *ResponseHead {
 	return s
 }
 
+// 商户资产入驻商户信息
+type MaoMerchantInfo struct {
+	// 营业执照登记名称
+	// example:
+	//
+	// 营业执照登记名称
+	MerchantName *string `json:"merchant_name,omitempty" xml:"merchant_name,omitempty" require:"true"`
+	// 简称
+	// example:
+	//
+	// 简称
+	MerchantShortName *string `json:"merchant_short_name,omitempty" xml:"merchant_short_name,omitempty" require:"true"`
+	// 企业类型
+	// example:
+	//
+	// ENTERPRISE
+	EnterType *string `json:"enter_type,omitempty" xml:"enter_type,omitempty" require:"true"`
+	// 商户角色
+	// example:
+	//
+	// SI_STORE
+	MerchantRole *string `json:"merchant_role,omitempty" xml:"merchant_role,omitempty" require:"true"`
+	// 法人姓名
+	// example:
+	//
+	// 法人姓名
+	LegalPerson *string `json:"legal_person,omitempty" xml:"legal_person,omitempty" require:"true"`
+	// 法人身份证号
+	// example:
+	//
+	// 法人身份证号
+	LegalPersonIdCard *string `json:"legal_person_id_card,omitempty" xml:"legal_person_id_card,omitempty" require:"true"`
+	// 法人手机号
+	// example:
+	//
+	// 法人手机号
+	LegalPersonPhone *string `json:"legal_person_phone,omitempty" xml:"legal_person_phone,omitempty" require:"true"`
+	// 经营地址
+	// example:
+	//
+	// undefined
+	OperateAddress *MaoOperateAddress `json:"operate_address,omitempty" xml:"operate_address,omitempty" require:"true"`
+	// 图片
+	// example:
+	//
+	// undefined
+	Images *MaoImages `json:"images,omitempty" xml:"images,omitempty" require:"true"`
+	// 结算账户
+	// example:
+	//
+	// undefined
+	SettleAccount *MaoSettleAccount `json:"settle_account,omitempty" xml:"settle_account,omitempty" require:"true"`
+	// 联系人列表
+	// example:
+	//
+	// undefined
+	Contacts []*MaoContact `json:"contacts,omitempty" xml:"contacts,omitempty" require:"true" type:"Repeated"`
+	// 行业资质
+	// example:
+	//
+	// undefined
+	IndustryFields []*MaoQualification `json:"industry_fields,omitempty" xml:"industry_fields,omitempty" type:"Repeated"`
+	// 执照有效期
+	LicenseValidPeriod *MaoLicenseValidPeriod `json:"license_valid_period,omitempty" xml:"license_valid_period,omitempty"`
+	// 是否连锁企业
+	// example:
+	//
+	// 是否连锁企业
+	IsChain *string `json:"is_chain,omitempty" xml:"is_chain,omitempty"`
+	// 门店经营模式
+	// example:
+	//
+	// 门店经营模式
+	StoreType *string `json:"store_type,omitempty" xml:"store_type,omitempty"`
+	// 扩展字段
+	// example:
+	//
+	// 扩展字段
+	ExtraInfo *string `json:"extra_info,omitempty" xml:"extra_info,omitempty"`
+	// 门店经营范围
+	// example:
+	//
+	// 门店经营范围
+	BusinessScope *string `json:"business_scope,omitempty" xml:"business_scope,omitempty" require:"true"`
+	// 特殊行业许可证名称
+	// example:
+	//
+	// 特殊行业许可证名称
+	SpecialIndustryLicenseName *string `json:"special_industry_license_name,omitempty" xml:"special_industry_license_name,omitempty"`
+	// 特殊行业许可证有效期
+	// example:
+	//
+	// 特殊行业许可证有效期
+	SpecialIndustryLicenseValidPeriod *MaoLicenseValidPeriod `json:"special_industry_license_valid_period,omitempty" xml:"special_industry_license_valid_period,omitempty"`
+}
+
+func (s MaoMerchantInfo) String() string {
+	return tea.Prettify(s)
+}
+
+func (s MaoMerchantInfo) GoString() string {
+	return s.String()
+}
+
+func (s *MaoMerchantInfo) SetMerchantName(v string) *MaoMerchantInfo {
+	s.MerchantName = &v
+	return s
+}
+
+func (s *MaoMerchantInfo) SetMerchantShortName(v string) *MaoMerchantInfo {
+	s.MerchantShortName = &v
+	return s
+}
+
+func (s *MaoMerchantInfo) SetEnterType(v string) *MaoMerchantInfo {
+	s.EnterType = &v
+	return s
+}
+
+func (s *MaoMerchantInfo) SetMerchantRole(v string) *MaoMerchantInfo {
+	s.MerchantRole = &v
+	return s
+}
+
+func (s *MaoMerchantInfo) SetLegalPerson(v string) *MaoMerchantInfo {
+	s.LegalPerson = &v
+	return s
+}
+
+func (s *MaoMerchantInfo) SetLegalPersonIdCard(v string) *MaoMerchantInfo {
+	s.LegalPersonIdCard = &v
+	return s
+}
+
+func (s *MaoMerchantInfo) SetLegalPersonPhone(v string) *MaoMerchantInfo {
+	s.LegalPersonPhone = &v
+	return s
+}
+
+func (s *MaoMerchantInfo) SetOperateAddress(v *MaoOperateAddress) *MaoMerchantInfo {
+	s.OperateAddress = v
+	return s
+}
+
+func (s *MaoMerchantInfo) SetImages(v *MaoImages) *MaoMerchantInfo {
+	s.Images = v
+	return s
+}
+
+func (s *MaoMerchantInfo) SetSettleAccount(v *MaoSettleAccount) *MaoMerchantInfo {
+	s.SettleAccount = v
+	return s
+}
+
+func (s *MaoMerchantInfo) SetContacts(v []*MaoContact) *MaoMerchantInfo {
+	s.Contacts = v
+	return s
+}
+
+func (s *MaoMerchantInfo) SetIndustryFields(v []*MaoQualification) *MaoMerchantInfo {
+	s.IndustryFields = v
+	return s
+}
+
+func (s *MaoMerchantInfo) SetLicenseValidPeriod(v *MaoLicenseValidPeriod) *MaoMerchantInfo {
+	s.LicenseValidPeriod = v
+	return s
+}
+
+func (s *MaoMerchantInfo) SetIsChain(v string) *MaoMerchantInfo {
+	s.IsChain = &v
+	return s
+}
+
+func (s *MaoMerchantInfo) SetStoreType(v string) *MaoMerchantInfo {
+	s.StoreType = &v
+	return s
+}
+
+func (s *MaoMerchantInfo) SetExtraInfo(v string) *MaoMerchantInfo {
+	s.ExtraInfo = &v
+	return s
+}
+
+func (s *MaoMerchantInfo) SetBusinessScope(v string) *MaoMerchantInfo {
+	s.BusinessScope = &v
+	return s
+}
+
+func (s *MaoMerchantInfo) SetSpecialIndustryLicenseName(v string) *MaoMerchantInfo {
+	s.SpecialIndustryLicenseName = &v
+	return s
+}
+
+func (s *MaoMerchantInfo) SetSpecialIndustryLicenseValidPeriod(v *MaoLicenseValidPeriod) *MaoMerchantInfo {
+	s.SpecialIndustryLicenseValidPeriod = v
+	return s
+}
+
 // 时间
 type DurationInfo struct {
 	// 时长
+	// example:
+	//
+	// 12
 	Value *string `json:"value,omitempty" xml:"value,omitempty" require:"true"`
 	// 时间单位
+	// example:
+	//
+	// h
 	Unit *string `json:"unit,omitempty" xml:"unit,omitempty" require:"true"`
 }
 
@@ -320,6 +1033,9 @@ func (s *DurationInfo) SetUnit(v string) *DurationInfo {
 // spu图片信息
 type SpuPictureInfo struct {
 	// spu主图url
+	// example:
+	//
+	//
 	MainPic *string `json:"main_pic,omitempty" xml:"main_pic,omitempty" require:"true"`
 	// spu详情图片url
 	DetailPic []*string `json:"detail_pic,omitempty" xml:"detail_pic,omitempty" type:"Repeated"`
@@ -346,10 +1062,19 @@ func (s *SpuPictureInfo) SetDetailPic(v []*string) *SpuPictureInfo {
 // eKYT风险标签
 type RiskModel struct {
 	// 标签名称
+	// example:
+	//
+	// ekyt_risk_tag_100
 	ModelName *string `json:"model_name,omitempty" xml:"model_name,omitempty" require:"true"`
 	// 风险值
+	// example:
+	//
+	// 1
 	ModelValue *string `json:"model_value,omitempty" xml:"model_value,omitempty" require:"true"`
 	// 风险标签描述
+	// example:
+	//
+	// 中风险
 	ModelComment *string `json:"model_comment,omitempty" xml:"model_comment,omitempty" require:"true"`
 }
 
@@ -381,6 +1106,9 @@ type RiskResult struct {
 	// 数据列表
 	RiskData []*RiskData `json:"risk_data,omitempty" xml:"risk_data,omitempty" require:"true" type:"Repeated"`
 	// 解决方案编码
+	// example:
+	//
+	// ·
 	SolutionCode *string `json:"solution_code,omitempty" xml:"solution_code,omitempty" require:"true"`
 }
 
@@ -405,8 +1133,14 @@ func (s *RiskResult) SetSolutionCode(v string) *RiskResult {
 // 业务参数
 type BizParam struct {
 	// 参数类型枚举，mobile、cert、biz_license
+	// example:
+	//
+	// ·
 	ParamKey *string `json:"param_key,omitempty" xml:"param_key,omitempty" require:"true"`
 	// 值，如加密后的手机号
+	// example:
+	//
+	// ·
 	ParamValue *string `json:"param_value,omitempty" xml:"param_value,omitempty" require:"true"`
 }
 
@@ -430,6 +1164,9 @@ func (s *BizParam) SetParamValue(v string) *BizParam {
 
 // CctSubCheckLabel
 type CctSubCheckLabel struct {
+	// sub_label
+	// example:
+	//
 	// sub_label
 	SubLabel *string `json:"sub_label,omitempty" xml:"sub_label,omitempty" require:"true"`
 	// rate
@@ -457,15 +1194,33 @@ func (s *CctSubCheckLabel) SetRate(v int64) *CctSubCheckLabel {
 // 终端安全-Android加固-Response
 type FileTokenForUpload struct {
 	// .
+	// example:
+	//
+	// .
 	AccessId *string `json:"access_id,omitempty" xml:"access_id,omitempty" require:"true"`
+	// dir
+	// example:
+	//
 	// dir
 	Dir *string `json:"dir,omitempty" xml:"dir,omitempty" require:"true"`
 	// expire
+	// example:
+	//
+	// expire
 	Expire *string `json:"expire,omitempty" xml:"expire,omitempty" require:"true"`
+	// host
+	// example:
+	//
 	// host
 	Host *string `json:"host,omitempty" xml:"host,omitempty" require:"true"`
 	// policy
+	// example:
+	//
+	// policy
 	Policy *string `json:"policy,omitempty" xml:"policy,omitempty" require:"true"`
+	// signature
+	// example:
+	//
 	// signature
 	Signature *string `json:"signature,omitempty" xml:"signature,omitempty" require:"true"`
 }
@@ -511,23 +1266,53 @@ func (s *FileTokenForUpload) SetSignature(v string) *FileTokenForUpload {
 // result.resultData
 type DeviceRiskReportResultData struct {
 	// webrtc_url
+	// example:
+	//
+	// webrtc_url
 	WebrtcUrl *string `json:"webrtc_url,omitempty" xml:"webrtc_url,omitempty" require:"true"`
+	// a_dynamic_swi
+	// example:
+	//
 	// a_dynamic_swi
 	ADynamicSwi *string `json:"a_dynamic_swi,omitempty" xml:"a_dynamic_swi,omitempty" require:"true"`
 	// dynamic_interval
+	// example:
+	//
+	// dynamic_interval
 	DynamicInterval *string `json:"dynamic_interval,omitempty" xml:"dynamic_interval,omitempty" require:"true"`
+	// color
+	// example:
+	//
 	// color
 	Color *string `json:"color,omitempty" xml:"color,omitempty" require:"true"`
 	// os
+	// example:
+	//
+	// os
 	Os *string `json:"os,omitempty" xml:"os,omitempty" require:"true"`
+	// dynamic_cmd
+	// example:
+	//
 	// dynamic_cmd
 	DynamicCmd *string `json:"dynamic_cmd,omitempty" xml:"dynamic_cmd,omitempty" require:"true"`
 	// time_interval
+	// example:
+	//
+	// time_interval
 	TimeInterval *string `json:"time_interval,omitempty" xml:"time_interval,omitempty" require:"true"`
+	// dynamic_trace
+	// example:
+	//
 	// dynamic_trace
 	DynamicTrace *string `json:"dynamic_trace,omitempty" xml:"dynamic_trace,omitempty" require:"true"`
 	// dynamic_num
+	// example:
+	//
+	// dynamic_num
 	DynamicNum *string `json:"dynamic_num,omitempty" xml:"dynamic_num,omitempty" require:"true"`
+	// result_type
+	// example:
+	//
 	// result_type
 	ResultType *string `json:"result_type,omitempty" xml:"result_type,omitempty" require:"true"`
 }
@@ -590,13 +1375,51 @@ func (s *DeviceRiskReportResultData) SetResultType(v string) *DeviceRiskReportRe
 	return s
 }
 
+// 积分充值结果
+type PoiMallPointRechargeResult struct {
+	// 充值成功的ID列表
+	// example:
+	//
+	// undefined
+	SucceedRechargeIds []*string `json:"succeed_recharge_ids,omitempty" xml:"succeed_recharge_ids,omitempty" type:"Repeated"`
+	// 充值失败的ID列表（全部成功时为空）
+	// example:
+	//
+	// undefined
+	FailedRechargeIds []*string `json:"failed_recharge_ids,omitempty" xml:"failed_recharge_ids,omitempty" type:"Repeated"`
+}
+
+func (s PoiMallPointRechargeResult) String() string {
+	return tea.Prettify(s)
+}
+
+func (s PoiMallPointRechargeResult) GoString() string {
+	return s.String()
+}
+
+func (s *PoiMallPointRechargeResult) SetSucceedRechargeIds(v []*string) *PoiMallPointRechargeResult {
+	s.SucceedRechargeIds = v
+	return s
+}
+
+func (s *PoiMallPointRechargeResult) SetFailedRechargeIds(v []*string) *PoiMallPointRechargeResult {
+	s.FailedRechargeIds = v
+	return s
+}
+
 // 安卓加固HardeningTaskResponse
 type HardeningTaskResponse struct {
 	// 加固任务的 ID，后续用来轮询调用
+	// example:
+	//
+	// task_id
 	TaskId *string `json:"task_id,omitempty" xml:"task_id,omitempty" require:"true"`
 	// 加固任务的状态
 	Status *int64 `json:"status,omitempty" xml:"status,omitempty" require:"true"`
 	// 加固后 APK/ABB 的 MD5
+	// example:
+	//
+	// after_md_five
 	AfterMdFive *string `json:"after_md_five,omitempty" xml:"after_md_five,omitempty" require:"true"`
 	// 加固后 APK/ABB 的大小
 	AfterSize *int64 `json:"after_size,omitempty" xml:"after_size,omitempty" require:"true"`
@@ -633,10 +1456,19 @@ func (s *HardeningTaskResponse) SetAfterSize(v int64) *HardeningTaskResponse {
 // 收货信息
 type PoiMallPointReceiverInfo struct {
 	// 联系人名称
+	// example:
+	//
+	// 张三
 	ContactName *string `json:"contact_name,omitempty" xml:"contact_name,omitempty" require:"true"`
 	// 手机号
+	// example:
+	//
+	// 13000000000
 	Mobile *string `json:"mobile,omitempty" xml:"mobile,omitempty" require:"true"`
 	// 收货地址
+	// example:
+	//
+	// 上海市
 	Address *string `json:"address,omitempty" xml:"address,omitempty" require:"true"`
 }
 
@@ -666,20 +1498,44 @@ func (s *PoiMallPointReceiverInfo) SetAddress(v string) *PoiMallPointReceiverInf
 // 账户信息列表
 type PoiAccountInfo struct {
 	// 账户ID
+	// example:
+	//
+	// 0
 	AccountId *string `json:"account_id,omitempty" xml:"account_id,omitempty"`
 	// 用户已支出金额
+	// example:
+	//
+	// 0
 	ExpenseAmount *string `json:"expense_amount,omitempty" xml:"expense_amount,omitempty"`
 	// 商城已消费金额
+	// example:
+	//
+	// 0
 	ConsumeAmount *string `json:"consume_amount,omitempty" xml:"consume_amount,omitempty"`
 	// 商城已冻结金额
+	// example:
+	//
+	// 0
 	FrozenAmount *string `json:"frozen_amount,omitempty" xml:"frozen_amount,omitempty"`
 	// 是否逾期
+	// example:
+	//
+	// TRUE
 	Overdue *string `json:"overdue,omitempty" xml:"overdue,omitempty"`
 	// 已还金额
+	// example:
+	//
+	// 0
 	RepayAmount *string `json:"repay_amount,omitempty" xml:"repay_amount,omitempty"`
 	// 解约后剩余应还金额
+	// example:
+	//
+	// 0
 	RemainingAmount *string `json:"remaining_amount,omitempty" xml:"remaining_amount,omitempty"`
 	// 解约后退还用户金额
+	// example:
+	//
+	// 0
 	RefundAmountToUser *string `json:"refund_amount_to_user,omitempty" xml:"refund_amount_to_user,omitempty"`
 }
 
@@ -734,16 +1590,34 @@ func (s *PoiAccountInfo) SetRefundAmountToUser(v string) *PoiAccountInfo {
 // 车辆行程信息
 type TripInfo struct {
 	// tripList
+	// example:
+	//
+	// METL202004041220123456
 	TripId *string `json:"trip_id,omitempty" xml:"trip_id,omitempty" require:"true"`
 	// 开始时间
+	// example:
+	//
+	// 2000-10-10 00:00:00
 	StartTime *string `json:"start_time,omitempty" xml:"start_time,omitempty" pattern:"\\d{4}[-]\\d{1,2}[-]\\d{1,2}[T]\\d{2}:\\d{2}:\\d{2}([Z]|([\\.]\\d{1,9})?[\\+]\\d{2}[\\:]?\\d{2})"`
 	// 结束时间
+	// example:
+	//
+	// 2000-10-10 00:00:00
 	EndTime *string `json:"end_time,omitempty" xml:"end_time,omitempty" pattern:"\\d{4}[-]\\d{1,2}[-]\\d{1,2}[T]\\d{2}:\\d{2}:\\d{2}([Z]|([\\.]\\d{1,9})?[\\+]\\d{2}[\\:]?\\d{2})"`
 	// 起点位置
+	// example:
+	//
+	// 7FA1316252F6DDA22176ED13DBA4EF65
 	StartLocation *string `json:"start_location,omitempty" xml:"start_location,omitempty"`
 	// 终点位置
+	// example:
+	//
+	// 7FA1316252F6DDA22176ED13DBA4EF65
 	EndLocation *string `json:"end_location,omitempty" xml:"end_location,omitempty"`
 	// 行驶里程（km）
+	// example:
+	//
+	// 5
 	Mileage *string `json:"mileage,omitempty" xml:"mileage,omitempty"`
 }
 
@@ -788,10 +1662,19 @@ func (s *TripInfo) SetMileage(v string) *TripInfo {
 // 车辆gps轨迹点
 type SimCarLocationInfo struct {
 	// 定位时间
+	// example:
+	//
+	// 2025-12-26 17:07:00
 	LocationTime *string `json:"location_time,omitempty" xml:"location_time,omitempty" require:"true"`
 	// 经度
+	// example:
+	//
+	//
 	Longitude *string `json:"longitude,omitempty" xml:"longitude,omitempty" require:"true"`
 	// 纬度
+	// example:
+	//
+	//
 	Latitude *string `json:"latitude,omitempty" xml:"latitude,omitempty" require:"true"`
 }
 
@@ -821,20 +1704,44 @@ func (s *SimCarLocationInfo) SetLatitude(v string) *SimCarLocationInfo {
 // 积分账户信息
 type PointAccountInfo struct {
 	// 门店ID
+	// example:
+	//
+	// 0
 	StoreId *string `json:"store_id,omitempty" xml:"store_id,omitempty"`
 	// 账户ID
+	// example:
+	//
+	// 0
 	AccountId *string `json:"account_id,omitempty" xml:"account_id,omitempty"`
 	// 总积分
+	// example:
+	//
+	// 0
 	TotalPoint *string `json:"total_point,omitempty" xml:"total_point,omitempty"`
 	// 已充值积分
+	// example:
+	//
+	// 0
 	RechargedPoint *string `json:"recharged_point,omitempty" xml:"recharged_point,omitempty"`
 	// 可用积分
+	// example:
+	//
+	// 0
 	AvailablePoint *string `json:"available_point,omitempty" xml:"available_point,omitempty"`
 	// 冻结积分
+	// example:
+	//
+	// 0
 	FrozenPoint *string `json:"frozen_point,omitempty" xml:"frozen_point,omitempty"`
 	// 已消费积分
+	// example:
+	//
+	// 0
 	ConsumedPoint *string `json:"consumed_point,omitempty" xml:"consumed_point,omitempty"`
 	// 账户状态：ACTIVE-生效, INACTIVE-失效, FROZEN-逾期冻结, CANCEL-解约中
+	// example:
+	//
+	// ACTIVE
 	AccountStatus *string `json:"account_status,omitempty" xml:"account_status,omitempty"`
 }
 
@@ -908,8 +1815,14 @@ func (s *BizQueryParam) SetBizParams(v []*BizParam) *BizQueryParam {
 // 终端安全-Android应用加固-ClassMethodConfig
 type ClassMethodConfig struct {
 	// 加固类名
+	// example:
+	//
+	// class_name
 	ClassName *string `json:"class_name,omitempty" xml:"class_name,omitempty" require:"true"`
 	// 方法集合，使用英文逗号分隔
+	// example:
+	//
+	// methods
 	Methods *string `json:"methods,omitempty" xml:"methods,omitempty" require:"true"`
 }
 
@@ -934,24 +1847,54 @@ func (s *ClassMethodConfig) SetMethods(v string) *ClassMethodConfig {
 // 两轮车一体机订单信息
 type SimOrderInfo struct {
 	// 订单ID
+	// example:
+	//
+	//
 	OrderId *string `json:"order_id,omitempty" xml:"order_id,omitempty" require:"true"`
 	// 必填	销售id
+	// example:
+	//
+	//
 	SalesId *string `json:"sales_id,omitempty" xml:"sales_id,omitempty" require:"true"`
 	// 销售姓名
+	// example:
+	//
+	//
 	SalesName *string `json:"sales_name,omitempty" xml:"sales_name,omitempty" require:"true"`
 	// 车辆SN号
+	// example:
+	//
+	//
 	Sn *string `json:"sn,omitempty" xml:"sn,omitempty"`
 	// 车架号
+	// example:
+	//
+	//
 	FrameNo *string `json:"frame_no,omitempty" xml:"frame_no,omitempty"`
 	// 用户手机号
+	// example:
+	//
+	// 17796897555
 	MobileNo *string `json:"mobile_no,omitempty" xml:"mobile_no,omitempty"`
 	// 订单时间，格式yyyy-MM-dd HH:mm:ss
+	// example:
+	//
+	// 2025-01-01 00:00:00
 	OrderTime *string `json:"order_time,omitempty" xml:"order_time,omitempty" require:"true"`
 	// 支付类型，枚举值FULL（全额付款）, INSTALLMENT（分期付款）
+	// example:
+	//
+	// FULL
 	PaymentType *string `json:"payment_type,omitempty" xml:"payment_type,omitempty"`
 	// 支付时间，格式yyyy-MM-dd HH:mm:ss
+	// example:
+	//
+	// 2025-01-01 00:00:00
 	PaymentTime *string `json:"payment_time,omitempty" xml:"payment_time,omitempty"`
 	// 总金额，单位元
+	// example:
+	//
+	// 1000.00
 	TotalAmount *string `json:"total_amount,omitempty" xml:"total_amount,omitempty"`
 	// 订单状态，枚举值
 	// UNPAID（未支付），
@@ -959,18 +1902,39 @@ type SimOrderInfo struct {
 	// CANCEL（订单取消），
 	// PENDING（支付中），
 	// FAILED（支付失败）
+	// example:
+	//
+	// PAID
 	Status *string `json:"status,omitempty" xml:"status,omitempty" require:"true"`
 	// 车辆SKU名字
+	// example:
+	//
+	//
 	SkuName *string `json:"sku_name,omitempty" xml:"sku_name,omitempty"`
 	// 车型
+	// example:
+	//
+	//
 	VehicleModel *string `json:"vehicle_model,omitempty" xml:"vehicle_model,omitempty"`
 	// 颜色
+	// example:
+	//
+	//
 	Color *string `json:"color,omitempty" xml:"color,omitempty"`
 	// 配件信息，逗号分隔
+	// example:
+	//
+	//
 	Accessories *string `json:"accessories,omitempty" xml:"accessories,omitempty"`
 	// 图片json
+	// example:
+	//
+	//
 	Images *string `json:"images,omitempty" xml:"images,omitempty"`
 	// 拓展字段，json格式
+	// example:
+	//
+	// {}
 	ExtraInfo *string `json:"extra_info,omitempty" xml:"extra_info,omitempty"`
 }
 
@@ -1070,20 +2034,44 @@ func (s *SimOrderInfo) SetExtraInfo(v string) *SimOrderInfo {
 // 积分账户信息
 type PoiMallPointAccountInfo struct {
 	// 门店ID
+	// example:
+	//
+	// 0
 	StoreId *string `json:"store_id,omitempty" xml:"store_id,omitempty"`
 	// 账户ID
+	// example:
+	//
+	// 0
 	AccountId *string `json:"account_id,omitempty" xml:"account_id,omitempty"`
 	// 总积分
+	// example:
+	//
+	// 0
 	TotalPoint *string `json:"total_point,omitempty" xml:"total_point,omitempty"`
 	// 已充值积分
+	// example:
+	//
+	// 0
 	RechargedPoint *string `json:"recharged_point,omitempty" xml:"recharged_point,omitempty"`
 	// 可用积分
+	// example:
+	//
+	// 0
 	AvailablePoint *string `json:"available_point,omitempty" xml:"available_point,omitempty"`
 	// 冻结积分
+	// example:
+	//
+	// 0
 	FrozenPoint *string `json:"frozen_point,omitempty" xml:"frozen_point,omitempty"`
 	// 已消费积分
+	// example:
+	//
+	// 0
 	ConsumedPoint *string `json:"consumed_point,omitempty" xml:"consumed_point,omitempty"`
 	// 账户状态
+	// example:
+	//
+	// ACTIVE
 	AccountStatus *string `json:"account_status,omitempty" xml:"account_status,omitempty"`
 }
 
@@ -1138,16 +2126,34 @@ func (s *PoiMallPointAccountInfo) SetAccountStatus(v string) *PoiMallPointAccoun
 // 积分账户信息
 type AccountInfo struct {
 	// STRING	账户ID
+	// example:
+	//
+	// 0
 	AccountId *string `json:"account_id,omitempty" xml:"account_id,omitempty" require:"true"`
 	// 已消费金额
+	// example:
+	//
+	// 0
 	ConsumeAmount *string `json:"consume_amount,omitempty" xml:"consume_amount,omitempty"`
 	// 已还金额
+	// example:
+	//
+	// 0
 	RepayAmount *string `json:"repay_amount,omitempty" xml:"repay_amount,omitempty"`
 	// 解约后剩余应还金额
+	// example:
+	//
+	// 0
 	RemainingAmount *string `json:"remaining_amount,omitempty" xml:"remaining_amount,omitempty"`
 	// 可退还用户金额
+	// example:
+	//
+	// 0
 	RefundAmountToUser *string `json:"refund_amount_to_user,omitempty" xml:"refund_amount_to_user,omitempty"`
 	// 可退还资方金额
+	// example:
+	//
+	// 0
 	RefundAmountToInvestor *string `json:"refund_amount_to_investor,omitempty" xml:"refund_amount_to_investor,omitempty"`
 }
 
@@ -1189,27 +2195,189 @@ func (s *AccountInfo) SetRefundAmountToInvestor(v string) *AccountInfo {
 	return s
 }
 
+// 积分充值信息
+type PoiMallPointRechargeInfo struct {
+	// 充值唯一ID
+	// example:
+	//
+	// 0
+	RechargeId *string `json:"recharge_id,omitempty" xml:"recharge_id,omitempty" require:"true"`
+	// 支付宝小程序用户唯一ID
+	// example:
+	//
+	// 0
+	OpenId *string `json:"open_id,omitempty" xml:"open_id,omitempty" require:"true"`
+	// 门店ID
+	// example:
+	//
+	// 0
+	StoreId *string `json:"store_id,omitempty" xml:"store_id,omitempty" require:"true"`
+	// 分期主订单号
+	// example:
+	//
+	// 0
+	BizOrderNo *string `json:"biz_order_no,omitempty" xml:"biz_order_no,omitempty" require:"true"`
+	// 商城总余额
+	// example:
+	//
+	// 0
+	TotalMallAmount *string `json:"total_mall_amount,omitempty" xml:"total_mall_amount,omitempty" require:"true"`
+	// 积分换算系数
+	// example:
+	//
+	// 0
+	ExchangeRate *string `json:"exchange_rate,omitempty" xml:"exchange_rate,omitempty" require:"true"`
+	// 商城充值总期数
+	// example:
+	//
+	// 0
+	TotalPhase *string `json:"total_phase,omitempty" xml:"total_phase,omitempty" require:"true"`
+	// 当前期数编号
+	// example:
+	//
+	// 0
+	PhaseNo *string `json:"phase_no,omitempty" xml:"phase_no,omitempty" require:"true"`
+	// 当期充值金额
+	// example:
+	//
+	// 0
+	PhaseAmount *string `json:"phase_amount,omitempty" xml:"phase_amount,omitempty" require:"true"`
+	// 渠道Code
+	// example:
+	//
+	// TBJHF
+	ChannelCode *string `json:"channel_code,omitempty" xml:"channel_code,omitempty" require:"true"`
+	// 子渠道
+	// example:
+	//
+	// NYG
+	TrafficPlatform *string `json:"traffic_platform,omitempty" xml:"traffic_platform,omitempty" require:"true"`
+	// 充值来源
+	// example:
+	//
+	// DUBHE_MALL_INTEGRAL_RECHARG
+	PointSource *string `json:"point_source,omitempty" xml:"point_source,omitempty" require:"true"`
+}
+
+func (s PoiMallPointRechargeInfo) String() string {
+	return tea.Prettify(s)
+}
+
+func (s PoiMallPointRechargeInfo) GoString() string {
+	return s.String()
+}
+
+func (s *PoiMallPointRechargeInfo) SetRechargeId(v string) *PoiMallPointRechargeInfo {
+	s.RechargeId = &v
+	return s
+}
+
+func (s *PoiMallPointRechargeInfo) SetOpenId(v string) *PoiMallPointRechargeInfo {
+	s.OpenId = &v
+	return s
+}
+
+func (s *PoiMallPointRechargeInfo) SetStoreId(v string) *PoiMallPointRechargeInfo {
+	s.StoreId = &v
+	return s
+}
+
+func (s *PoiMallPointRechargeInfo) SetBizOrderNo(v string) *PoiMallPointRechargeInfo {
+	s.BizOrderNo = &v
+	return s
+}
+
+func (s *PoiMallPointRechargeInfo) SetTotalMallAmount(v string) *PoiMallPointRechargeInfo {
+	s.TotalMallAmount = &v
+	return s
+}
+
+func (s *PoiMallPointRechargeInfo) SetExchangeRate(v string) *PoiMallPointRechargeInfo {
+	s.ExchangeRate = &v
+	return s
+}
+
+func (s *PoiMallPointRechargeInfo) SetTotalPhase(v string) *PoiMallPointRechargeInfo {
+	s.TotalPhase = &v
+	return s
+}
+
+func (s *PoiMallPointRechargeInfo) SetPhaseNo(v string) *PoiMallPointRechargeInfo {
+	s.PhaseNo = &v
+	return s
+}
+
+func (s *PoiMallPointRechargeInfo) SetPhaseAmount(v string) *PoiMallPointRechargeInfo {
+	s.PhaseAmount = &v
+	return s
+}
+
+func (s *PoiMallPointRechargeInfo) SetChannelCode(v string) *PoiMallPointRechargeInfo {
+	s.ChannelCode = &v
+	return s
+}
+
+func (s *PoiMallPointRechargeInfo) SetTrafficPlatform(v string) *PoiMallPointRechargeInfo {
+	s.TrafficPlatform = &v
+	return s
+}
+
+func (s *PoiMallPointRechargeInfo) SetPointSource(v string) *PoiMallPointRechargeInfo {
+	s.PointSource = &v
+	return s
+}
+
 // 保单信息
 type InsureInfo struct {
 	// 保单时间
+	// example:
+	//
+	// 2023-04-23 12:00:01
 	ModifyTime *string `json:"modify_time,omitempty" xml:"modify_time,omitempty" require:"true"`
 	// 蚂蚁L5产品code
+	// example:
+	//
+	// base
 	ProductCode *string `json:"product_code,omitempty" xml:"product_code,omitempty" require:"true"`
 	// 保险产品code
+	// example:
+	//
+	// A
 	InsureProduct *string `json:"insure_product,omitempty" xml:"insure_product,omitempty" require:"true"`
 	// 保险产品价格
+	// example:
+	//
+	// 54
 	InsurePrice *string `json:"insure_price,omitempty" xml:"insure_price,omitempty" require:"true"`
 	// 保险品种
+	// example:
+	//
+	// 基础险
 	InsureType *string `json:"insure_type,omitempty" xml:"insure_type,omitempty" require:"true"`
 	// 付款方式
+	// example:
+	//
+	// 年付
 	PayType *string `json:"pay_type,omitempty" xml:"pay_type,omitempty" require:"true"`
 	// 保险期数
+	// example:
+	//
+	// 12
 	InsurePeriod *string `json:"insure_period,omitempty" xml:"insure_period,omitempty" require:"true"`
 	// 保单状态
+	// example:
+	//
+	// 生效中
 	PolicyStatus *string `json:"policy_status,omitempty" xml:"policy_status,omitempty" require:"true"`
 	// 操作类型
+	// example:
+	//
+	// 投保
 	OperateType *string `json:"operate_type,omitempty" xml:"operate_type,omitempty" require:"true"`
 	// 保司信用代码
+	// example:
+	//
+	// 91440300892305861T
 	InsureCompCreditNo *string `json:"insure_comp_credit_no,omitempty" xml:"insure_comp_credit_no,omitempty" require:"true"`
 }
 
@@ -1274,10 +2442,19 @@ func (s *InsureInfo) SetInsureCompCreditNo(v string) *InsureInfo {
 // 两轮车一体机车辆SPU
 type SimSpuInfo struct {
 	// SPU ID
+	// example:
+	//
+	//
 	SpuId *string `json:"spu_id,omitempty" xml:"spu_id,omitempty" require:"true"`
 	// spu名称
+	// example:
+	//
+	//
 	SpuName *string `json:"spu_name,omitempty" xml:"spu_name,omitempty" require:"true"`
 	// spu图片信息
+	// example:
+	//
+	//
 	SpuPictureInfo *SpuPictureInfo `json:"spu_picture_info,omitempty" xml:"spu_picture_info,omitempty" require:"true"`
 }
 
@@ -1307,26 +2484,56 @@ func (s *SimSpuInfo) SetSpuPictureInfo(v *SpuPictureInfo) *SimSpuInfo {
 // 行程详细信息
 type TripDetailInfo struct {
 	// 开始时间 时间戳
+	// example:
+	//
+	//
 	StartTime *int64 `json:"start_time,omitempty" xml:"start_time,omitempty" require:"true"`
 	// 结束时间 时间戳
+	// example:
+	//
+	//
 	EndTime *int64 `json:"end_time,omitempty" xml:"end_time,omitempty" require:"true"`
 	// 行程id
+	// example:
+	//
+	//
 	TripId *string `json:"trip_id,omitempty" xml:"trip_id,omitempty" require:"true"`
 	// 行驶里程
+	// example:
+	//
+	//
 	Mileage *string `json:"mileage,omitempty" xml:"mileage,omitempty" require:"true"`
 	// 时长
+	// example:
+	//
+	//
 	Duration *DurationInfo `json:"duration,omitempty" xml:"duration,omitempty" require:"true"`
 	// 最高速度
+	// example:
+	//
+	//
 	MaxSpeed *string `json:"max_speed,omitempty" xml:"max_speed,omitempty" require:"true"`
 	// 平均速度
+	// example:
+	//
+	//
 	AvgSpeed *string `json:"avg_speed,omitempty" xml:"avg_speed,omitempty" require:"true"`
 	// 开始地址
+	// example:
+	//
+	//
 	FirstAddress *string `json:"first_address,omitempty" xml:"first_address,omitempty" require:"true"`
 	// 结束地址
+	// example:
+	//
+	//
 	LastAddress *string `json:"last_address,omitempty" xml:"last_address,omitempty" require:"true"`
 	// 开始定位时间 时间戳
 	FirstLocationTime *int64 `json:"first_location_time,omitempty" xml:"first_location_time,omitempty" require:"true"`
 	// 最终定位时间 时间戳
+	// example:
+	//
+	//
 	LastLocationTime *int64 `json:"last_location_time,omitempty" xml:"last_location_time,omitempty" require:"true"`
 }
 
@@ -1396,14 +2603,29 @@ func (s *TripDetailInfo) SetLastLocationTime(v int64) *TripDetailInfo {
 // 冻结结果详情
 type PoiMallPointFreezeResult struct {
 	// 账户ID
+	// example:
+	//
+	// 0
 	AccountId *string `json:"account_id,omitempty" xml:"account_id,omitempty"`
 	// 本次冻结总积分
+	// example:
+	//
+	// 0
 	TotalFreezePoint *string `json:"total_freeze_point,omitempty" xml:"total_freeze_point,omitempty"`
 	// 冻结后剩余可用积分
+	// example:
+	//
+	// 0
 	AvailablePoint *string `json:"available_point,omitempty" xml:"available_point,omitempty"`
 	// 成功冻结的子订单数
+	// example:
+	//
+	// 0
 	FreezeOrderCount *string `json:"freeze_order_count,omitempty" xml:"freeze_order_count,omitempty"`
 	// 冻结失败的子订单ID列表
+	// example:
+	//
+	// undefined
 	FailedOrderIds []*string `json:"failed_order_ids,omitempty" xml:"failed_order_ids,omitempty" type:"Repeated"`
 }
 
@@ -1443,16 +2665,34 @@ func (s *PoiMallPointFreezeResult) SetFailedOrderIds(v []*string) *PoiMallPointF
 // 设备风险查询data
 type DeviceRiskResp struct {
 	// apdid
+	// example:
+	//
+	// .
 	Apdid *string `json:"apdid,omitempty" xml:"apdid,omitempty" require:"true"`
 	// apdid_token
+	// example:
+	//
+	// .
 	ApdidToken *string `json:"apdid_token,omitempty" xml:"apdid_token,omitempty" require:"true"`
 	// risk_level
+	// example:
+	//
+	// .
 	RiskLevel *int64 `json:"risk_level,omitempty" xml:"risk_level,omitempty" require:"true"`
 	// risk_desc
+	// example:
+	//
+	// .
 	RiskDesc *string `json:"risk_desc,omitempty" xml:"risk_desc,omitempty" require:"true"`
 	// sug_action
+	// example:
+	//
+	// .
 	SugAction *string `json:"sug_action,omitempty" xml:"sug_action,omitempty" require:"true"`
 	// risk_labels
+	// example:
+	//
+	// .
 	RiskLabels []*string `json:"risk_labels,omitempty" xml:"risk_labels,omitempty" require:"true" type:"Repeated"`
 }
 
@@ -1530,7 +2770,13 @@ func (s *Paginator) SetItems(v int64) *Paginator {
 // 内容安全请求体datamap
 type CctDataMap struct {
 	// text
+	// example:
+	//
+	// text
 	Text []*string `json:"text,omitempty" xml:"text,omitempty" type:"Repeated"`
+	// PICTURE
+	// example:
+	//
 	// PICTURE
 	Picture []*string `json:"picture,omitempty" xml:"picture,omitempty" type:"Repeated"`
 }
@@ -1556,14 +2802,29 @@ func (s *CctDataMap) SetPicture(v []*string) *CctDataMap {
 // 两轮车一体机门店信息
 type SimStoreInfo struct {
 	// 门店对外业务id
+	// example:
+	//
+	//
 	StoreId *string `json:"store_id,omitempty" xml:"store_id,omitempty" require:"true"`
 	// 品牌id
+	// example:
+	//
+	// HQS
 	BrandId *string `json:"brand_id,omitempty" xml:"brand_id,omitempty" require:"true"`
 	// 门店名称
+	// example:
+	//
+	//
 	StoreName *string `json:"store_name,omitempty" xml:"store_name,omitempty" require:"true"`
 	// 是否签约 true已签约/false未签约
+	// example:
+	//
+	// true, false
 	IsSign *bool `json:"is_sign,omitempty" xml:"is_sign,omitempty" require:"true"`
 	// 支付宝H5签约链接 未签约时非空
+	// example:
+	//
+	//
 	SignUrl *string `json:"sign_url,omitempty" xml:"sign_url,omitempty"`
 	// 销售信息
 	SalesInfo *SimSalesInfo `json:"sales_info,omitempty" xml:"sales_info,omitempty" require:"true"`
@@ -1610,24 +2871,51 @@ func (s *SimStoreInfo) SetSalesInfo(v *SimSalesInfo) *SimStoreInfo {
 // 司机签约信息列表
 type SignInfo struct {
 	// 司机证件号
+	// example:
+	//
+	// 310681200001017789
 	EmployeeCertNo *string `json:"employee_cert_no,omitempty" xml:"employee_cert_no,omitempty" require:"true"`
 	// 灵工卡号
+	// example:
+	//
+	// 111222190002309999
 	EmployeeCardNo *string `json:"employee_card_no,omitempty" xml:"employee_card_no,omitempty" require:"true"`
 	// 借贷专户ID，用于后续资金相关操作
+	// example:
+	//
+	// 111222190002309999
 	AccountBookId *string `json:"account_book_id,omitempty" xml:"account_book_id,omitempty" require:"true"`
 	// 签约状态，枚举值
 	// ● SIGNED：已签约【灵工卡状态正常，可入金出金】
 	// ● TERMINATED：已解约【不可入金出金】
+	// example:
+	//
+	// SIGNED
 	Status *string `json:"status,omitempty" xml:"status,omitempty" require:"true"`
 	// 签约时间 "yyyy-MM-dd HH:mm:ss"
+	// example:
+	//
+	// 2000-10-10 00:00:00
 	SignTime *string `json:"sign_time,omitempty" xml:"sign_time,omitempty"`
 	// 解约时间 "yyyy-MM-dd HH:mm:ss"
+	// example:
+	//
+	// 2000-10-10 00:00:00
 	TerminateTime *string `json:"terminate_time,omitempty" xml:"terminate_time,omitempty"`
 	// 签约协议生效时间
+	// example:
+	//
+	// 2000-10-10 00:00:00
 	EffectTime *string `json:"effect_time,omitempty" xml:"effect_time,omitempty" require:"true"`
 	// 签约协议解约时间
+	// example:
+	//
+	// 2000-10-10 00:00:00
 	ExpireTime *string `json:"expire_time,omitempty" xml:"expire_time,omitempty" require:"true"`
 	// 月租金额：单位为元
+	// example:
+	//
+	// 100
 	PaymentAmount *string `json:"payment_amount,omitempty" xml:"payment_amount,omitempty" require:"true"`
 }
 
@@ -1684,14 +2972,55 @@ func (s *SignInfo) SetPaymentAmount(v string) *SignInfo {
 	return s
 }
 
+// 商户入驻-市
+type MaoCity struct {
+	// 市编码
+	// example:
+	//
+	// 市编码
+	Code *string `json:"code,omitempty" xml:"code,omitempty" require:"true"`
+	// 市名称
+	// example:
+	//
+	// 市名称
+	Name *string `json:"name,omitempty" xml:"name,omitempty" require:"true"`
+}
+
+func (s MaoCity) String() string {
+	return tea.Prettify(s)
+}
+
+func (s MaoCity) GoString() string {
+	return s.String()
+}
+
+func (s *MaoCity) SetCode(v string) *MaoCity {
+	s.Code = &v
+	return s
+}
+
+func (s *MaoCity) SetName(v string) *MaoCity {
+	s.Name = &v
+	return s
+}
+
 // 内容安全response
 type CctDetectCheckLabel struct {
 	// label
+	// example:
+	//
+	// label
 	Label *string `json:"label,omitempty" xml:"label,omitempty" require:"true"`
+	// rate
+	// example:
+	//
 	// rate
 	Rate *int64 `json:"rate,omitempty" xml:"rate,omitempty" require:"true"`
 	// subLabels
 	SubLabels []*CctSubCheckLabel `json:"sub_labels,omitempty" xml:"sub_labels,omitempty" require:"true" type:"Repeated"`
+	// details
+	// example:
+	//
 	// details
 	Details *string `json:"details,omitempty" xml:"details,omitempty" require:"true"`
 }
@@ -1724,11 +3053,46 @@ func (s *CctDetectCheckLabel) SetDetails(v string) *CctDetectCheckLabel {
 	return s
 }
 
+// 商户入驻-省信息
+type MaoProvince struct {
+	// 省编码
+	// example:
+	//
+	// TBJHF
+	Code *string `json:"code,omitempty" xml:"code,omitempty" require:"true"`
+	// 省名称
+	// example:
+	//
+	// 省名称
+	Name *string `json:"name,omitempty" xml:"name,omitempty" require:"true"`
+}
+
+func (s MaoProvince) String() string {
+	return tea.Prettify(s)
+}
+
+func (s MaoProvince) GoString() string {
+	return s.String()
+}
+
+func (s *MaoProvince) SetCode(v string) *MaoProvince {
+	s.Code = &v
+	return s
+}
+
+func (s *MaoProvince) SetName(v string) *MaoProvince {
+	s.Name = &v
+	return s
+}
+
 // 风险评估响应结果
 type RiskAssessData struct {
 	// 响应头
 	Head *ResponseHead `json:"head,omitempty" xml:"head,omitempty" require:"true"`
 	// 风险评估结果
+	// example:
+	//
+	// A238EE36A9E096A97BF49C568EE7D0F4543043E21CE1A9831303EFDD
 	RiskResult *string `json:"risk_result,omitempty" xml:"risk_result,omitempty" require:"true"`
 }
 
@@ -1779,24 +3143,54 @@ func (s *ResultList) SetBizParams(v []*BizParam) *ResultList {
 // ETC行程信息
 type EtcTripInfo struct {
 	// 发行方扣款订单号
+	// example:
+	//
+	// 56789123456
 	OutOrderId *string `json:"out_order_id,omitempty" xml:"out_order_id,omitempty"`
 	// 行程开始时间
+	// example:
+	//
+	// 2018-10-10T10:10:00Z
 	TripStartTime *string `json:"trip_start_time,omitempty" xml:"trip_start_time,omitempty" pattern:"\\d{4}[-]\\d{1,2}[-]\\d{1,2}[T]\\d{2}:\\d{2}:\\d{2}([Z]|([\\.]\\d{1,9})?[\\+]\\d{2}[\\:]?\\d{2})"`
 	// 行程结束时间
+	// example:
+	//
+	// 2018-10-10T10:10:00Z
 	TripEndTime *string `json:"trip_end_time,omitempty" xml:"trip_end_time,omitempty" pattern:"\\d{4}[-]\\d{1,2}[-]\\d{1,2}[T]\\d{2}:\\d{2}:\\d{2}([Z]|([\\.]\\d{1,9})?[\\+]\\d{2}[\\:]?\\d{2})"`
 	// 1、收费站入口名称 2、格式为省份+收费站名，比如“黑龙江瓦盆窑西站”
+	// example:
+	//
+	// 黑龙江瓦盆窑西站
 	StartStationName *string `json:"start_station_name,omitempty" xml:"start_station_name,omitempty"`
 	// 1、收费站出口名称 2、格式为省份+收费站名，比如“黑龙江瓦盆窑西站”
+	// example:
+	//
+	// 黑龙江瓦盆窑西站
 	EndStationName *string `json:"end_station_name,omitempty" xml:"end_station_name,omitempty"`
 	// HIGHWAY_TYPE：高速交易场景类型，对应具体交易场景[ETC_HIGHWAY,ETC_HIGHWAY_OPEN] EXPAND_TYPE：拓展消费交易类型，对应具体交易场景 [ETC_PARKING,ETC_GAS,ETC_SERVICE_AREA,ETC_MUNICIPAL_SERVICE]
+	// example:
+	//
+	// HIGHWAY_TYPE
 	SubType *string `json:"sub_type,omitempty" xml:"sub_type,omitempty"`
 	// ETC_HIGHWAY：ETC封闭式高速公路； ETC_HIGHWAY_OPEN：ETC开放式高速公路； ETC_PARKING：ETC停车场； ETC_GAS：ETC加油站； ETC_SERVICE_AREA：ETC服务区； ETC_MUNICIPAL_SERVICE：ETC市政服务
+	// example:
+	//
+	// ETC_HIGHWAY
 	SubScene *string `json:"sub_scene,omitempty" xml:"sub_scene,omitempty"`
 	// 商户扣费的总金额：单位为元，精确到小数点后两位
+	// example:
+	//
+	// 4.50
 	TotalAmount *string `json:"total_amount,omitempty" xml:"total_amount,omitempty"`
 	// 行程id
+	// example:
+	//
+	// 230390390303
 	TripId *string `json:"trip_id,omitempty" xml:"trip_id,omitempty"`
 	// 交易单号
+	// example:
+	//
+	// 20230916988938938393
 	TradeNo *string `json:"trade_no,omitempty" xml:"trade_no,omitempty"`
 }
 
@@ -1861,12 +3255,24 @@ func (s *EtcTripInfo) SetTradeNo(v string) *EtcTripInfo {
 // 两轮车一体机营销活动信息
 type SimCampaignInfo struct {
 	// 营销活动id
+	// example:
+	//
+	//
 	CampaignId *string `json:"campaign_id,omitempty" xml:"campaign_id,omitempty" require:"true"`
 	// 营销活动名
+	// example:
+	//
+	//
 	CampaignName *string `json:"campaign_name,omitempty" xml:"campaign_name,omitempty" require:"true"`
 	// 营销图片
+	// example:
+	//
+	//
 	ImageUrl *string `json:"image_url,omitempty" xml:"image_url,omitempty" require:"true"`
 	// 营销活动内容
+	// example:
+	//
+	// {}
 	Content *string `json:"content,omitempty" xml:"content,omitempty" require:"true"`
 }
 
@@ -1901,18 +3307,39 @@ func (s *SimCampaignInfo) SetContent(v string) *SimCampaignInfo {
 // 终端安全-Android应用加固-RuntimeProtectConfig
 type RuntimeProtectConfig struct {
 	// 重打包,签名校验,AndroidManifest防篡改,签名文件保护,0为检测到风险退出,1不处理
+	// example:
+	//
+	// .
 	AntiSignature *int64 `json:"anti_signature,omitempty" xml:"anti_signature,omitempty" require:"true"`
 	// 防调试,0为检测到风险退出,1不处理
+	// example:
+	//
+	// .
 	AntiDebug *int64 `json:"anti_debug,omitempty" xml:"anti_debug,omitempty" require:"true"`
 	// 防hook,0为检测到风险退出,1不处理
+	// example:
+	//
+	// .
 	AntiHook *int64 `json:"anti_hook,omitempty" xml:"anti_hook,omitempty" require:"true"`
 	// 防注入,防内存dump,防内存数据修改,读取,0为检测到风险退出,1不处理
+	// example:
+	//
+	// .
 	AntiInject *int64 `json:"anti_inject,omitempty" xml:"anti_inject,omitempty" require:"true"`
 	// 模拟器检查,0为检测到风险退出,1不处理
+	// example:
+	//
+	// .
 	AntiEmulator *int64 `json:"anti_emulator,omitempty" xml:"anti_emulator,omitempty" require:"true"`
 	// 防root,0为检测到风险退出,1不处理
+	// example:
+	//
+	// .
 	AntiRoot *int64 `json:"anti_root,omitempty" xml:"anti_root,omitempty" require:"true"`
 	// 防多开软件运行,0为检测到风险退出,1不处理
+	// example:
+	//
+	// .
 	AntiMultiApp *int64 `json:"anti_multi_app,omitempty" xml:"anti_multi_app,omitempty" require:"true"`
 }
 
@@ -1962,12 +3389,24 @@ func (s *RuntimeProtectConfig) SetAntiMultiApp(v int64) *RuntimeProtectConfig {
 // 人脸盾结果
 type FaceShieldResult struct {
 	// 设备token
+	// example:
+	//
+	// uYxLZlL5YGpLvdwO5+4pyCkjgf3/FF4XxOqzrmG/XY+jyFilhgEAAA==
 	ApdidToken *string `json:"apdid_token,omitempty" xml:"apdid_token,omitempty" require:"true"`
 	// 风险等级，-1参数异常，0无风险，1-3表示低、中、高
+	// example:
+	//
+	// 3
 	RiskLevel *int64 `json:"risk_level,omitempty" xml:"risk_level,omitempty" require:"true"`
 	// 风险描述，对风险等级的补充
+	// example:
+	//
+	// 本次咨询设备风险水平很高,风险编号:10000010.8.0
 	RiskDesc *string `json:"risk_desc,omitempty" xml:"risk_desc,omitempty" require:"true"`
 	// 处理的建议，如PAAS
+	// example:
+	//
+	// 建议直接拦截
 	SugAction *string `json:"sug_action,omitempty" xml:"sug_action,omitempty" require:"true"`
 }
 
@@ -2002,16 +3441,34 @@ func (s *FaceShieldResult) SetSugAction(v string) *FaceShieldResult {
 // 订单信息
 type PoiMallPointOrderInfo struct {
 	// 订单号
+	// example:
+	//
+	// 0
 	OrderId *string `json:"order_id,omitempty" xml:"order_id,omitempty" require:"true"`
 	// 商品名称
+	// example:
+	//
+	// 猫粮
 	GoodsName *string `json:"goods_name,omitempty" xml:"goods_name,omitempty" require:"true"`
 	// 商品条码
+	// example:
+	//
+	// 0
 	GoodsNum *string `json:"goods_num,omitempty" xml:"goods_num,omitempty" require:"true"`
 	// 商品类型
+	// example:
+	//
+	// GOODS
 	GoodsType *string `json:"goods_type,omitempty" xml:"goods_type,omitempty" require:"true"`
 	// 商品积分
+	// example:
+	//
+	// 3
 	GoodsPoint *string `json:"goods_point,omitempty" xml:"goods_point,omitempty" require:"true"`
 	// 商品供应方信息
+	// example:
+	//
+	// undefined
 	SupplierInfo *PoiMallPointSupplierInfo `json:"supplier_info,omitempty" xml:"supplier_info,omitempty"`
 }
 
@@ -2056,10 +3513,19 @@ func (s *PoiMallPointOrderInfo) SetSupplierInfo(v *PoiMallPointSupplierInfo) *Po
 // eKYT人脸核身结果数据
 type FaceVerifyResultData struct {
 	// 请求唯一标识Id
+	// example:
+	//
+	// 111111111111111
 	RequestId *string `json:"request_id,omitempty" xml:"request_id,omitempty" require:"true"`
 	// 认证是否通过
+	// example:
+	//
+	// T、F 或 null
 	Passed *string `json:"passed,omitempty" xml:"passed,omitempty" require:"true"`
 	// faceOcclusion:面部遮挡信息；true为有面部遮挡，false为无面部遮挡
+	// example:
+	//
+	// "{"faceOcclusion":false}"
 	MaterialInfo *string `json:"material_info,omitempty" xml:"material_info,omitempty" require:"true"`
 }
 
@@ -2089,10 +3555,19 @@ func (s *FaceVerifyResultData) SetMaterialInfo(v string) *FaceVerifyResultData {
 // 光鉴智能凭证结构体
 type IdentityData struct {
 	// 风险等级，枚举值： 0：低风险（打扰率＞10%） 1：中风险（5%＜打扰率≤10%） 2：高风险（打扰率≤5%）
+	// example:
+	//
+	// 1
 	IsRisk *string `json:"is_risk,omitempty" xml:"is_risk,omitempty" require:"true"`
 	// 风险类型，枚举值及对应含义： ● PS：图片被PS篡改 ● SCREEN_PHOTO：屏幕翻拍 ● SCREENSHOT：截屏图片 ● COLOR_PRINT：彩打复印 ● WATERMARK：水印 ● FACE_SIMILAR：人脸相似 ● BACKGROUND_SIMILAR：背景相似 ● SIGNATURE_SIMILAR：证件手写签名相似 格式：以英文逗号分隔，如样例
+	// example:
+	//
+	// PS,SCREEN_PHOTO
 	RiskType *string `json:"risk_type,omitempty" xml:"risk_type,omitempty" require:"true"`
 	// 附加字段,json格式字符串
+	// example:
+	//
+	// { "ps_score": "0.0236", "screen_photo_score": "0.1839"}
 	ExtInfo *string `json:"ext_info,omitempty" xml:"ext_info,omitempty" require:"true"`
 }
 
@@ -2122,12 +3597,24 @@ func (s *IdentityData) SetExtInfo(v string) *IdentityData {
 // 行程统计数据
 type TripStatisticInfo struct {
 	// 总里程
+	// example:
+	//
+	//
 	TotalMileage *string `json:"total_mileage,omitempty" xml:"total_mileage,omitempty" require:"true"`
 	// 总时长
+	// example:
+	//
+	//
 	TotalDuration *DurationInfo `json:"total_duration,omitempty" xml:"total_duration,omitempty" require:"true"`
 	// 总条数
+	// example:
+	//
+	//
 	TotalCount *int64 `json:"total_count,omitempty" xml:"total_count,omitempty" require:"true"`
 	// 时间码
+	// example:
+	//
+	//
 	PeriodCode *int64 `json:"period_code,omitempty" xml:"period_code,omitempty" require:"true"`
 }
 
@@ -2159,33 +3646,130 @@ func (s *TripStatisticInfo) SetPeriodCode(v int64) *TripStatisticInfo {
 	return s
 }
 
+// 商户入驻-区
+type MaoDistrict struct {
+	// 区编码
+	// example:
+	//
+	// 区编码
+	Code *string `json:"code,omitempty" xml:"code,omitempty" require:"true"`
+	// 区名称
+	// example:
+	//
+	// 区名称
+	Name *string `json:"name,omitempty" xml:"name,omitempty" require:"true"`
+}
+
+func (s MaoDistrict) String() string {
+	return tea.Prettify(s)
+}
+
+func (s MaoDistrict) GoString() string {
+	return s.String()
+}
+
+func (s *MaoDistrict) SetCode(v string) *MaoDistrict {
+	s.Code = &v
+	return s
+}
+
+func (s *MaoDistrict) SetName(v string) *MaoDistrict {
+	s.Name = &v
+	return s
+}
+
+// usci+industry 组合列表
+type MaoUsciIndustryPair struct {
+	// 统一社会信用代码
+	// example:
+	//
+	// 统一社会信用代码
+	Usci *string `json:"usci,omitempty" xml:"usci,omitempty"`
+	// 行业类型
+	// example:
+	//
+	// 行业类型
+	Industry *string `json:"industry,omitempty" xml:"industry,omitempty"`
+}
+
+func (s MaoUsciIndustryPair) String() string {
+	return tea.Prettify(s)
+}
+
+func (s MaoUsciIndustryPair) GoString() string {
+	return s.String()
+}
+
+func (s *MaoUsciIndustryPair) SetUsci(v string) *MaoUsciIndustryPair {
+	s.Usci = &v
+	return s
+}
+
+func (s *MaoUsciIndustryPair) SetIndustry(v string) *MaoUsciIndustryPair {
+	s.Industry = &v
+	return s
+}
+
 // ETC车辆信息
 type EtcVehicleInfo struct {
 	// 车辆id
+	// example:
+	//
+	// 2039029939
 	VehicleId *string `json:"vehicle_id,omitempty" xml:"vehicle_id,omitempty" require:"true"`
 	// etc申请单号
+	// example:
+	//
+	// 20212424231413243
 	OrderId *string `json:"order_id,omitempty" xml:"order_id,omitempty" require:"true"`
 	// etc平台扣款协议号
+	// example:
+	//
+	// 20211232213232
 	BizAgreementNo *string `json:"biz_agreement_no,omitempty" xml:"biz_agreement_no,omitempty" require:"true"`
 	// etc申请单状态
 	// ORDER_CREATE:订单创建;ORDER_SYNCED:订单已同步;SUCCESS_ACTIVATE:订单已激活;UNMOUNTING:注销中;UNMOUNTED:已注销;
+	// example:
+	//
+	// ORDER_CREATE
 	OrderStatus *string `json:"order_status,omitempty" xml:"order_status,omitempty" require:"true"`
 	// 用户ETC设备OBU号，当order_status为SUCCESS_ACTIVATE及以后状态时，必选
+	// example:
+	//
+	// 32432def
 	DeviceNo *string `json:"device_no,omitempty" xml:"device_no,omitempty"`
 	// 代扣签约状态，当传入waybill_no且匹配到对应运单时，deduct_sign_status必选
 	// 待签约: WAIT_SIGN
 	// 已签约: SIGNED
 	// 已解约: UNSIGN
+	// example:
+	//
+	// WAIT_SIGN
 	DeductSignStatus *string `json:"deduct_sign_status,omitempty" xml:"deduct_sign_status,omitempty"`
 	// 设备首次激活时间
+	// example:
+	//
+	// 2018-10-10T10:10:00Z
 	FirstActivedTime *string `json:"first_actived_time,omitempty" xml:"first_actived_time,omitempty" pattern:"\\d{4}[-]\\d{1,2}[-]\\d{1,2}[T]\\d{2}:\\d{2}:\\d{2}([Z]|([\\.]\\d{1,9})?[\\+]\\d{2}[\\:]?\\d{2})"`
 	// 合约到期时间
+	// example:
+	//
+	// 2018-10-10T10:10:00Z
 	ServiceExp *string `json:"service_exp,omitempty" xml:"service_exp,omitempty" pattern:"\\d{4}[-]\\d{1,2}[-]\\d{1,2}[T]\\d{2}:\\d{2}:\\d{2}([Z]|([\\.]\\d{1,9})?[\\+]\\d{2}[\\:]?\\d{2})"`
 	// etc设备状态，USABLE-设备激活可用（可上高速正常使用）PENDING-设备激活挂起（限制消费） UNUSABLE-设备异常不可用
+	// example:
+	//
+	// USABLE
 	DeviceStatus *string `json:"device_status,omitempty" xml:"device_status,omitempty"`
 	// 设备状态明细，能清楚说明etc设备此时状态（/卡签注销/卡签挂失/已过户/维修中/黑名单/卡过期/欠费/标签脱落/设备报警/正常/ETC停用等）
+	// example:
+	//
+	// 卡签挂起
 	DeviceStatusDetail *string `json:"device_status_detail,omitempty" xml:"device_status_detail,omitempty"`
 	// 设备状态触发的具体时间
+	// example:
+	//
+	// 2018-10-10T10:10:00Z
 	DeviceBizTime *string `json:"device_biz_time,omitempty" xml:"device_biz_time,omitempty" pattern:"\\d{4}[-]\\d{1,2}[-]\\d{1,2}[T]\\d{2}:\\d{2}:\\d{2}([Z]|([\\.]\\d{1,9})?[\\+]\\d{2}[\\:]?\\d{2})"`
 }
 
@@ -2252,17 +3836,144 @@ func (s *EtcVehicleInfo) SetDeviceBizTime(v string) *EtcVehicleInfo {
 	return s
 }
 
+// 商户入驻-查询结果
+type MaoQueryMerchantResult struct {
+	// 商户号
+	// example:
+	//
+	// 商户号
+	MerchantId *string `json:"merchant_id,omitempty" xml:"merchant_id,omitempty"`
+	// 所属渠道租户
+	// example:
+	//
+	// 所属渠道租户
+	ChannelTenant *string `json:"channel_tenant,omitempty" xml:"channel_tenant,omitempty"`
+	// 统一社会信用代码
+	// example:
+	//
+	// 统一社会信用代码
+	Usci *string `json:"usci,omitempty" xml:"usci,omitempty"`
+	// 行业类型
+	// example:
+	//
+	// 行业类型
+	Industry *string `json:"industry,omitempty" xml:"industry,omitempty"`
+	// 二级类目
+	// example:
+	//
+	// 二级类目
+	SubCategory *string `json:"sub_category,omitempty" xml:"sub_category,omitempty"`
+	// 入驻场景
+	// example:
+	//
+	// 入驻场景
+	Scene *string `json:"scene,omitempty" xml:"scene,omitempty"`
+	// 申请单状态
+	// example:
+	//
+	// 申请单状态
+	ApplyStatus *string `json:"apply_status,omitempty" xml:"apply_status,omitempty"`
+	// 商户信息
+	// example:
+	//
+	// undefined
+	MerchantInfo *MaoMerchantInfo `json:"merchant_info,omitempty" xml:"merchant_info,omitempty"`
+	// 是否有在申请
+	// example:
+	//
+	// 是否有在申请
+	PendingApply *string `json:"pending_apply,omitempty" xml:"pending_apply,omitempty"`
+	// 入驻时间
+	// example:
+	//
+	// 入驻时间
+	OnboardingTime *string `json:"onboarding_time,omitempty" xml:"onboarding_time,omitempty"`
+}
+
+func (s MaoQueryMerchantResult) String() string {
+	return tea.Prettify(s)
+}
+
+func (s MaoQueryMerchantResult) GoString() string {
+	return s.String()
+}
+
+func (s *MaoQueryMerchantResult) SetMerchantId(v string) *MaoQueryMerchantResult {
+	s.MerchantId = &v
+	return s
+}
+
+func (s *MaoQueryMerchantResult) SetChannelTenant(v string) *MaoQueryMerchantResult {
+	s.ChannelTenant = &v
+	return s
+}
+
+func (s *MaoQueryMerchantResult) SetUsci(v string) *MaoQueryMerchantResult {
+	s.Usci = &v
+	return s
+}
+
+func (s *MaoQueryMerchantResult) SetIndustry(v string) *MaoQueryMerchantResult {
+	s.Industry = &v
+	return s
+}
+
+func (s *MaoQueryMerchantResult) SetSubCategory(v string) *MaoQueryMerchantResult {
+	s.SubCategory = &v
+	return s
+}
+
+func (s *MaoQueryMerchantResult) SetScene(v string) *MaoQueryMerchantResult {
+	s.Scene = &v
+	return s
+}
+
+func (s *MaoQueryMerchantResult) SetApplyStatus(v string) *MaoQueryMerchantResult {
+	s.ApplyStatus = &v
+	return s
+}
+
+func (s *MaoQueryMerchantResult) SetMerchantInfo(v *MaoMerchantInfo) *MaoQueryMerchantResult {
+	s.MerchantInfo = v
+	return s
+}
+
+func (s *MaoQueryMerchantResult) SetPendingApply(v string) *MaoQueryMerchantResult {
+	s.PendingApply = &v
+	return s
+}
+
+func (s *MaoQueryMerchantResult) SetOnboardingTime(v string) *MaoQueryMerchantResult {
+	s.OnboardingTime = &v
+	return s
+}
+
 // 扣减结果详情
 type PointDeductResult struct {
 	// 账户ID
+	// example:
+	//
+	// 0
 	AccountId *string `json:"account_id,omitempty" xml:"account_id,omitempty"`
 	// 本次扣减总积分
+	// example:
+	//
+	// 0
 	TotalDeductPoint *string `json:"total_deduct_point,omitempty" xml:"total_deduct_point,omitempty"`
 	// 账户累计已消费积分
+	// example:
+	//
+	// 0
 	ConsumedPoint *string `json:"consumed_point,omitempty" xml:"consumed_point,omitempty"`
 	// 成功扣减的子订单数
+	// example:
+	//
+	// 0
 	DeductOrderCount *string `json:"deduct_order_count,omitempty" xml:"deduct_order_count,omitempty"`
 	// 扣减失败的子订单ID列表（全部成功时为空）
+	// example:
+	//
+	// undefined
 	FailedOrderIds []*string `json:"failed_order_ids,omitempty" xml:"failed_order_ids,omitempty" type:"Repeated"`
 }
 
@@ -2302,20 +4013,44 @@ func (s *PointDeductResult) SetFailedOrderIds(v []*string) *PointDeductResult {
 // 车辆信息列表
 type CarInfoVO struct {
 	// 车辆型号
+	// example:
+	//
+	// E10R
 	CarModel *string `json:"car_model,omitempty" xml:"car_model,omitempty" require:"true"`
 	// 车辆颜色
+	// example:
+	//
+	// 红色
 	CarColor *string `json:"car_color,omitempty" xml:"car_color,omitempty" require:"true"`
 	// 车型编号
+	// example:
+	//
+	// AAA470106
 	ModelNo *string `json:"model_no,omitempty" xml:"model_no,omitempty" require:"true"`
 	// 车架号
+	// example:
+	//
+	// 220922507905000
 	FrameNo *string `json:"frame_no,omitempty" xml:"frame_no,omitempty" require:"true"`
 	// 设备ID
+	// example:
+	//
+	// FF9999995FF1020251009BE8B1B08855
 	Tuid *string `json:"tuid,omitempty" xml:"tuid,omitempty" require:"true"`
 	// tagId
+	// example:
+	//
+	// 4EA1FFFFFFFFFFFFFFFFFFFFE13D02862257
 	TagId *string `json:"tag_id,omitempty" xml:"tag_id,omitempty" require:"true"`
 	// 品牌ID
+	// example:
+	//
+	// SAIGE
 	BrandId *string `json:"brand_id,omitempty" xml:"brand_id,omitempty" require:"true"`
 	// 协议类型
+	// example:
+	//
+	// ble
 	ProtocolType *string `json:"protocol_type,omitempty" xml:"protocol_type,omitempty" require:"true"`
 }
 
@@ -2372,6 +4107,9 @@ type IifaaEkytResponse struct {
 	// 响应头
 	Head *ResponseHead `json:"head,omitempty" xml:"head,omitempty" require:"true"`
 	// 业务响应结果
+	// example:
+	//
+	// 126dncnceicncwuiooo
 	BizRes *string `json:"biz_res,omitempty" xml:"biz_res,omitempty" require:"true"`
 }
 
@@ -2396,8 +4134,14 @@ func (s *IifaaEkytResponse) SetBizRes(v string) *IifaaEkytResponse {
 // 行程轨迹点
 type TripPoint struct {
 	// 经度
+	// example:
+	//
+	// 121.503052
 	Longitude *string `json:"longitude,omitempty" xml:"longitude,omitempty"`
 	// 维度
+	// example:
+	//
+	// 31.218412
 	Latitude *string `json:"latitude,omitempty" xml:"latitude,omitempty"`
 }
 
@@ -2422,8 +4166,14 @@ func (s *TripPoint) SetLatitude(v string) *TripPoint {
 // eKYT可信签约录入准备数据
 type TrustSignInitData struct {
 	// 请求唯一标识Id
+	// example:
+	//
+	// 111111111111111
 	RequestId *string `json:"request_id,omitempty" xml:"request_id,omitempty" require:"true"`
 	// 签约秘钥
+	// example:
+	//
+	// g9y47yjs
 	SignUniqueId *string `json:"sign_unique_id,omitempty" xml:"sign_unique_id,omitempty" require:"true"`
 }
 
@@ -2448,34 +4198,79 @@ func (s *TrustSignInitData) SetSignUniqueId(v string) *TrustSignInitData {
 // 二轮车一体机车辆SKU
 type SimSkuInfo struct {
 	// sku对外id
+	// example:
+	//
+	//
 	SkuId *string `json:"sku_id,omitempty" xml:"sku_id,omitempty" require:"true"`
 	// sku名称
+	// example:
+	//
+	//
 	SkuName *string `json:"sku_name,omitempty" xml:"sku_name,omitempty" require:"true"`
 	// sku官方指导价：单位为元
+	// example:
+	//
+	// 1000.00
 	Price *string `json:"price,omitempty" xml:"price,omitempty" require:"true"`
 	// sku门店优惠价：单位为元
+	// example:
+	//
+	// 1000.00
 	StorePrice *string `json:"store_price,omitempty" xml:"store_price,omitempty" require:"true"`
 	// 车型
+	// example:
+	//
+	//
 	VehicleModel *string `json:"vehicle_model,omitempty" xml:"vehicle_model,omitempty" require:"true"`
 	// 续航里程
+	// example:
+	//
+	// -
 	RangeKm *string `json:"range_km,omitempty" xml:"range_km,omitempty" require:"true"`
 	// 关键词，逗号分隔
+	// example:
+	//
+	// A,B,C
 	Keywords *string `json:"keywords,omitempty" xml:"keywords,omitempty" require:"true"`
 	// 颜色，逗号分隔
+	// example:
+	//
+	// A,B,C
 	Colors *string `json:"colors,omitempty" xml:"colors,omitempty" require:"true"`
 	// 配件信息，逗号分隔
+	// example:
+	//
+	// A,B,C
 	Accessories *string `json:"accessories,omitempty" xml:"accessories,omitempty" require:"true"`
 	// 图片url json
+	// example:
+	//
+	// {}
 	Images *string `json:"images,omitempty" xml:"images,omitempty" require:"true"`
 	// 门店id
+	// example:
+	//
+	//
 	StoreId *string `json:"store_id,omitempty" xml:"store_id,omitempty" require:"true"`
 	// 车型描述
+	// example:
+	//
+	//
 	SkuDescription *string `json:"sku_description,omitempty" xml:"sku_description,omitempty"`
 	// sku价格配置开关 true开/false关
+	// example:
+	//
+	// true, false
 	PriceSwitch *bool `json:"price_switch,omitempty" xml:"price_switch,omitempty" require:"true"`
 	// sku价格配置范围 上限：单位元
+	// example:
+	//
+	//
 	PriceMax *string `json:"price_max,omitempty" xml:"price_max,omitempty"`
 	// sku价格配置范围 下限：单位元
+	// example:
+	//
+	//
 	PriceMin *string `json:"price_min,omitempty" xml:"price_min,omitempty"`
 }
 
@@ -2565,14 +4360,29 @@ func (s *SimSkuInfo) SetPriceMin(v string) *SimSkuInfo {
 // eKYT可信签约查询数据
 type TrustSignQueryData struct {
 	// 请求唯一标识Id
+	// example:
+	//
+	// 111111111111111
 	RequestId *string `json:"request_id,omitempty" xml:"request_id,omitempty" require:"true"`
 	// 订单状态
+	// example:
+	//
+	// SUCCESS
 	OrderStatus *string `json:"order_status,omitempty" xml:"order_status,omitempty" require:"true"`
 	// 签约方案码
+	// example:
+	//
+	// 011fda32a0046d0e8a8be6b94b367fb3
 	SolutionCode *string `json:"solution_code,omitempty" xml:"solution_code,omitempty" require:"true"`
 	// 创建时间
+	// example:
+	//
+	// 2024-03-20
 	GmtCreate *string `json:"gmt_create,omitempty" xml:"gmt_create,omitempty" require:"true"`
 	// 修改时间
+	// example:
+	//
+	// 2024-03-20
 	GmtModified *string `json:"gmt_modified,omitempty" xml:"gmt_modified,omitempty" require:"true"`
 	// 签约文件列表
 	FileList []*string `json:"file_list,omitempty" xml:"file_list,omitempty" require:"true" type:"Repeated"`
@@ -2619,12 +4429,24 @@ func (s *TrustSignQueryData) SetFileList(v []*string) *TrustSignQueryData {
 // 扣减结果详情
 type PoiMallPointDeductResult struct {
 	// 账户ID
+	// example:
+	//
+	// 0
 	AccountId *string `json:"account_id,omitempty" xml:"account_id,omitempty"`
 	// 本次扣减总积分
+	// example:
+	//
+	// 0
 	TotalDeductPoint *string `json:"total_deduct_point,omitempty" xml:"total_deduct_point,omitempty"`
 	// 账户累计已消费积分
+	// example:
+	//
+	// 0
 	ConsumedPoint *string `json:"consumed_point,omitempty" xml:"consumed_point,omitempty"`
 	// 成功扣减的子订单数
+	// example:
+	//
+	// 0
 	DeductOrderCount *string `json:"deduct_order_count,omitempty" xml:"deduct_order_count,omitempty"`
 	// 扣减失败的子订单ID列表
 	FailedOrderIds []*string `json:"failed_order_ids,omitempty" xml:"failed_order_ids,omitempty" type:"Repeated"`
@@ -2666,14 +4488,29 @@ func (s *PoiMallPointDeductResult) SetFailedOrderIds(v []*string) *PoiMallPointD
 // eKYT请求头
 type RequestHead struct {
 	// 请求唯一标识
+	// example:
+	//
+	// 91440300892305861T
 	RequestId *string `json:"request_id,omitempty" xml:"request_id,omitempty" require:"true"`
 	// 客户身份标识ID
+	// example:
+	//
+	// 91440300892305861T
 	SecretId *string `json:"secret_id,omitempty" xml:"secret_id,omitempty" require:"true"`
 	// 客户签约产品code
+	// example:
+	//
+	// RDDB04201PR
 	ProductCode *string `json:"product_code,omitempty" xml:"product_code,omitempty" require:"true"`
 	// response输出类型，默认json
+	// example:
+	//
+	// "tlv"
 	FormatType *string `json:"format_type,omitempty" xml:"format_type,omitempty"`
 	// false
+	// example:
+	//
+	// true, false
 	OnlineFlag *bool `json:"online_flag,omitempty" xml:"online_flag,omitempty"`
 }
 
@@ -2713,14 +4550,29 @@ func (s *RequestHead) SetOnlineFlag(v bool) *RequestHead {
 // 冻结结果详情（成功时返回）
 type PointFreezeResult struct {
 	// 账户ID
+	// example:
+	//
+	// 0
 	AccountId *string `json:"account_id,omitempty" xml:"account_id,omitempty"`
 	// 本次冻结总积分
+	// example:
+	//
+	// 0
 	TotalFreezePoint *string `json:"total_freeze_point,omitempty" xml:"total_freeze_point,omitempty"`
 	// 冻结后剩余可用积分
+	// example:
+	//
+	// 0
 	AvailablePoint *string `json:"available_point,omitempty" xml:"available_point,omitempty"`
 	// 成功冻结的子订单数
+	// example:
+	//
+	// 0
 	FreezeOrderCount *string `json:"freeze_order_count,omitempty" xml:"freeze_order_count,omitempty"`
 	// 冻结失败的子订单ID列表（全部成功时为空）
+	// example:
+	//
+	// undefined
 	FailedOrderIds []*string `json:"failed_order_ids,omitempty" xml:"failed_order_ids,omitempty" type:"Repeated"`
 }
 
@@ -2760,14 +4612,29 @@ func (s *PointFreezeResult) SetFailedOrderIds(v []*string) *PointFreezeResult {
 // 解冻结果详情（成功时返回）
 type PointUnfreezeResult struct {
 	// 账户ID
+	// example:
+	//
+	// 0
 	AccountId *string `json:"account_id,omitempty" xml:"account_id,omitempty"`
 	// 本次解冻总积分
+	// example:
+	//
+	// 0
 	TotalUnfreezePoint *string `json:"total_unfreeze_point,omitempty" xml:"total_unfreeze_point,omitempty"`
 	// 解冻后可用积分
+	// example:
+	//
+	// 0
 	AvailablePoint *string `json:"available_point,omitempty" xml:"available_point,omitempty"`
 	// 成功解冻的子订单数
+	// example:
+	//
+	// 0
 	UnfreezeOrderCount *string `json:"unfreeze_order_count,omitempty" xml:"unfreeze_order_count,omitempty"`
 	// 解冻失败的子订单ID列表（全部成功时为空）
+	// example:
+	//
+	// undefined
 	FailedOrderIds []*string `json:"failed_order_ids,omitempty" xml:"failed_order_ids,omitempty" type:"Repeated"`
 }
 
@@ -2807,8 +4674,14 @@ func (s *PointUnfreezeResult) SetFailedOrderIds(v []*string) *PointUnfreezeResul
 // 车队信息结构体
 type DcpInfo struct {
 	// 企业入驻租户ID
+	// example:
+	//
+	// LKPFALCN
 	DcpTenantId *string `json:"dcp_tenant_id,omitempty" xml:"dcp_tenant_id,omitempty" require:"true"`
 	// 企业名称
+	// example:
+	//
+	// 曹操出行
 	DcpName *string `json:"dcp_name,omitempty" xml:"dcp_name,omitempty" require:"true"`
 }
 
@@ -2833,8 +4706,14 @@ func (s *DcpInfo) SetDcpName(v string) *DcpInfo {
 // 设备风险咨询结果
 type RiskQueryData struct {
 	// 风险评分
+	// example:
+	//
+	// .
 	RiskScore *string `json:"risk_score,omitempty" xml:"risk_score,omitempty" require:"true"`
 	// 风险标签
+	// example:
+	//
+	// .
 	RiskLabels []*string `json:"risk_labels,omitempty" xml:"risk_labels,omitempty" require:"true" type:"Repeated"`
 }
 
@@ -2859,14 +4738,29 @@ func (s *RiskQueryData) SetRiskLabels(v []*string) *RiskQueryData {
 // 解冻结果详情
 type PoiMallPointUnfreezeResult struct {
 	// 账户ID
+	// example:
+	//
+	// 0
 	AccountId *string `json:"account_id,omitempty" xml:"account_id,omitempty"`
 	// 本次解冻总积分
+	// example:
+	//
+	// 0
 	TotalUnfreezePoint *string `json:"total_unfreeze_point,omitempty" xml:"total_unfreeze_point,omitempty"`
 	// 成功解冻的子订单数
+	// example:
+	//
+	// 0
 	AvailablePoint *string `json:"available_point,omitempty" xml:"available_point,omitempty"`
 	// 解冻失败的子订单ID列表
+	// example:
+	//
+	// undefined
 	FailedOrderIds []*string `json:"failed_order_ids,omitempty" xml:"failed_order_ids,omitempty" type:"Repeated"`
 	// 成功解冻的子订单数
+	// example:
+	//
+	// 0
 	UnfreezeOrderCount *string `json:"unfreeze_order_count,omitempty" xml:"unfreeze_order_count,omitempty"`
 }
 
@@ -2906,8 +4800,14 @@ func (s *PoiMallPointUnfreezeResult) SetUnfreezeOrderCount(v string) *PoiMallPoi
 // KeyValue对属性
 type KeyValueMap struct {
 	// key-value中的key
+	// example:
+	//
+	// key
 	Key *string `json:"key,omitempty" xml:"key,omitempty" maxLength:"100" minLength:"1"`
 	// key-value中的value
+	// example:
+	//
+	// value
 	Value *string `json:"value,omitempty" xml:"value,omitempty" maxLength:"1000" minLength:"1"`
 }
 
@@ -2932,10 +4832,19 @@ func (s *KeyValueMap) SetValue(v string) *KeyValueMap {
 // eKYT人脸核身初始化数据
 type FaceVerifyInitData struct {
 	// 请求唯一标识Id
+	// example:
+	//
+	// 111111111111111
 	RequestId *string `json:"request_id,omitempty" xml:"request_id,omitempty" require:"true"`
 	// 可信实人认证的唯一标识
+	// example:
+	//
+	// cwek23dw24geor89230hf2rw
 	CertifyId *string `json:"certify_id,omitempty" xml:"certify_id,omitempty" require:"true"`
 	// 认证流程入口 URL
+	// example:
+	//
+	// https://picker...
 	CertifyUrl *string `json:"certify_url,omitempty" xml:"certify_url,omitempty" require:"true"`
 }
 
@@ -2965,18 +4874,36 @@ func (s *FaceVerifyInitData) SetCertifyUrl(v string) *FaceVerifyInitData {
 // 积分商城订单信息
 type PointOrderInfo struct {
 	// 订单号（子）
+	// example:
+	//
+	// 0
 	OrderId *string `json:"order_id,omitempty" xml:"order_id,omitempty" require:"true"`
 	// 商品名称
+	// example:
+	//
+	// 猫粮
 	GoodsName *string `json:"goods_name,omitempty" xml:"goods_name,omitempty" require:"true"`
 	// 商品条码
+	// example:
+	//
+	// 0
 	GoodsNum *string `json:"goods_num,omitempty" xml:"goods_num,omitempty" require:"true"`
 	// 商品类型
 	// 货物：GOODS
 	// 服务：SERVICE
+	// example:
+	//
+	// GOODS
 	GoodsType *string `json:"goods_type,omitempty" xml:"goods_type,omitempty" require:"true"`
 	// 商品积分
+	// example:
+	//
+	// 0
 	GoodsPoint *string `json:"goods_point,omitempty" xml:"goods_point,omitempty" require:"true"`
 	// 商品供应方信息
+	// example:
+	//
+	// undefined
 	SupplierInfo *PointSupplierInfo `json:"supplier_info,omitempty" xml:"supplier_info,omitempty"`
 }
 
@@ -3021,10 +4948,19 @@ func (s *PointOrderInfo) SetSupplierInfo(v *PointSupplierInfo) *PointOrderInfo {
 // 商城收货信息
 type PointReceiverInfo struct {
 	// 联系人名称
+	// example:
+	//
+	// 张三
 	ContactName *string `json:"contact_name,omitempty" xml:"contact_name,omitempty" require:"true"`
 	// 手机号
+	// example:
+	//
+	// 13000000000
 	Mobile *string `json:"mobile,omitempty" xml:"mobile,omitempty" require:"true"`
 	// 收货地址
+	// example:
+	//
+	// 上海市
 	Address *string `json:"address,omitempty" xml:"address,omitempty" require:"true"`
 }
 
@@ -3054,8 +4990,14 @@ func (s *PointReceiverInfo) SetAddress(v string) *PointReceiverInfo {
 // 风险评估结果
 type RiskAssessResult struct {
 	// 风险评估结果
+	// example:
+	//
+	// 中风险
 	RiskValue *string `json:"risk_value,omitempty" xml:"risk_value,omitempty" require:"true"`
 	// 风险评估分数
+	// example:
+	//
+	// 90
 	RiskScore *string `json:"risk_score,omitempty" xml:"risk_score,omitempty" require:"true"`
 	// 风险评估标签
 	ModelInfos *RiskModel `json:"model_infos,omitempty" xml:"model_infos,omitempty" require:"true"`
@@ -3081,6 +5023,38 @@ func (s *RiskAssessResult) SetRiskScore(v string) *RiskAssessResult {
 
 func (s *RiskAssessResult) SetModelInfos(v *RiskModel) *RiskAssessResult {
 	s.ModelInfos = v
+	return s
+}
+
+// 键值对
+type XNameValuePair struct {
+	// 键名
+	// example:
+	//
+	// key
+	Name *string `json:"name,omitempty" xml:"name,omitempty" require:"true"`
+	// 键值
+	// example:
+	//
+	// value
+	Value *string `json:"value,omitempty" xml:"value,omitempty" require:"true"`
+}
+
+func (s XNameValuePair) String() string {
+	return tea.Prettify(s)
+}
+
+func (s XNameValuePair) GoString() string {
+	return s.String()
+}
+
+func (s *XNameValuePair) SetName(v string) *XNameValuePair {
+	s.Name = &v
+	return s
+}
+
+func (s *XNameValuePair) SetValue(v string) *XNameValuePair {
+	s.Value = &v
 	return s
 }
 
@@ -8632,26 +10606,8 @@ type RechargePoiMallpointRequest struct {
 	// OAuth模式下的授权token
 	AuthToken         *string `json:"auth_token,omitempty" xml:"auth_token,omitempty"`
 	ProductInstanceId *string `json:"product_instance_id,omitempty" xml:"product_instance_id,omitempty"`
-	// 支付宝小程序用户唯一ID
-	OpenId *string `json:"open_id,omitempty" xml:"open_id,omitempty" require:"true"`
-	// 门店ID
-	StoreId *string `json:"store_id,omitempty" xml:"store_id,omitempty" require:"true"`
-	// 分期主订单号
-	BizOrderNo *string `json:"biz_order_no,omitempty" xml:"biz_order_no,omitempty" require:"true"`
-	// 商城总余额
-	TotalMallAmount *string `json:"total_mall_amount,omitempty" xml:"total_mall_amount,omitempty" require:"true"`
-	// 积分换算系数
-	ExchangeRate *string `json:"exchange_rate,omitempty" xml:"exchange_rate,omitempty" require:"true"`
-	// 商城充值总期数
-	TotalPhase *string `json:"total_phase,omitempty" xml:"total_phase,omitempty" require:"true"`
-	// 当期充值金额
-	PhaseAmount *string `json:"phase_amount,omitempty" xml:"phase_amount,omitempty" require:"true"`
-	// 当前期数编号
-	PhaseNo *string `json:"phase_no,omitempty" xml:"phase_no,omitempty" require:"true"`
-	// 渠道
-	TrafficPlatform *string `json:"traffic_platform,omitempty" xml:"traffic_platform,omitempty" require:"true"`
-	// 渠道Code
-	ChannelCode *string `json:"channel_code,omitempty" xml:"channel_code,omitempty" require:"true"`
+	// 积分充值列表
+	PointRechargeInfoList []*PoiMallPointRechargeInfo `json:"point_recharge_info_list,omitempty" xml:"point_recharge_info_list,omitempty" require:"true" type:"Repeated"`
 }
 
 func (s RechargePoiMallpointRequest) String() string {
@@ -8672,53 +10628,8 @@ func (s *RechargePoiMallpointRequest) SetProductInstanceId(v string) *RechargePo
 	return s
 }
 
-func (s *RechargePoiMallpointRequest) SetOpenId(v string) *RechargePoiMallpointRequest {
-	s.OpenId = &v
-	return s
-}
-
-func (s *RechargePoiMallpointRequest) SetStoreId(v string) *RechargePoiMallpointRequest {
-	s.StoreId = &v
-	return s
-}
-
-func (s *RechargePoiMallpointRequest) SetBizOrderNo(v string) *RechargePoiMallpointRequest {
-	s.BizOrderNo = &v
-	return s
-}
-
-func (s *RechargePoiMallpointRequest) SetTotalMallAmount(v string) *RechargePoiMallpointRequest {
-	s.TotalMallAmount = &v
-	return s
-}
-
-func (s *RechargePoiMallpointRequest) SetExchangeRate(v string) *RechargePoiMallpointRequest {
-	s.ExchangeRate = &v
-	return s
-}
-
-func (s *RechargePoiMallpointRequest) SetTotalPhase(v string) *RechargePoiMallpointRequest {
-	s.TotalPhase = &v
-	return s
-}
-
-func (s *RechargePoiMallpointRequest) SetPhaseAmount(v string) *RechargePoiMallpointRequest {
-	s.PhaseAmount = &v
-	return s
-}
-
-func (s *RechargePoiMallpointRequest) SetPhaseNo(v string) *RechargePoiMallpointRequest {
-	s.PhaseNo = &v
-	return s
-}
-
-func (s *RechargePoiMallpointRequest) SetTrafficPlatform(v string) *RechargePoiMallpointRequest {
-	s.TrafficPlatform = &v
-	return s
-}
-
-func (s *RechargePoiMallpointRequest) SetChannelCode(v string) *RechargePoiMallpointRequest {
-	s.ChannelCode = &v
+func (s *RechargePoiMallpointRequest) SetPointRechargeInfoList(v []*PoiMallPointRechargeInfo) *RechargePoiMallpointRequest {
+	s.PointRechargeInfoList = v
 	return s
 }
 
@@ -8729,6 +10640,8 @@ type RechargePoiMallpointResponse struct {
 	ResultCode *string `json:"result_code,omitempty" xml:"result_code,omitempty"`
 	// 异常信息的文本描述
 	ResultMsg *string `json:"result_msg,omitempty" xml:"result_msg,omitempty"`
+	// 充值结果
+	RechargeResult *PoiMallPointRechargeResult `json:"recharge_result,omitempty" xml:"recharge_result,omitempty"`
 }
 
 func (s RechargePoiMallpointResponse) String() string {
@@ -8751,6 +10664,11 @@ func (s *RechargePoiMallpointResponse) SetResultCode(v string) *RechargePoiMallp
 
 func (s *RechargePoiMallpointResponse) SetResultMsg(v string) *RechargePoiMallpointResponse {
 	s.ResultMsg = &v
+	return s
+}
+
+func (s *RechargePoiMallpointResponse) SetRechargeResult(v *PoiMallPointRechargeResult) *RechargePoiMallpointResponse {
+	s.RechargeResult = v
 	return s
 }
 
@@ -9569,6 +11487,699 @@ func (s *CancelPoiOrderResponse) SetResultCode(v string) *CancelPoiOrderResponse
 }
 
 func (s *CancelPoiOrderResponse) SetResultMsg(v string) *CancelPoiOrderResponse {
+	s.ResultMsg = &v
+	return s
+}
+
+type NotifyPoiTradeRequest struct {
+	// OAuth模式下的授权token
+	AuthToken         *string `json:"auth_token,omitempty" xml:"auth_token,omitempty"`
+	ProductInstanceId *string `json:"product_instance_id,omitempty" xml:"product_instance_id,omitempty"`
+	// 渠道Code
+	ChannelCode *string `json:"channel_code,omitempty" xml:"channel_code,omitempty" require:"true"`
+	// 子渠道Code
+	TrafficPlatform *string `json:"traffic_platform,omitempty" xml:"traffic_platform,omitempty" require:"true"`
+	// 原始订单号
+	BizOrderNo *string `json:"biz_order_no,omitempty" xml:"biz_order_no,omitempty" require:"true"`
+	// 交易状态
+	Status *string `json:"status,omitempty" xml:"status,omitempty" require:"true"`
+	// 交易订单号
+	TradeNo *string `json:"trade_no,omitempty" xml:"trade_no,omitempty" require:"true"`
+	// 拓展字段
+	ExtraInfo *string `json:"extra_info,omitempty" xml:"extra_info,omitempty" require:"true"`
+}
+
+func (s NotifyPoiTradeRequest) String() string {
+	return tea.Prettify(s)
+}
+
+func (s NotifyPoiTradeRequest) GoString() string {
+	return s.String()
+}
+
+func (s *NotifyPoiTradeRequest) SetAuthToken(v string) *NotifyPoiTradeRequest {
+	s.AuthToken = &v
+	return s
+}
+
+func (s *NotifyPoiTradeRequest) SetProductInstanceId(v string) *NotifyPoiTradeRequest {
+	s.ProductInstanceId = &v
+	return s
+}
+
+func (s *NotifyPoiTradeRequest) SetChannelCode(v string) *NotifyPoiTradeRequest {
+	s.ChannelCode = &v
+	return s
+}
+
+func (s *NotifyPoiTradeRequest) SetTrafficPlatform(v string) *NotifyPoiTradeRequest {
+	s.TrafficPlatform = &v
+	return s
+}
+
+func (s *NotifyPoiTradeRequest) SetBizOrderNo(v string) *NotifyPoiTradeRequest {
+	s.BizOrderNo = &v
+	return s
+}
+
+func (s *NotifyPoiTradeRequest) SetStatus(v string) *NotifyPoiTradeRequest {
+	s.Status = &v
+	return s
+}
+
+func (s *NotifyPoiTradeRequest) SetTradeNo(v string) *NotifyPoiTradeRequest {
+	s.TradeNo = &v
+	return s
+}
+
+func (s *NotifyPoiTradeRequest) SetExtraInfo(v string) *NotifyPoiTradeRequest {
+	s.ExtraInfo = &v
+	return s
+}
+
+type NotifyPoiTradeResponse struct {
+	// 请求唯一ID，用于链路跟踪和问题排查
+	ReqMsgId *string `json:"req_msg_id,omitempty" xml:"req_msg_id,omitempty"`
+	// 结果码，一般OK表示调用成功
+	ResultCode *string `json:"result_code,omitempty" xml:"result_code,omitempty"`
+	// 异常信息的文本描述
+	ResultMsg *string `json:"result_msg,omitempty" xml:"result_msg,omitempty"`
+}
+
+func (s NotifyPoiTradeResponse) String() string {
+	return tea.Prettify(s)
+}
+
+func (s NotifyPoiTradeResponse) GoString() string {
+	return s.String()
+}
+
+func (s *NotifyPoiTradeResponse) SetReqMsgId(v string) *NotifyPoiTradeResponse {
+	s.ReqMsgId = &v
+	return s
+}
+
+func (s *NotifyPoiTradeResponse) SetResultCode(v string) *NotifyPoiTradeResponse {
+	s.ResultCode = &v
+	return s
+}
+
+func (s *NotifyPoiTradeResponse) SetResultMsg(v string) *NotifyPoiTradeResponse {
+	s.ResultMsg = &v
+	return s
+}
+
+type CreateMerchantApplyRequest struct {
+	// OAuth模式下的授权token
+	AuthToken         *string `json:"auth_token,omitempty" xml:"auth_token,omitempty"`
+	ProductInstanceId *string `json:"product_instance_id,omitempty" xml:"product_instance_id,omitempty"`
+	// 统一社会信用代码
+	Usci *string `json:"usci,omitempty" xml:"usci,omitempty" require:"true"`
+	// 行业类型
+	Industry *string `json:"industry,omitempty" xml:"industry,omitempty" require:"true"`
+	// 二级类目
+	SubCategory *string `json:"sub_category,omitempty" xml:"sub_category,omitempty" require:"true"`
+	// 入驻场景
+	Scene *string `json:"scene,omitempty" xml:"scene,omitempty" require:"true"`
+	// 商户信息
+	MerchantInfo *MaoMerchantInfo `json:"merchant_info,omitempty" xml:"merchant_info,omitempty" require:"true"`
+}
+
+func (s CreateMerchantApplyRequest) String() string {
+	return tea.Prettify(s)
+}
+
+func (s CreateMerchantApplyRequest) GoString() string {
+	return s.String()
+}
+
+func (s *CreateMerchantApplyRequest) SetAuthToken(v string) *CreateMerchantApplyRequest {
+	s.AuthToken = &v
+	return s
+}
+
+func (s *CreateMerchantApplyRequest) SetProductInstanceId(v string) *CreateMerchantApplyRequest {
+	s.ProductInstanceId = &v
+	return s
+}
+
+func (s *CreateMerchantApplyRequest) SetUsci(v string) *CreateMerchantApplyRequest {
+	s.Usci = &v
+	return s
+}
+
+func (s *CreateMerchantApplyRequest) SetIndustry(v string) *CreateMerchantApplyRequest {
+	s.Industry = &v
+	return s
+}
+
+func (s *CreateMerchantApplyRequest) SetSubCategory(v string) *CreateMerchantApplyRequest {
+	s.SubCategory = &v
+	return s
+}
+
+func (s *CreateMerchantApplyRequest) SetScene(v string) *CreateMerchantApplyRequest {
+	s.Scene = &v
+	return s
+}
+
+func (s *CreateMerchantApplyRequest) SetMerchantInfo(v *MaoMerchantInfo) *CreateMerchantApplyRequest {
+	s.MerchantInfo = v
+	return s
+}
+
+type CreateMerchantApplyResponse struct {
+	// 请求唯一ID，用于链路跟踪和问题排查
+	ReqMsgId *string `json:"req_msg_id,omitempty" xml:"req_msg_id,omitempty"`
+	// 结果码，一般OK表示调用成功
+	ResultCode *string `json:"result_code,omitempty" xml:"result_code,omitempty"`
+	// 异常信息的文本描述
+	ResultMsg *string `json:"result_msg,omitempty" xml:"result_msg,omitempty"`
+	// 申请单号
+	ApplyNo *string `json:"apply_no,omitempty" xml:"apply_no,omitempty"`
+	// 商户号
+	MerchantId *string `json:"merchant_id,omitempty" xml:"merchant_id,omitempty"`
+	// 申请单状态
+	ApplyStatus *string `json:"apply_status,omitempty" xml:"apply_status,omitempty"`
+}
+
+func (s CreateMerchantApplyResponse) String() string {
+	return tea.Prettify(s)
+}
+
+func (s CreateMerchantApplyResponse) GoString() string {
+	return s.String()
+}
+
+func (s *CreateMerchantApplyResponse) SetReqMsgId(v string) *CreateMerchantApplyResponse {
+	s.ReqMsgId = &v
+	return s
+}
+
+func (s *CreateMerchantApplyResponse) SetResultCode(v string) *CreateMerchantApplyResponse {
+	s.ResultCode = &v
+	return s
+}
+
+func (s *CreateMerchantApplyResponse) SetResultMsg(v string) *CreateMerchantApplyResponse {
+	s.ResultMsg = &v
+	return s
+}
+
+func (s *CreateMerchantApplyResponse) SetApplyNo(v string) *CreateMerchantApplyResponse {
+	s.ApplyNo = &v
+	return s
+}
+
+func (s *CreateMerchantApplyResponse) SetMerchantId(v string) *CreateMerchantApplyResponse {
+	s.MerchantId = &v
+	return s
+}
+
+func (s *CreateMerchantApplyResponse) SetApplyStatus(v string) *CreateMerchantApplyResponse {
+	s.ApplyStatus = &v
+	return s
+}
+
+type UpdateMerchantApplyRequest struct {
+	// OAuth模式下的授权token
+	AuthToken         *string `json:"auth_token,omitempty" xml:"auth_token,omitempty"`
+	ProductInstanceId *string `json:"product_instance_id,omitempty" xml:"product_instance_id,omitempty"`
+	// 商户号
+	MerchantId *string `json:"merchant_id,omitempty" xml:"merchant_id,omitempty"`
+	// 社会统代
+	Usci *string `json:"usci,omitempty" xml:"usci,omitempty"`
+	// 行业类型
+	Industry *string `json:"industry,omitempty" xml:"industry,omitempty"`
+	// 入驻场景
+	Scene *string `json:"scene,omitempty" xml:"scene,omitempty" require:"true"`
+	// 商户信息
+	ModifyFields *MaoMerchantInfo `json:"modify_fields,omitempty" xml:"modify_fields,omitempty" require:"true"`
+}
+
+func (s UpdateMerchantApplyRequest) String() string {
+	return tea.Prettify(s)
+}
+
+func (s UpdateMerchantApplyRequest) GoString() string {
+	return s.String()
+}
+
+func (s *UpdateMerchantApplyRequest) SetAuthToken(v string) *UpdateMerchantApplyRequest {
+	s.AuthToken = &v
+	return s
+}
+
+func (s *UpdateMerchantApplyRequest) SetProductInstanceId(v string) *UpdateMerchantApplyRequest {
+	s.ProductInstanceId = &v
+	return s
+}
+
+func (s *UpdateMerchantApplyRequest) SetMerchantId(v string) *UpdateMerchantApplyRequest {
+	s.MerchantId = &v
+	return s
+}
+
+func (s *UpdateMerchantApplyRequest) SetUsci(v string) *UpdateMerchantApplyRequest {
+	s.Usci = &v
+	return s
+}
+
+func (s *UpdateMerchantApplyRequest) SetIndustry(v string) *UpdateMerchantApplyRequest {
+	s.Industry = &v
+	return s
+}
+
+func (s *UpdateMerchantApplyRequest) SetScene(v string) *UpdateMerchantApplyRequest {
+	s.Scene = &v
+	return s
+}
+
+func (s *UpdateMerchantApplyRequest) SetModifyFields(v *MaoMerchantInfo) *UpdateMerchantApplyRequest {
+	s.ModifyFields = v
+	return s
+}
+
+type UpdateMerchantApplyResponse struct {
+	// 请求唯一ID，用于链路跟踪和问题排查
+	ReqMsgId *string `json:"req_msg_id,omitempty" xml:"req_msg_id,omitempty"`
+	// 结果码，一般OK表示调用成功
+	ResultCode *string `json:"result_code,omitempty" xml:"result_code,omitempty"`
+	// 异常信息的文本描述
+	ResultMsg *string `json:"result_msg,omitempty" xml:"result_msg,omitempty"`
+	// 申请单号
+	ApplyNo *string `json:"apply_no,omitempty" xml:"apply_no,omitempty"`
+	// 商户号
+	MerchantId *string `json:"merchant_id,omitempty" xml:"merchant_id,omitempty"`
+	// 申请单状态
+	ApplyStatus *string `json:"apply_status,omitempty" xml:"apply_status,omitempty"`
+}
+
+func (s UpdateMerchantApplyResponse) String() string {
+	return tea.Prettify(s)
+}
+
+func (s UpdateMerchantApplyResponse) GoString() string {
+	return s.String()
+}
+
+func (s *UpdateMerchantApplyResponse) SetReqMsgId(v string) *UpdateMerchantApplyResponse {
+	s.ReqMsgId = &v
+	return s
+}
+
+func (s *UpdateMerchantApplyResponse) SetResultCode(v string) *UpdateMerchantApplyResponse {
+	s.ResultCode = &v
+	return s
+}
+
+func (s *UpdateMerchantApplyResponse) SetResultMsg(v string) *UpdateMerchantApplyResponse {
+	s.ResultMsg = &v
+	return s
+}
+
+func (s *UpdateMerchantApplyResponse) SetApplyNo(v string) *UpdateMerchantApplyResponse {
+	s.ApplyNo = &v
+	return s
+}
+
+func (s *UpdateMerchantApplyResponse) SetMerchantId(v string) *UpdateMerchantApplyResponse {
+	s.MerchantId = &v
+	return s
+}
+
+func (s *UpdateMerchantApplyResponse) SetApplyStatus(v string) *UpdateMerchantApplyResponse {
+	s.ApplyStatus = &v
+	return s
+}
+
+type QueryMerchantRequest struct {
+	// OAuth模式下的授权token
+	AuthToken         *string `json:"auth_token,omitempty" xml:"auth_token,omitempty"`
+	ProductInstanceId *string `json:"product_instance_id,omitempty" xml:"product_instance_id,omitempty"`
+	// 商户号
+	MerchantId *string `json:"merchant_id,omitempty" xml:"merchant_id,omitempty"`
+	// 统代
+	Usci *string `json:"usci,omitempty" xml:"usci,omitempty"`
+	// 行业类型
+	Industry *string `json:"industry,omitempty" xml:"industry,omitempty"`
+}
+
+func (s QueryMerchantRequest) String() string {
+	return tea.Prettify(s)
+}
+
+func (s QueryMerchantRequest) GoString() string {
+	return s.String()
+}
+
+func (s *QueryMerchantRequest) SetAuthToken(v string) *QueryMerchantRequest {
+	s.AuthToken = &v
+	return s
+}
+
+func (s *QueryMerchantRequest) SetProductInstanceId(v string) *QueryMerchantRequest {
+	s.ProductInstanceId = &v
+	return s
+}
+
+func (s *QueryMerchantRequest) SetMerchantId(v string) *QueryMerchantRequest {
+	s.MerchantId = &v
+	return s
+}
+
+func (s *QueryMerchantRequest) SetUsci(v string) *QueryMerchantRequest {
+	s.Usci = &v
+	return s
+}
+
+func (s *QueryMerchantRequest) SetIndustry(v string) *QueryMerchantRequest {
+	s.Industry = &v
+	return s
+}
+
+type QueryMerchantResponse struct {
+	// 请求唯一ID，用于链路跟踪和问题排查
+	ReqMsgId *string `json:"req_msg_id,omitempty" xml:"req_msg_id,omitempty"`
+	// 结果码，一般OK表示调用成功
+	ResultCode *string `json:"result_code,omitempty" xml:"result_code,omitempty"`
+	// 异常信息的文本描述
+	ResultMsg *string `json:"result_msg,omitempty" xml:"result_msg,omitempty"`
+	// 商户入驻查询结果
+	MerchantResult *MaoQueryMerchantResult `json:"merchant_result,omitempty" xml:"merchant_result,omitempty"`
+}
+
+func (s QueryMerchantResponse) String() string {
+	return tea.Prettify(s)
+}
+
+func (s QueryMerchantResponse) GoString() string {
+	return s.String()
+}
+
+func (s *QueryMerchantResponse) SetReqMsgId(v string) *QueryMerchantResponse {
+	s.ReqMsgId = &v
+	return s
+}
+
+func (s *QueryMerchantResponse) SetResultCode(v string) *QueryMerchantResponse {
+	s.ResultCode = &v
+	return s
+}
+
+func (s *QueryMerchantResponse) SetResultMsg(v string) *QueryMerchantResponse {
+	s.ResultMsg = &v
+	return s
+}
+
+func (s *QueryMerchantResponse) SetMerchantResult(v *MaoQueryMerchantResult) *QueryMerchantResponse {
+	s.MerchantResult = v
+	return s
+}
+
+type QueryMerchantBatchRequest struct {
+	// OAuth模式下的授权token
+	AuthToken         *string `json:"auth_token,omitempty" xml:"auth_token,omitempty"`
+	ProductInstanceId *string `json:"product_instance_id,omitempty" xml:"product_instance_id,omitempty"`
+	// 商户号列表
+	MerchantIds []*string `json:"merchant_ids,omitempty" xml:"merchant_ids,omitempty" type:"Repeated"`
+	// usci+industry 组合列表
+	UsciIndustryPairs []*MaoUsciIndustryPair `json:"usci_industry_pairs,omitempty" xml:"usci_industry_pairs,omitempty" type:"Repeated"`
+}
+
+func (s QueryMerchantBatchRequest) String() string {
+	return tea.Prettify(s)
+}
+
+func (s QueryMerchantBatchRequest) GoString() string {
+	return s.String()
+}
+
+func (s *QueryMerchantBatchRequest) SetAuthToken(v string) *QueryMerchantBatchRequest {
+	s.AuthToken = &v
+	return s
+}
+
+func (s *QueryMerchantBatchRequest) SetProductInstanceId(v string) *QueryMerchantBatchRequest {
+	s.ProductInstanceId = &v
+	return s
+}
+
+func (s *QueryMerchantBatchRequest) SetMerchantIds(v []*string) *QueryMerchantBatchRequest {
+	s.MerchantIds = v
+	return s
+}
+
+func (s *QueryMerchantBatchRequest) SetUsciIndustryPairs(v []*MaoUsciIndustryPair) *QueryMerchantBatchRequest {
+	s.UsciIndustryPairs = v
+	return s
+}
+
+type QueryMerchantBatchResponse struct {
+	// 请求唯一ID，用于链路跟踪和问题排查
+	ReqMsgId *string `json:"req_msg_id,omitempty" xml:"req_msg_id,omitempty"`
+	// 结果码，一般OK表示调用成功
+	ResultCode *string `json:"result_code,omitempty" xml:"result_code,omitempty"`
+	// 异常信息的文本描述
+	ResultMsg *string `json:"result_msg,omitempty" xml:"result_msg,omitempty"`
+	// 商户入驻查询结果列表
+	MerchantResultList []*MaoQueryMerchantResult `json:"merchant_result_list,omitempty" xml:"merchant_result_list,omitempty" type:"Repeated"`
+}
+
+func (s QueryMerchantBatchResponse) String() string {
+	return tea.Prettify(s)
+}
+
+func (s QueryMerchantBatchResponse) GoString() string {
+	return s.String()
+}
+
+func (s *QueryMerchantBatchResponse) SetReqMsgId(v string) *QueryMerchantBatchResponse {
+	s.ReqMsgId = &v
+	return s
+}
+
+func (s *QueryMerchantBatchResponse) SetResultCode(v string) *QueryMerchantBatchResponse {
+	s.ResultCode = &v
+	return s
+}
+
+func (s *QueryMerchantBatchResponse) SetResultMsg(v string) *QueryMerchantBatchResponse {
+	s.ResultMsg = &v
+	return s
+}
+
+func (s *QueryMerchantBatchResponse) SetMerchantResultList(v []*MaoQueryMerchantResult) *QueryMerchantBatchResponse {
+	s.MerchantResultList = v
+	return s
+}
+
+type CallbackMerchantRiskRequest struct {
+	// OAuth模式下的授权token
+	AuthToken         *string `json:"auth_token,omitempty" xml:"auth_token,omitempty"`
+	ProductInstanceId *string `json:"product_instance_id,omitempty" xml:"product_instance_id,omitempty"`
+	// 来源类型
+	SourceType *string `json:"source_type,omitempty" xml:"source_type,omitempty" require:"true"`
+	// 申请单号
+	ApplyNo *string `json:"apply_no,omitempty" xml:"apply_no,omitempty" require:"true"`
+	// 商户号
+	MerchantId *string `json:"merchant_id,omitempty" xml:"merchant_id,omitempty" require:"true"`
+	// 风控结果
+	RiskStatus *string `json:"risk_status,omitempty" xml:"risk_status,omitempty" require:"true"`
+	// 风控结果码
+	ResultCode *string `json:"result_code,omitempty" xml:"result_code,omitempty"`
+	// 风控结果说明
+	ResultMsg *string `json:"result_msg,omitempty" xml:"result_msg,omitempty"`
+	// 拓展字段
+	ExtraInfo *string `json:"extra_info,omitempty" xml:"extra_info,omitempty"`
+	// 入驻场景
+	Scene *string `json:"scene,omitempty" xml:"scene,omitempty" require:"true"`
+}
+
+func (s CallbackMerchantRiskRequest) String() string {
+	return tea.Prettify(s)
+}
+
+func (s CallbackMerchantRiskRequest) GoString() string {
+	return s.String()
+}
+
+func (s *CallbackMerchantRiskRequest) SetAuthToken(v string) *CallbackMerchantRiskRequest {
+	s.AuthToken = &v
+	return s
+}
+
+func (s *CallbackMerchantRiskRequest) SetProductInstanceId(v string) *CallbackMerchantRiskRequest {
+	s.ProductInstanceId = &v
+	return s
+}
+
+func (s *CallbackMerchantRiskRequest) SetSourceType(v string) *CallbackMerchantRiskRequest {
+	s.SourceType = &v
+	return s
+}
+
+func (s *CallbackMerchantRiskRequest) SetApplyNo(v string) *CallbackMerchantRiskRequest {
+	s.ApplyNo = &v
+	return s
+}
+
+func (s *CallbackMerchantRiskRequest) SetMerchantId(v string) *CallbackMerchantRiskRequest {
+	s.MerchantId = &v
+	return s
+}
+
+func (s *CallbackMerchantRiskRequest) SetRiskStatus(v string) *CallbackMerchantRiskRequest {
+	s.RiskStatus = &v
+	return s
+}
+
+func (s *CallbackMerchantRiskRequest) SetResultCode(v string) *CallbackMerchantRiskRequest {
+	s.ResultCode = &v
+	return s
+}
+
+func (s *CallbackMerchantRiskRequest) SetResultMsg(v string) *CallbackMerchantRiskRequest {
+	s.ResultMsg = &v
+	return s
+}
+
+func (s *CallbackMerchantRiskRequest) SetExtraInfo(v string) *CallbackMerchantRiskRequest {
+	s.ExtraInfo = &v
+	return s
+}
+
+func (s *CallbackMerchantRiskRequest) SetScene(v string) *CallbackMerchantRiskRequest {
+	s.Scene = &v
+	return s
+}
+
+type CallbackMerchantRiskResponse struct {
+	// 请求唯一ID，用于链路跟踪和问题排查
+	ReqMsgId *string `json:"req_msg_id,omitempty" xml:"req_msg_id,omitempty"`
+	// 结果码，一般OK表示调用成功
+	ResultCode *string `json:"result_code,omitempty" xml:"result_code,omitempty"`
+	// 异常信息的文本描述
+	ResultMsg *string `json:"result_msg,omitempty" xml:"result_msg,omitempty"`
+}
+
+func (s CallbackMerchantRiskResponse) String() string {
+	return tea.Prettify(s)
+}
+
+func (s CallbackMerchantRiskResponse) GoString() string {
+	return s.String()
+}
+
+func (s *CallbackMerchantRiskResponse) SetReqMsgId(v string) *CallbackMerchantRiskResponse {
+	s.ReqMsgId = &v
+	return s
+}
+
+func (s *CallbackMerchantRiskResponse) SetResultCode(v string) *CallbackMerchantRiskResponse {
+	s.ResultCode = &v
+	return s
+}
+
+func (s *CallbackMerchantRiskResponse) SetResultMsg(v string) *CallbackMerchantRiskResponse {
+	s.ResultMsg = &v
+	return s
+}
+
+type ReceiveFileidCallbackRequest struct {
+	// OAuth模式下的授权token
+	AuthToken         *string `json:"auth_token,omitempty" xml:"auth_token,omitempty"`
+	ProductInstanceId *string `json:"product_instance_id,omitempty" xml:"product_instance_id,omitempty"`
+	// string
+	// 待上传文件
+	FileObject io.Reader `json:"fileObject,omitempty" xml:"fileObject,omitempty"`
+	// 待上传文件名
+	FileObjectName *string `json:"fileObjectName,omitempty" xml:"fileObjectName,omitempty"`
+	FileId         *string `json:"file_id,omitempty" xml:"file_id,omitempty" require:"true"`
+	// 上传场景
+	UploadScene *string `json:"upload_scene,omitempty" xml:"upload_scene,omitempty" require:"true"`
+	// 渠道方租户
+	ChannelTenant *string `json:"channel_tenant,omitempty" xml:"channel_tenant,omitempty" require:"true"`
+	// 上传唯一标识
+	UploadId *string `json:"upload_id,omitempty" xml:"upload_id,omitempty" require:"true"`
+}
+
+func (s ReceiveFileidCallbackRequest) String() string {
+	return tea.Prettify(s)
+}
+
+func (s ReceiveFileidCallbackRequest) GoString() string {
+	return s.String()
+}
+
+func (s *ReceiveFileidCallbackRequest) SetAuthToken(v string) *ReceiveFileidCallbackRequest {
+	s.AuthToken = &v
+	return s
+}
+
+func (s *ReceiveFileidCallbackRequest) SetProductInstanceId(v string) *ReceiveFileidCallbackRequest {
+	s.ProductInstanceId = &v
+	return s
+}
+
+func (s *ReceiveFileidCallbackRequest) SetFileObject(v io.Reader) *ReceiveFileidCallbackRequest {
+	s.FileObject = v
+	return s
+}
+
+func (s *ReceiveFileidCallbackRequest) SetFileObjectName(v string) *ReceiveFileidCallbackRequest {
+	s.FileObjectName = &v
+	return s
+}
+
+func (s *ReceiveFileidCallbackRequest) SetFileId(v string) *ReceiveFileidCallbackRequest {
+	s.FileId = &v
+	return s
+}
+
+func (s *ReceiveFileidCallbackRequest) SetUploadScene(v string) *ReceiveFileidCallbackRequest {
+	s.UploadScene = &v
+	return s
+}
+
+func (s *ReceiveFileidCallbackRequest) SetChannelTenant(v string) *ReceiveFileidCallbackRequest {
+	s.ChannelTenant = &v
+	return s
+}
+
+func (s *ReceiveFileidCallbackRequest) SetUploadId(v string) *ReceiveFileidCallbackRequest {
+	s.UploadId = &v
+	return s
+}
+
+type ReceiveFileidCallbackResponse struct {
+	// 请求唯一ID，用于链路跟踪和问题排查
+	ReqMsgId *string `json:"req_msg_id,omitempty" xml:"req_msg_id,omitempty"`
+	// 结果码，一般OK表示调用成功
+	ResultCode *string `json:"result_code,omitempty" xml:"result_code,omitempty"`
+	// 异常信息的文本描述
+	ResultMsg *string `json:"result_msg,omitempty" xml:"result_msg,omitempty"`
+}
+
+func (s ReceiveFileidCallbackResponse) String() string {
+	return tea.Prettify(s)
+}
+
+func (s ReceiveFileidCallbackResponse) GoString() string {
+	return s.String()
+}
+
+func (s *ReceiveFileidCallbackResponse) SetReqMsgId(v string) *ReceiveFileidCallbackResponse {
+	s.ReqMsgId = &v
+	return s
+}
+
+func (s *ReceiveFileidCallbackResponse) SetResultCode(v string) *ReceiveFileidCallbackResponse {
+	s.ResultCode = &v
+	return s
+}
+
+func (s *ReceiveFileidCallbackResponse) SetResultMsg(v string) *ReceiveFileidCallbackResponse {
 	s.ResultMsg = &v
 	return s
 }
@@ -13880,6 +16491,126 @@ func (s *CheckOpticalIdentifyResponse) SetData(v *IdentityData) *CheckOpticalIde
 	return s
 }
 
+type CreateAntcloudGatewayxFileUploadRequest struct {
+	// OAuth模式下的授权token
+	AuthToken *string `json:"auth_token,omitempty" xml:"auth_token,omitempty"`
+	// 上传文件作用的openapi method
+	ApiCode *string `json:"api_code,omitempty" xml:"api_code,omitempty" require:"true"`
+	// 文件标签，多个标签;分割
+	FileLabel *string `json:"file_label,omitempty" xml:"file_label,omitempty" maxLength:"100"`
+	// 自定义的文件元数据
+	FileMetadata *string `json:"file_metadata,omitempty" xml:"file_metadata,omitempty" maxLength:"1000"`
+	// 文件名，不传则随机生成文件名
+	FileName *string `json:"file_name,omitempty" xml:"file_name,omitempty" maxLength:"100"`
+	// 文件的多媒体类型
+	MimeType *string `json:"mime_type,omitempty" xml:"mime_type,omitempty"`
+	// 产品方的api归属集群，即productInstanceId
+	ApiCluster *string `json:"api_cluster,omitempty" xml:"api_cluster,omitempty"`
+}
+
+func (s CreateAntcloudGatewayxFileUploadRequest) String() string {
+	return tea.Prettify(s)
+}
+
+func (s CreateAntcloudGatewayxFileUploadRequest) GoString() string {
+	return s.String()
+}
+
+func (s *CreateAntcloudGatewayxFileUploadRequest) SetAuthToken(v string) *CreateAntcloudGatewayxFileUploadRequest {
+	s.AuthToken = &v
+	return s
+}
+
+func (s *CreateAntcloudGatewayxFileUploadRequest) SetApiCode(v string) *CreateAntcloudGatewayxFileUploadRequest {
+	s.ApiCode = &v
+	return s
+}
+
+func (s *CreateAntcloudGatewayxFileUploadRequest) SetFileLabel(v string) *CreateAntcloudGatewayxFileUploadRequest {
+	s.FileLabel = &v
+	return s
+}
+
+func (s *CreateAntcloudGatewayxFileUploadRequest) SetFileMetadata(v string) *CreateAntcloudGatewayxFileUploadRequest {
+	s.FileMetadata = &v
+	return s
+}
+
+func (s *CreateAntcloudGatewayxFileUploadRequest) SetFileName(v string) *CreateAntcloudGatewayxFileUploadRequest {
+	s.FileName = &v
+	return s
+}
+
+func (s *CreateAntcloudGatewayxFileUploadRequest) SetMimeType(v string) *CreateAntcloudGatewayxFileUploadRequest {
+	s.MimeType = &v
+	return s
+}
+
+func (s *CreateAntcloudGatewayxFileUploadRequest) SetApiCluster(v string) *CreateAntcloudGatewayxFileUploadRequest {
+	s.ApiCluster = &v
+	return s
+}
+
+type CreateAntcloudGatewayxFileUploadResponse struct {
+	// 请求唯一ID，用于链路跟踪和问题排查
+	ReqMsgId *string `json:"req_msg_id,omitempty" xml:"req_msg_id,omitempty"`
+	// 结果码，一般OK表示调用成功
+	ResultCode *string `json:"result_code,omitempty" xml:"result_code,omitempty"`
+	// 异常信息的文本描述
+	ResultMsg *string `json:"result_msg,omitempty" xml:"result_msg,omitempty"`
+	// 上传有效期
+	ExpiredTime *string `json:"expired_time,omitempty" xml:"expired_time,omitempty" pattern:"\\d{4}[-]\\d{1,2}[-]\\d{1,2}[T]\\d{2}:\\d{2}:\\d{2}([Z]|([\\.]\\d{1,9})?[\\+]\\d{2}[\\:]?\\d{2})"`
+	// 32位文件唯一id
+	FileId *string `json:"file_id,omitempty" xml:"file_id,omitempty"`
+	// 放入http请求头里
+	UploadHeaders []*XNameValuePair `json:"upload_headers,omitempty" xml:"upload_headers,omitempty" type:"Repeated"`
+	// 文件上传地址
+	UploadUrl *string `json:"upload_url,omitempty" xml:"upload_url,omitempty"`
+}
+
+func (s CreateAntcloudGatewayxFileUploadResponse) String() string {
+	return tea.Prettify(s)
+}
+
+func (s CreateAntcloudGatewayxFileUploadResponse) GoString() string {
+	return s.String()
+}
+
+func (s *CreateAntcloudGatewayxFileUploadResponse) SetReqMsgId(v string) *CreateAntcloudGatewayxFileUploadResponse {
+	s.ReqMsgId = &v
+	return s
+}
+
+func (s *CreateAntcloudGatewayxFileUploadResponse) SetResultCode(v string) *CreateAntcloudGatewayxFileUploadResponse {
+	s.ResultCode = &v
+	return s
+}
+
+func (s *CreateAntcloudGatewayxFileUploadResponse) SetResultMsg(v string) *CreateAntcloudGatewayxFileUploadResponse {
+	s.ResultMsg = &v
+	return s
+}
+
+func (s *CreateAntcloudGatewayxFileUploadResponse) SetExpiredTime(v string) *CreateAntcloudGatewayxFileUploadResponse {
+	s.ExpiredTime = &v
+	return s
+}
+
+func (s *CreateAntcloudGatewayxFileUploadResponse) SetFileId(v string) *CreateAntcloudGatewayxFileUploadResponse {
+	s.FileId = &v
+	return s
+}
+
+func (s *CreateAntcloudGatewayxFileUploadResponse) SetUploadHeaders(v []*XNameValuePair) *CreateAntcloudGatewayxFileUploadResponse {
+	s.UploadHeaders = v
+	return s
+}
+
+func (s *CreateAntcloudGatewayxFileUploadResponse) SetUploadUrl(v string) *CreateAntcloudGatewayxFileUploadResponse {
+	s.UploadUrl = &v
+	return s
+}
+
 type Client struct {
 	Endpoint                *string
 	RegionId                *string
@@ -13902,10 +16633,11 @@ type Client struct {
 	MaxRequestsPerHost      *int
 }
 
-/**
- * Init client with Config
- * @param config config contains the necessary information to create a client
- */
+// Description:
+//
+// # Init client with Config
+//
+// @param config - config contains the necessary information to create a client
 func NewClient(config *Config) (*Client, error) {
 	client := new(Client)
 	err := client.Init(config)
@@ -13913,7 +16645,7 @@ func NewClient(config *Config) (*Client, error) {
 }
 
 func (client *Client) Init(config *Config) (_err error) {
-	if tea.BoolValue(util.IsUnset(tea.ToMap(config))) {
+	if tea.BoolValue(util.IsUnset(config)) {
 		_err = tea.NewSDKError(map[string]interface{}{
 			"code":    "ParameterMissing",
 			"message": "'config' can not be unset",
@@ -13942,16 +16674,23 @@ func (client *Client) Init(config *Config) (_err error) {
 	return nil
 }
 
-/**
- * Encapsulate the request and invoke the network
- * @param action api name
- * @param protocol http or https
- * @param method e.g. GET
- * @param pathname pathname of every api
- * @param request which contains request params
- * @param runtime which controls some details of call api, such as retry times
- * @return the response
- */
+// Description:
+//
+// # Encapsulate the request and invoke the network
+//
+// @param action - api name
+//
+// @param protocol - http or https
+//
+// @param method - e.g. GET
+//
+// @param pathname - pathname of every api
+//
+// @param request - which contains request params
+//
+// @param runtime - which controls some details of call api, such as retry times
+//
+// @return the response
 func (client *Client) DoRequest(version *string, action *string, protocol *string, method *string, pathname *string, request map[string]interface{}, headers map[string]*string, runtime *util.RuntimeOptions) (_result map[string]interface{}, _err error) {
 	_err = tea.Validate(runtime)
 	if _err != nil {
@@ -14002,7 +16741,7 @@ func (client *Client) DoRequest(version *string, action *string, protocol *strin
 				"req_msg_id":       antchainutil.GetNonce(),
 				"access_key":       client.AccessKeyId,
 				"base_sdk_version": tea.String("TeaSDK-2.0"),
-				"sdk_version":      tea.String("1.7.14"),
+				"sdk_version":      tea.String("1.7.23"),
 				"_prod_code":       tea.String("SECURITYTECH"),
 				"_prod_channel":    tea.String("undefined"),
 			}
@@ -14060,10 +16799,11 @@ func (client *Client) DoRequest(version *string, action *string, protocol *strin
 	return _resp, _err
 }
 
-/**
- * Description: 安全科技网关通用运行接口
- * Summary: 安全科技网关通用运行接口
- */
+// Description:
+//
+// Description: 安全科技网关通用运行接口
+//
+// Summary: 安全科技网关通用运行接口
 func (client *Client) RunGeneral(request *RunGeneralRequest) (_result *RunGeneralResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14076,10 +16816,11 @@ func (client *Client) RunGeneral(request *RunGeneralRequest) (_result *RunGenera
 	return _result, _err
 }
 
-/**
- * Description: 安全科技网关通用运行接口
- * Summary: 安全科技网关通用运行接口
- */
+// Description:
+//
+// Description: 安全科技网关通用运行接口
+//
+// Summary: 安全科技网关通用运行接口
 func (client *Client) RunGeneralEx(request *RunGeneralRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *RunGeneralResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14094,11 +16835,13 @@ func (client *Client) RunGeneralEx(request *RunGeneralRequest, headers map[strin
 	return _result, _err
 }
 
-/**
- * Description: 租赁住房保险产品，开放接口
-调用方：上海远点网络科技有限公司
- * Summary: 租赁住房保险产品，接口开放给租房平台
-*/
+// Description:
+//
+// Description: 租赁住房保险产品，开放接口
+//
+// 调用方：上海远点网络科技有限公司
+//
+// Summary: 租赁住房保险产品，接口开放给租房平台
 func (client *Client) ExecEkytInsure(request *ExecEkytInsureRequest) (_result *ExecEkytInsureResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14111,11 +16854,13 @@ func (client *Client) ExecEkytInsure(request *ExecEkytInsureRequest) (_result *E
 	return _result, _err
 }
 
-/**
- * Description: 租赁住房保险产品，开放接口
-调用方：上海远点网络科技有限公司
- * Summary: 租赁住房保险产品，接口开放给租房平台
-*/
+// Description:
+//
+// Description: 租赁住房保险产品，开放接口
+//
+// 调用方：上海远点网络科技有限公司
+//
+// Summary: 租赁住房保险产品，接口开放给租房平台
 func (client *Client) ExecEkytInsureEx(request *ExecEkytInsureRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *ExecEkytInsureResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14130,10 +16875,11 @@ func (client *Client) ExecEkytInsureEx(request *ExecEkytInsureRequest, headers m
 	return _result, _err
 }
 
-/**
- * Description: 获取EKYT平台入驻的车队信息列表
- * Summary: 获取EKYT平台入驻的车队信息列表
- */
+// Description:
+//
+// Description: 获取EKYT平台入驻的车队信息列表
+//
+// Summary: 获取EKYT平台入驻的车队信息列表
 func (client *Client) ListDcp(request *ListDcpRequest) (_result *ListDcpResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14146,10 +16892,11 @@ func (client *Client) ListDcp(request *ListDcpRequest) (_result *ListDcpResponse
 	return _result, _err
 }
 
-/**
- * Description: 获取EKYT平台入驻的车队信息列表
- * Summary: 获取EKYT平台入驻的车队信息列表
- */
+// Description:
+//
+// Description: 获取EKYT平台入驻的车队信息列表
+//
+// Summary: 获取EKYT平台入驻的车队信息列表
 func (client *Client) ListDcpEx(request *ListDcpRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *ListDcpResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14164,10 +16911,11 @@ func (client *Client) ListDcpEx(request *ListDcpRequest, headers map[string]*str
 	return _result, _err
 }
 
-/**
- * Description: 获取EKYT平台入驻的司机灵工卡信息列表
- * Summary: 获取EKYT平台入驻的司机灵工卡信息列表
- */
+// Description:
+//
+// Description: 获取EKYT平台入驻的司机灵工卡信息列表
+//
+// Summary: 获取EKYT平台入驻的司机灵工卡信息列表
 func (client *Client) ListDcpAccountbook(request *ListDcpAccountbookRequest) (_result *ListDcpAccountbookResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14180,10 +16928,11 @@ func (client *Client) ListDcpAccountbook(request *ListDcpAccountbookRequest) (_r
 	return _result, _err
 }
 
-/**
- * Description: 获取EKYT平台入驻的司机灵工卡信息列表
- * Summary: 获取EKYT平台入驻的司机灵工卡信息列表
- */
+// Description:
+//
+// Description: 获取EKYT平台入驻的司机灵工卡信息列表
+//
+// Summary: 获取EKYT平台入驻的司机灵工卡信息列表
 func (client *Client) ListDcpAccountbookEx(request *ListDcpAccountbookRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *ListDcpAccountbookResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14198,10 +16947,11 @@ func (client *Client) ListDcpAccountbookEx(request *ListDcpAccountbookRequest, h
 	return _result, _err
 }
 
-/**
- * Description: 企业ETC入驻车辆查询
- * Summary: 企业ETC入驻车辆查询
- */
+// Description:
+//
+// Description: 企业ETC入驻车辆查询
+//
+// Summary: 企业ETC入驻车辆查询
 func (client *Client) QueryEtcVehicle(request *QueryEtcVehicleRequest) (_result *QueryEtcVehicleResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14214,10 +16964,11 @@ func (client *Client) QueryEtcVehicle(request *QueryEtcVehicleRequest) (_result 
 	return _result, _err
 }
 
-/**
- * Description: 企业ETC入驻车辆查询
- * Summary: 企业ETC入驻车辆查询
- */
+// Description:
+//
+// Description: 企业ETC入驻车辆查询
+//
+// Summary: 企业ETC入驻车辆查询
 func (client *Client) QueryEtcVehicleEx(request *QueryEtcVehicleRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryEtcVehicleResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14232,10 +16983,11 @@ func (client *Client) QueryEtcVehicleEx(request *QueryEtcVehicleRequest, headers
 	return _result, _err
 }
 
-/**
- * Description: 企业ETC运单上传
- * Summary: 企业ETC运单上传
- */
+// Description:
+//
+// Description: 企业ETC运单上传
+//
+// Summary: 企业ETC运单上传
 func (client *Client) UploadEtcWaybill(request *UploadEtcWaybillRequest) (_result *UploadEtcWaybillResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14248,10 +17000,11 @@ func (client *Client) UploadEtcWaybill(request *UploadEtcWaybillRequest) (_resul
 	return _result, _err
 }
 
-/**
- * Description: 企业ETC运单上传
- * Summary: 企业ETC运单上传
- */
+// Description:
+//
+// Description: 企业ETC运单上传
+//
+// Summary: 企业ETC运单上传
 func (client *Client) UploadEtcWaybillEx(request *UploadEtcWaybillRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *UploadEtcWaybillResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14266,10 +17019,11 @@ func (client *Client) UploadEtcWaybillEx(request *UploadEtcWaybillRequest, heade
 	return _result, _err
 }
 
-/**
- * Description: 企业ETC车辆行程查询
- * Summary: 企业ETC车辆行程查询
- */
+// Description:
+//
+// Description: 企业ETC车辆行程查询
+//
+// Summary: 企业ETC车辆行程查询
 func (client *Client) QueryEtcTrip(request *QueryEtcTripRequest) (_result *QueryEtcTripResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14282,10 +17036,11 @@ func (client *Client) QueryEtcTrip(request *QueryEtcTripRequest) (_result *Query
 	return _result, _err
 }
 
-/**
- * Description: 企业ETC车辆行程查询
- * Summary: 企业ETC车辆行程查询
- */
+// Description:
+//
+// Description: 企业ETC车辆行程查询
+//
+// Summary: 企业ETC车辆行程查询
 func (client *Client) QueryEtcTripEx(request *QueryEtcTripRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryEtcTripResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14300,10 +17055,11 @@ func (client *Client) QueryEtcTripEx(request *QueryEtcTripRequest, headers map[s
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机获取授权登录地址
- * Summary: 两轮车一体机获取授权登录地址
- */
+// Description:
+//
+// Description: 两轮车一体机获取授权登录地址
+//
+// Summary: 两轮车一体机获取授权登录地址
 func (client *Client) InitSimLogin(request *InitSimLoginRequest) (_result *InitSimLoginResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14316,10 +17072,11 @@ func (client *Client) InitSimLogin(request *InitSimLoginRequest) (_result *InitS
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机获取授权登录地址
- * Summary: 两轮车一体机获取授权登录地址
- */
+// Description:
+//
+// Description: 两轮车一体机获取授权登录地址
+//
+// Summary: 两轮车一体机获取授权登录地址
 func (client *Client) InitSimLoginEx(request *InitSimLoginRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *InitSimLoginResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14334,10 +17091,11 @@ func (client *Client) InitSimLoginEx(request *InitSimLoginRequest, headers map[s
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机查询登录结果
- * Summary: 两轮车一体机查询登录结果
- */
+// Description:
+//
+// Description: 两轮车一体机查询登录结果
+//
+// Summary: 两轮车一体机查询登录结果
 func (client *Client) QuerySimLogin(request *QuerySimLoginRequest) (_result *QuerySimLoginResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14350,10 +17108,11 @@ func (client *Client) QuerySimLogin(request *QuerySimLoginRequest) (_result *Que
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机查询登录结果
- * Summary: 两轮车一体机查询登录结果
- */
+// Description:
+//
+// Description: 两轮车一体机查询登录结果
+//
+// Summary: 两轮车一体机查询登录结果
 func (client *Client) QuerySimLoginEx(request *QuerySimLoginRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QuerySimLoginResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14368,10 +17127,11 @@ func (client *Client) QuerySimLoginEx(request *QuerySimLoginRequest, headers map
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机获取营销活动
- * Summary: 两轮车一体机获取营销活动
- */
+// Description:
+//
+// Description: 两轮车一体机获取营销活动
+//
+// Summary: 两轮车一体机获取营销活动
 func (client *Client) ListSimCampaign(request *ListSimCampaignRequest) (_result *ListSimCampaignResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14384,10 +17144,11 @@ func (client *Client) ListSimCampaign(request *ListSimCampaignRequest) (_result 
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机获取营销活动
- * Summary: 两轮车一体机获取营销活动
- */
+// Description:
+//
+// Description: 两轮车一体机获取营销活动
+//
+// Summary: 两轮车一体机获取营销活动
 func (client *Client) ListSimCampaignEx(request *ListSimCampaignRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *ListSimCampaignResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14402,10 +17163,11 @@ func (client *Client) ListSimCampaignEx(request *ListSimCampaignRequest, headers
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机查询车辆SKU
- * Summary: 两轮车一体机查询车辆SKU
- */
+// Description:
+//
+// Description: 两轮车一体机查询车辆SKU
+//
+// Summary: 两轮车一体机查询车辆SKU
 func (client *Client) QuerySimSku(request *QuerySimSkuRequest) (_result *QuerySimSkuResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14418,10 +17180,11 @@ func (client *Client) QuerySimSku(request *QuerySimSkuRequest) (_result *QuerySi
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机查询车辆SKU
- * Summary: 两轮车一体机查询车辆SKU
- */
+// Description:
+//
+// Description: 两轮车一体机查询车辆SKU
+//
+// Summary: 两轮车一体机查询车辆SKU
 func (client *Client) QuerySimSkuEx(request *QuerySimSkuRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QuerySimSkuResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14436,10 +17199,11 @@ func (client *Client) QuerySimSkuEx(request *QuerySimSkuRequest, headers map[str
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机列举车辆SKU
- * Summary: 两轮车一体机列举车辆SKU
- */
+// Description:
+//
+// Description: 两轮车一体机列举车辆SKU
+//
+// Summary: 两轮车一体机列举车辆SKU
 func (client *Client) ListSimSku(request *ListSimSkuRequest) (_result *ListSimSkuResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14452,10 +17216,11 @@ func (client *Client) ListSimSku(request *ListSimSkuRequest) (_result *ListSimSk
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机列举车辆SKU
- * Summary: 两轮车一体机列举车辆SKU
- */
+// Description:
+//
+// Description: 两轮车一体机列举车辆SKU
+//
+// Summary: 两轮车一体机列举车辆SKU
 func (client *Client) ListSimSkuEx(request *ListSimSkuRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *ListSimSkuResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14470,10 +17235,11 @@ func (client *Client) ListSimSkuEx(request *ListSimSkuRequest, headers map[strin
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机创建订单信息
- * Summary: 两轮车一体机创建订单信息
- */
+// Description:
+//
+// Description: 两轮车一体机创建订单信息
+//
+// Summary: 两轮车一体机创建订单信息
 func (client *Client) CreateSimOrder(request *CreateSimOrderRequest) (_result *CreateSimOrderResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14486,10 +17252,11 @@ func (client *Client) CreateSimOrder(request *CreateSimOrderRequest) (_result *C
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机创建订单信息
- * Summary: 两轮车一体机创建订单信息
- */
+// Description:
+//
+// Description: 两轮车一体机创建订单信息
+//
+// Summary: 两轮车一体机创建订单信息
 func (client *Client) CreateSimOrderEx(request *CreateSimOrderRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *CreateSimOrderResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14504,10 +17271,11 @@ func (client *Client) CreateSimOrderEx(request *CreateSimOrderRequest, headers m
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机查询订单信息
- * Summary: 两轮车一体机查询订单信息
- */
+// Description:
+//
+// Description: 两轮车一体机查询订单信息
+//
+// Summary: 两轮车一体机查询订单信息
 func (client *Client) QuerySimOrder(request *QuerySimOrderRequest) (_result *QuerySimOrderResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14520,10 +17288,11 @@ func (client *Client) QuerySimOrder(request *QuerySimOrderRequest) (_result *Que
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机查询订单信息
- * Summary: 两轮车一体机查询订单信息
- */
+// Description:
+//
+// Description: 两轮车一体机查询订单信息
+//
+// Summary: 两轮车一体机查询订单信息
 func (client *Client) QuerySimOrderEx(request *QuerySimOrderRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QuerySimOrderResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14538,10 +17307,11 @@ func (client *Client) QuerySimOrderEx(request *QuerySimOrderRequest, headers map
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机列举订单信息
- * Summary: 两轮车一体机列举订单信息
- */
+// Description:
+//
+// Description: 两轮车一体机列举订单信息
+//
+// Summary: 两轮车一体机列举订单信息
 func (client *Client) ListSimOrder(request *ListSimOrderRequest) (_result *ListSimOrderResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14554,10 +17324,11 @@ func (client *Client) ListSimOrder(request *ListSimOrderRequest) (_result *ListS
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机列举订单信息
- * Summary: 两轮车一体机列举订单信息
- */
+// Description:
+//
+// Description: 两轮车一体机列举订单信息
+//
+// Summary: 两轮车一体机列举订单信息
 func (client *Client) ListSimOrderEx(request *ListSimOrderRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *ListSimOrderResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14572,10 +17343,11 @@ func (client *Client) ListSimOrderEx(request *ListSimOrderRequest, headers map[s
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机取消订单信息
- * Summary: 两轮车一体机取消订单信息
- */
+// Description:
+//
+// Description: 两轮车一体机取消订单信息
+//
+// Summary: 两轮车一体机取消订单信息
 func (client *Client) CancelSimOrder(request *CancelSimOrderRequest) (_result *CancelSimOrderResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14588,10 +17360,11 @@ func (client *Client) CancelSimOrder(request *CancelSimOrderRequest) (_result *C
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机取消订单信息
- * Summary: 两轮车一体机取消订单信息
- */
+// Description:
+//
+// Description: 两轮车一体机取消订单信息
+//
+// Summary: 两轮车一体机取消订单信息
 func (client *Client) CancelSimOrderEx(request *CancelSimOrderRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *CancelSimOrderResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14606,10 +17379,11 @@ func (client *Client) CancelSimOrderEx(request *CancelSimOrderRequest, headers m
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机拉取车辆SKU
- * Summary: 两轮车一体机拉取车辆SKU
- */
+// Description:
+//
+// Description: 两轮车一体机拉取车辆SKU
+//
+// Summary: 两轮车一体机拉取车辆SKU
 func (client *Client) PullSimSku(request *PullSimSkuRequest) (_result *PullSimSkuResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14622,10 +17396,11 @@ func (client *Client) PullSimSku(request *PullSimSkuRequest) (_result *PullSimSk
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机拉取车辆SKU
- * Summary: 两轮车一体机拉取车辆SKU
- */
+// Description:
+//
+// Description: 两轮车一体机拉取车辆SKU
+//
+// Summary: 两轮车一体机拉取车辆SKU
 func (client *Client) PullSimSkuEx(request *PullSimSkuRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *PullSimSkuResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14640,10 +17415,11 @@ func (client *Client) PullSimSkuEx(request *PullSimSkuRequest, headers map[strin
 	return _result, _err
 }
 
-/**
- * Description: 一体机购车订单支付确认请求
- * Summary: 一体机购车订单支付确认请求
- */
+// Description:
+//
+// Description: 一体机购车订单支付确认请求
+//
+// Summary: 一体机购车订单支付确认请求
 func (client *Client) ConfirmSimOrder(request *ConfirmSimOrderRequest) (_result *ConfirmSimOrderResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14656,10 +17432,11 @@ func (client *Client) ConfirmSimOrder(request *ConfirmSimOrderRequest) (_result 
 	return _result, _err
 }
 
-/**
- * Description: 一体机购车订单支付确认请求
- * Summary: 一体机购车订单支付确认请求
- */
+// Description:
+//
+// Description: 一体机购车订单支付确认请求
+//
+// Summary: 一体机购车订单支付确认请求
 func (client *Client) ConfirmSimOrderEx(request *ConfirmSimOrderRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *ConfirmSimOrderResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14674,10 +17451,11 @@ func (client *Client) ConfirmSimOrderEx(request *ConfirmSimOrderRequest, headers
 	return _result, _err
 }
 
-/**
- * Description: 门店一体机车辆码上传解析接口
- * Summary: 门店一体机车辆码上传解析接口
- */
+// Description:
+//
+// Description: 门店一体机车辆码上传解析接口
+//
+// Summary: 门店一体机车辆码上传解析接口
 func (client *Client) UploadSimQrcode(request *UploadSimQrcodeRequest) (_result *UploadSimQrcodeResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14690,10 +17468,11 @@ func (client *Client) UploadSimQrcode(request *UploadSimQrcodeRequest) (_result 
 	return _result, _err
 }
 
-/**
- * Description: 门店一体机车辆码上传解析接口
- * Summary: 门店一体机车辆码上传解析接口
- */
+// Description:
+//
+// Description: 门店一体机车辆码上传解析接口
+//
+// Summary: 门店一体机车辆码上传解析接口
 func (client *Client) UploadSimQrcodeEx(request *UploadSimQrcodeRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *UploadSimQrcodeResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14708,10 +17487,11 @@ func (client *Client) UploadSimQrcodeEx(request *UploadSimQrcodeRequest, headers
 	return _result, _err
 }
 
-/**
- * Description: 查询spu列表
- * Summary: 两轮车一体机列举车辆SPU
- */
+// Description:
+//
+// Description: 查询spu列表
+//
+// Summary: 两轮车一体机列举车辆SPU
 func (client *Client) QuerySpuList(request *QuerySpuListRequest) (_result *QuerySpuListResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14724,10 +17504,11 @@ func (client *Client) QuerySpuList(request *QuerySpuListRequest) (_result *Query
 	return _result, _err
 }
 
-/**
- * Description: 查询spu列表
- * Summary: 两轮车一体机列举车辆SPU
- */
+// Description:
+//
+// Description: 查询spu列表
+//
+// Summary: 两轮车一体机列举车辆SPU
 func (client *Client) QuerySpuListEx(request *QuerySpuListRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QuerySpuListResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14742,10 +17523,11 @@ func (client *Client) QuerySpuListEx(request *QuerySpuListRequest, headers map[s
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机轮询门店签约结果
- * Summary: 两轮车一体机轮询门店签约结果
- */
+// Description:
+//
+// Description: 两轮车一体机轮询门店签约结果
+//
+// Summary: 两轮车一体机轮询门店签约结果
 func (client *Client) QueryLoginSign(request *QueryLoginSignRequest) (_result *QueryLoginSignResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14758,10 +17540,11 @@ func (client *Client) QueryLoginSign(request *QueryLoginSignRequest) (_result *Q
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机轮询门店签约结果
- * Summary: 两轮车一体机轮询门店签约结果
- */
+// Description:
+//
+// Description: 两轮车一体机轮询门店签约结果
+//
+// Summary: 两轮车一体机轮询门店签约结果
 func (client *Client) QueryLoginSignEx(request *QueryLoginSignRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryLoginSignResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14776,10 +17559,11 @@ func (client *Client) QueryLoginSignEx(request *QueryLoginSignRequest, headers m
 	return _result, _err
 }
 
-/**
- * Description: 刷新订单链接
- * Summary: 刷新订单链接
- */
+// Description:
+//
+// Description: 刷新订单链接
+//
+// Summary: 刷新订单链接
 func (client *Client) ResetOrderLink(request *ResetOrderLinkRequest) (_result *ResetOrderLinkResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14792,10 +17576,11 @@ func (client *Client) ResetOrderLink(request *ResetOrderLinkRequest) (_result *R
 	return _result, _err
 }
 
-/**
- * Description: 刷新订单链接
- * Summary: 刷新订单链接
- */
+// Description:
+//
+// Description: 刷新订单链接
+//
+// Summary: 刷新订单链接
 func (client *Client) ResetOrderLinkEx(request *ResetOrderLinkRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *ResetOrderLinkResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14810,10 +17595,11 @@ func (client *Client) ResetOrderLinkEx(request *ResetOrderLinkRequest, headers m
 	return _result, _err
 }
 
-/**
- * Description: 一体机风控信息上传接口
- * Summary: 一体机风控信息上传接口
- */
+// Description:
+//
+// Description: 一体机风控信息上传接口
+//
+// Summary: 一体机风控信息上传接口
 func (client *Client) UploadSimRiskdata(request *UploadSimRiskdataRequest) (_result *UploadSimRiskdataResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14826,10 +17612,11 @@ func (client *Client) UploadSimRiskdata(request *UploadSimRiskdataRequest) (_res
 	return _result, _err
 }
 
-/**
- * Description: 一体机风控信息上传接口
- * Summary: 一体机风控信息上传接口
- */
+// Description:
+//
+// Description: 一体机风控信息上传接口
+//
+// Summary: 一体机风控信息上传接口
 func (client *Client) UploadSimRiskdataEx(request *UploadSimRiskdataRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *UploadSimRiskdataResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14844,10 +17631,11 @@ func (client *Client) UploadSimRiskdataEx(request *UploadSimRiskdataRequest, hea
 	return _result, _err
 }
 
-/**
- * Description: 数字钥匙通过联登TOKEN获取用户信息
- * Summary: 数字钥匙通过联登TOKEN获取用户信息
- */
+// Description:
+//
+// Description: 数字钥匙通过联登TOKEN获取用户信息
+//
+// Summary: 数字钥匙通过联登TOKEN获取用户信息
 func (client *Client) QueryDigitalkeyUserinfo(request *QueryDigitalkeyUserinfoRequest) (_result *QueryDigitalkeyUserinfoResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14860,10 +17648,11 @@ func (client *Client) QueryDigitalkeyUserinfo(request *QueryDigitalkeyUserinfoRe
 	return _result, _err
 }
 
-/**
- * Description: 数字钥匙通过联登TOKEN获取用户信息
- * Summary: 数字钥匙通过联登TOKEN获取用户信息
- */
+// Description:
+//
+// Description: 数字钥匙通过联登TOKEN获取用户信息
+//
+// Summary: 数字钥匙通过联登TOKEN获取用户信息
 func (client *Client) QueryDigitalkeyUserinfoEx(request *QueryDigitalkeyUserinfoRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryDigitalkeyUserinfoResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14878,10 +17667,11 @@ func (client *Client) QueryDigitalkeyUserinfoEx(request *QueryDigitalkeyUserinfo
 	return _result, _err
 }
 
-/**
- * Description: 车辆gps定位查询接口
- * Summary: 车辆gps定位查询接口
- */
+// Description:
+//
+// Description: 车辆gps定位查询接口
+//
+// Summary: 车辆gps定位查询接口
 func (client *Client) QueryTwevPosition(request *QueryTwevPositionRequest) (_result *QueryTwevPositionResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14894,10 +17684,11 @@ func (client *Client) QueryTwevPosition(request *QueryTwevPositionRequest) (_res
 	return _result, _err
 }
 
-/**
- * Description: 车辆gps定位查询接口
- * Summary: 车辆gps定位查询接口
- */
+// Description:
+//
+// Description: 车辆gps定位查询接口
+//
+// Summary: 车辆gps定位查询接口
 func (client *Client) QueryTwevPositionEx(request *QueryTwevPositionRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryTwevPositionResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14912,10 +17703,11 @@ func (client *Client) QueryTwevPositionEx(request *QueryTwevPositionRequest, hea
 	return _result, _err
 }
 
-/**
- * Description: 寻车鸣笛
- * Summary: 寻车鸣笛
- */
+// Description:
+//
+// Description: 寻车鸣笛
+//
+// Summary: 寻车鸣笛
 func (client *Client) OperateTwevSearch(request *OperateTwevSearchRequest) (_result *OperateTwevSearchResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14928,10 +17720,11 @@ func (client *Client) OperateTwevSearch(request *OperateTwevSearchRequest) (_res
 	return _result, _err
 }
 
-/**
- * Description: 寻车鸣笛
- * Summary: 寻车鸣笛
- */
+// Description:
+//
+// Description: 寻车鸣笛
+//
+// Summary: 寻车鸣笛
 func (client *Client) OperateTwevSearchEx(request *OperateTwevSearchRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *OperateTwevSearchResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14946,10 +17739,11 @@ func (client *Client) OperateTwevSearchEx(request *OperateTwevSearchRequest, hea
 	return _result, _err
 }
 
-/**
- * Description: 二轮车锁车/解锁
- * Summary: 二轮车锁车/解锁
- */
+// Description:
+//
+// Description: 二轮车锁车/解锁
+//
+// Summary: 二轮车锁车/解锁
 func (client *Client) OperateTwevPower(request *OperateTwevPowerRequest) (_result *OperateTwevPowerResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14962,10 +17756,11 @@ func (client *Client) OperateTwevPower(request *OperateTwevPowerRequest) (_resul
 	return _result, _err
 }
 
-/**
- * Description: 二轮车锁车/解锁
- * Summary: 二轮车锁车/解锁
- */
+// Description:
+//
+// Description: 二轮车锁车/解锁
+//
+// Summary: 二轮车锁车/解锁
 func (client *Client) OperateTwevPowerEx(request *OperateTwevPowerRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *OperateTwevPowerResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -14980,10 +17775,11 @@ func (client *Client) OperateTwevPowerEx(request *OperateTwevPowerRequest, heade
 	return _result, _err
 }
 
-/**
- * Description: 二轮车异步任务结果查询
- * Summary: 二轮车异步任务结果查询
- */
+// Description:
+//
+// Description: 二轮车异步任务结果查询
+//
+// Summary: 二轮车异步任务结果查询
 func (client *Client) QueryTwevTask(request *QueryTwevTaskRequest) (_result *QueryTwevTaskResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -14996,10 +17792,11 @@ func (client *Client) QueryTwevTask(request *QueryTwevTaskRequest) (_result *Que
 	return _result, _err
 }
 
-/**
- * Description: 二轮车异步任务结果查询
- * Summary: 二轮车异步任务结果查询
- */
+// Description:
+//
+// Description: 二轮车异步任务结果查询
+//
+// Summary: 二轮车异步任务结果查询
 func (client *Client) QueryTwevTaskEx(request *QueryTwevTaskRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryTwevTaskResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15014,10 +17811,11 @@ func (client *Client) QueryTwevTaskEx(request *QueryTwevTaskRequest, headers map
 	return _result, _err
 }
 
-/**
- * Description: 数字钥匙设备凭证数据申请
- * Summary: 数字钥匙设备凭证数据申请
- */
+// Description:
+//
+// Description: 数字钥匙设备凭证数据申请
+//
+// Summary: 数字钥匙设备凭证数据申请
 func (client *Client) ApplyDigitalkeyCred(request *ApplyDigitalkeyCredRequest) (_result *ApplyDigitalkeyCredResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15030,10 +17828,11 @@ func (client *Client) ApplyDigitalkeyCred(request *ApplyDigitalkeyCredRequest) (
 	return _result, _err
 }
 
-/**
- * Description: 数字钥匙设备凭证数据申请
- * Summary: 数字钥匙设备凭证数据申请
- */
+// Description:
+//
+// Description: 数字钥匙设备凭证数据申请
+//
+// Summary: 数字钥匙设备凭证数据申请
 func (client *Client) ApplyDigitalkeyCredEx(request *ApplyDigitalkeyCredRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *ApplyDigitalkeyCredResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15048,10 +17847,11 @@ func (client *Client) ApplyDigitalkeyCredEx(request *ApplyDigitalkeyCredRequest,
 	return _result, _err
 }
 
-/**
- * Description: 客户信息初始化
- * Summary: 客户信息初始化
- */
+// Description:
+//
+// Description: 客户信息初始化
+//
+// Summary: 客户信息初始化
 func (client *Client) InitDigitalkeyCorp(request *InitDigitalkeyCorpRequest) (_result *InitDigitalkeyCorpResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15064,10 +17864,11 @@ func (client *Client) InitDigitalkeyCorp(request *InitDigitalkeyCorpRequest) (_r
 	return _result, _err
 }
 
-/**
- * Description: 客户信息初始化
- * Summary: 客户信息初始化
- */
+// Description:
+//
+// Description: 客户信息初始化
+//
+// Summary: 客户信息初始化
 func (client *Client) InitDigitalkeyCorpEx(request *InitDigitalkeyCorpRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *InitDigitalkeyCorpResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15082,10 +17883,11 @@ func (client *Client) InitDigitalkeyCorpEx(request *InitDigitalkeyCorpRequest, h
 	return _result, _err
 }
 
-/**
- * Description: 数字钥匙nfc车辆信息查询
- * Summary: 数字钥匙nfc车辆信息查询
- */
+// Description:
+//
+// Description: 数字钥匙nfc车辆信息查询
+//
+// Summary: 数字钥匙nfc车辆信息查询
 func (client *Client) QueryDigitalkeyNfccarinfo(request *QueryDigitalkeyNfccarinfoRequest) (_result *QueryDigitalkeyNfccarinfoResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15098,10 +17900,11 @@ func (client *Client) QueryDigitalkeyNfccarinfo(request *QueryDigitalkeyNfccarin
 	return _result, _err
 }
 
-/**
- * Description: 数字钥匙nfc车辆信息查询
- * Summary: 数字钥匙nfc车辆信息查询
- */
+// Description:
+//
+// Description: 数字钥匙nfc车辆信息查询
+//
+// Summary: 数字钥匙nfc车辆信息查询
 func (client *Client) QueryDigitalkeyNfccarinfoEx(request *QueryDigitalkeyNfccarinfoRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryDigitalkeyNfccarinfoResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15116,10 +17919,11 @@ func (client *Client) QueryDigitalkeyNfccarinfoEx(request *QueryDigitalkeyNfccar
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机选择门店登录
- * Summary: 两轮车一体机选择门店登录
- */
+// Description:
+//
+// Description: 两轮车一体机选择门店登录
+//
+// Summary: 两轮车一体机选择门店登录
 func (client *Client) ConfirmSimLogin(request *ConfirmSimLoginRequest) (_result *ConfirmSimLoginResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15132,10 +17936,11 @@ func (client *Client) ConfirmSimLogin(request *ConfirmSimLoginRequest) (_result 
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机选择门店登录
- * Summary: 两轮车一体机选择门店登录
- */
+// Description:
+//
+// Description: 两轮车一体机选择门店登录
+//
+// Summary: 两轮车一体机选择门店登录
 func (client *Client) ConfirmSimLoginEx(request *ConfirmSimLoginRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *ConfirmSimLoginResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15150,10 +17955,11 @@ func (client *Client) ConfirmSimLoginEx(request *ConfirmSimLoginRequest, headers
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机门店设置sku价格
- * Summary: 两轮车一体机门店设置sku价格
- */
+// Description:
+//
+// Description: 两轮车一体机门店设置sku价格
+//
+// Summary: 两轮车一体机门店设置sku价格
 func (client *Client) UpdateSimSku(request *UpdateSimSkuRequest) (_result *UpdateSimSkuResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15166,10 +17972,11 @@ func (client *Client) UpdateSimSku(request *UpdateSimSkuRequest) (_result *Updat
 	return _result, _err
 }
 
-/**
- * Description: 两轮车一体机门店设置sku价格
- * Summary: 两轮车一体机门店设置sku价格
- */
+// Description:
+//
+// Description: 两轮车一体机门店设置sku价格
+//
+// Summary: 两轮车一体机门店设置sku价格
 func (client *Client) UpdateSimSkuEx(request *UpdateSimSkuRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *UpdateSimSkuResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15184,10 +17991,11 @@ func (client *Client) UpdateSimSkuEx(request *UpdateSimSkuRequest, headers map[s
 	return _result, _err
 }
 
-/**
- * Description: 贷后控车查询车辆定位数据
- * Summary: 贷后控车查询车辆定位数据
- */
+// Description:
+//
+// Description: 贷后控车查询车辆定位数据
+//
+// Summary: 贷后控车查询车辆定位数据
 func (client *Client) QueryTwevCar(request *QueryTwevCarRequest) (_result *QueryTwevCarResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15200,10 +18008,11 @@ func (client *Client) QueryTwevCar(request *QueryTwevCarRequest) (_result *Query
 	return _result, _err
 }
 
-/**
- * Description: 贷后控车查询车辆定位数据
- * Summary: 贷后控车查询车辆定位数据
- */
+// Description:
+//
+// Description: 贷后控车查询车辆定位数据
+//
+// Summary: 贷后控车查询车辆定位数据
 func (client *Client) QueryTwevCarEx(request *QueryTwevCarRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryTwevCarResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15218,10 +18027,11 @@ func (client *Client) QueryTwevCarEx(request *QueryTwevCarRequest, headers map[s
 	return _result, _err
 }
 
-/**
- * Description: 贷后控车查询车辆gps轨迹
- * Summary: 贷后控车查询车辆gps轨迹
- */
+// Description:
+//
+// Description: 贷后控车查询车辆gps轨迹
+//
+// Summary: 贷后控车查询车辆gps轨迹
 func (client *Client) QueryTwevTravel(request *QueryTwevTravelRequest) (_result *QueryTwevTravelResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15234,10 +18044,11 @@ func (client *Client) QueryTwevTravel(request *QueryTwevTravelRequest) (_result 
 	return _result, _err
 }
 
-/**
- * Description: 贷后控车查询车辆gps轨迹
- * Summary: 贷后控车查询车辆gps轨迹
- */
+// Description:
+//
+// Description: 贷后控车查询车辆gps轨迹
+//
+// Summary: 贷后控车查询车辆gps轨迹
 func (client *Client) QueryTwevTravelEx(request *QueryTwevTravelRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryTwevTravelResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15252,10 +18063,11 @@ func (client *Client) QueryTwevTravelEx(request *QueryTwevTravelRequest, headers
 	return _result, _err
 }
 
-/**
- * Description: 贷后控车车辆控制
- * Summary: 贷后控车车辆控制
- */
+// Description:
+//
+// Description: 贷后控车车辆控制
+//
+// Summary: 贷后控车车辆控制
 func (client *Client) OperateTwevCar(request *OperateTwevCarRequest) (_result *OperateTwevCarResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15268,10 +18080,11 @@ func (client *Client) OperateTwevCar(request *OperateTwevCarRequest) (_result *O
 	return _result, _err
 }
 
-/**
- * Description: 贷后控车车辆控制
- * Summary: 贷后控车车辆控制
- */
+// Description:
+//
+// Description: 贷后控车车辆控制
+//
+// Summary: 贷后控车车辆控制
 func (client *Client) OperateTwevCarEx(request *OperateTwevCarRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *OperateTwevCarResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15286,10 +18099,11 @@ func (client *Client) OperateTwevCarEx(request *OperateTwevCarRequest, headers m
 	return _result, _err
 }
 
-/**
- * Description: 新接口-查询车辆行程统计数据
- * Summary: 新接口-查询车辆行程统计数据
- */
+// Description:
+//
+// Description: 新接口-查询车辆行程统计数据
+//
+// Summary: 新接口-查询车辆行程统计数据
 func (client *Client) QueryTwevCardata(request *QueryTwevCardataRequest) (_result *QueryTwevCardataResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15302,10 +18116,11 @@ func (client *Client) QueryTwevCardata(request *QueryTwevCardataRequest) (_resul
 	return _result, _err
 }
 
-/**
- * Description: 新接口-查询车辆行程统计数据
- * Summary: 新接口-查询车辆行程统计数据
- */
+// Description:
+//
+// Description: 新接口-查询车辆行程统计数据
+//
+// Summary: 新接口-查询车辆行程统计数据
 func (client *Client) QueryTwevCardataEx(request *QueryTwevCardataRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryTwevCardataResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15320,10 +18135,11 @@ func (client *Client) QueryTwevCardataEx(request *QueryTwevCardataRequest, heade
 	return _result, _err
 }
 
-/**
- * Description: 新接口-分页查询车辆行程记录
- * Summary: 新接口-分页查询车辆行程记录
- */
+// Description:
+//
+// Description: 新接口-分页查询车辆行程记录
+//
+// Summary: 新接口-分页查询车辆行程记录
 func (client *Client) QueryTwevCartravel(request *QueryTwevCartravelRequest) (_result *QueryTwevCartravelResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15336,10 +18152,11 @@ func (client *Client) QueryTwevCartravel(request *QueryTwevCartravelRequest) (_r
 	return _result, _err
 }
 
-/**
- * Description: 新接口-分页查询车辆行程记录
- * Summary: 新接口-分页查询车辆行程记录
- */
+// Description:
+//
+// Description: 新接口-分页查询车辆行程记录
+//
+// Summary: 新接口-分页查询车辆行程记录
 func (client *Client) QueryTwevCartravelEx(request *QueryTwevCartravelRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryTwevCartravelResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15354,10 +18171,11 @@ func (client *Client) QueryTwevCartravelEx(request *QueryTwevCartravelRequest, h
 	return _result, _err
 }
 
-/**
- * Description: 数字钥匙设备凭证数据删除
- * Summary: 数字钥匙设备凭证数据删除
- */
+// Description:
+//
+// Description: 数字钥匙设备凭证数据删除
+//
+// Summary: 数字钥匙设备凭证数据删除
 func (client *Client) DeleteDigitalkeyCred(request *DeleteDigitalkeyCredRequest) (_result *DeleteDigitalkeyCredResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15370,10 +18188,11 @@ func (client *Client) DeleteDigitalkeyCred(request *DeleteDigitalkeyCredRequest)
 	return _result, _err
 }
 
-/**
- * Description: 数字钥匙设备凭证数据删除
- * Summary: 数字钥匙设备凭证数据删除
- */
+// Description:
+//
+// Description: 数字钥匙设备凭证数据删除
+//
+// Summary: 数字钥匙设备凭证数据删除
 func (client *Client) DeleteDigitalkeyCredEx(request *DeleteDigitalkeyCredRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *DeleteDigitalkeyCredResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15388,10 +18207,11 @@ func (client *Client) DeleteDigitalkeyCredEx(request *DeleteDigitalkeyCredReques
 	return _result, _err
 }
 
-/**
- * Description: 租赁车辆激活接口
- * Summary: 租赁车辆激活接口
- */
+// Description:
+//
+// Description: 租赁车辆激活接口
+//
+// Summary: 租赁车辆激活接口
 func (client *Client) ActivateDigitalkeyRental(request *ActivateDigitalkeyRentalRequest) (_result *ActivateDigitalkeyRentalResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15404,10 +18224,11 @@ func (client *Client) ActivateDigitalkeyRental(request *ActivateDigitalkeyRental
 	return _result, _err
 }
 
-/**
- * Description: 租赁车辆激活接口
- * Summary: 租赁车辆激活接口
- */
+// Description:
+//
+// Description: 租赁车辆激活接口
+//
+// Summary: 租赁车辆激活接口
 func (client *Client) ActivateDigitalkeyRentalEx(request *ActivateDigitalkeyRentalRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *ActivateDigitalkeyRentalResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15422,10 +18243,11 @@ func (client *Client) ActivateDigitalkeyRentalEx(request *ActivateDigitalkeyRent
 	return _result, _err
 }
 
-/**
- * Description: 租赁钥匙分享接口
- * Summary: 租赁钥匙分享接口
- */
+// Description:
+//
+// Description: 租赁钥匙分享接口
+//
+// Summary: 租赁钥匙分享接口
 func (client *Client) ShareDigitalkeyRental(request *ShareDigitalkeyRentalRequest) (_result *ShareDigitalkeyRentalResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15438,10 +18260,11 @@ func (client *Client) ShareDigitalkeyRental(request *ShareDigitalkeyRentalReques
 	return _result, _err
 }
 
-/**
- * Description: 租赁钥匙分享接口
- * Summary: 租赁钥匙分享接口
- */
+// Description:
+//
+// Description: 租赁钥匙分享接口
+//
+// Summary: 租赁钥匙分享接口
 func (client *Client) ShareDigitalkeyRentalEx(request *ShareDigitalkeyRentalRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *ShareDigitalkeyRentalResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15456,10 +18279,11 @@ func (client *Client) ShareDigitalkeyRentalEx(request *ShareDigitalkeyRentalRequ
 	return _result, _err
 }
 
-/**
- * Description: 租赁钥匙收回接口
- * Summary: 租赁钥匙收回接口
- */
+// Description:
+//
+// Description: 租赁钥匙收回接口
+//
+// Summary: 租赁钥匙收回接口
 func (client *Client) RevokeDigitalkeyRental(request *RevokeDigitalkeyRentalRequest) (_result *RevokeDigitalkeyRentalResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15472,10 +18296,11 @@ func (client *Client) RevokeDigitalkeyRental(request *RevokeDigitalkeyRentalRequ
 	return _result, _err
 }
 
-/**
- * Description: 租赁钥匙收回接口
- * Summary: 租赁钥匙收回接口
- */
+// Description:
+//
+// Description: 租赁钥匙收回接口
+//
+// Summary: 租赁钥匙收回接口
 func (client *Client) RevokeDigitalkeyRentalEx(request *RevokeDigitalkeyRentalRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *RevokeDigitalkeyRentalResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15490,10 +18315,11 @@ func (client *Client) RevokeDigitalkeyRentalEx(request *RevokeDigitalkeyRentalRe
 	return _result, _err
 }
 
-/**
- * Description: 租赁车辆数据查询接口
- * Summary: 租赁车辆数据查询接口
- */
+// Description:
+//
+// Description: 租赁车辆数据查询接口
+//
+// Summary: 租赁车辆数据查询接口
 func (client *Client) QueryDigitalkeyRentalcar(request *QueryDigitalkeyRentalcarRequest) (_result *QueryDigitalkeyRentalcarResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15506,10 +18332,11 @@ func (client *Client) QueryDigitalkeyRentalcar(request *QueryDigitalkeyRentalcar
 	return _result, _err
 }
 
-/**
- * Description: 租赁车辆数据查询接口
- * Summary: 租赁车辆数据查询接口
- */
+// Description:
+//
+// Description: 租赁车辆数据查询接口
+//
+// Summary: 租赁车辆数据查询接口
 func (client *Client) QueryDigitalkeyRentalcarEx(request *QueryDigitalkeyRentalcarRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryDigitalkeyRentalcarResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15524,10 +18351,11 @@ func (client *Client) QueryDigitalkeyRentalcarEx(request *QueryDigitalkeyRentalc
 	return _result, _err
 }
 
-/**
- * Description: 租赁车辆轨迹查询接口
- * Summary: 租赁车辆轨迹查询接口
- */
+// Description:
+//
+// Description: 租赁车辆轨迹查询接口
+//
+// Summary: 租赁车辆轨迹查询接口
 func (client *Client) ListDigitalkeyRentaltrip(request *ListDigitalkeyRentaltripRequest) (_result *ListDigitalkeyRentaltripResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15540,10 +18368,11 @@ func (client *Client) ListDigitalkeyRentaltrip(request *ListDigitalkeyRentaltrip
 	return _result, _err
 }
 
-/**
- * Description: 租赁车辆轨迹查询接口
- * Summary: 租赁车辆轨迹查询接口
- */
+// Description:
+//
+// Description: 租赁车辆轨迹查询接口
+//
+// Summary: 租赁车辆轨迹查询接口
 func (client *Client) ListDigitalkeyRentaltripEx(request *ListDigitalkeyRentaltripRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *ListDigitalkeyRentaltripResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15558,10 +18387,11 @@ func (client *Client) ListDigitalkeyRentaltripEx(request *ListDigitalkeyRentaltr
 	return _result, _err
 }
 
-/**
- * Description: 行程轨迹点接口
- * Summary: 行程轨迹点接口
- */
+// Description:
+//
+// Description: 行程轨迹点接口
+//
+// Summary: 行程轨迹点接口
 func (client *Client) QueryDigitalkeyRentaltrippoint(request *QueryDigitalkeyRentaltrippointRequest) (_result *QueryDigitalkeyRentaltrippointResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15574,10 +18404,11 @@ func (client *Client) QueryDigitalkeyRentaltrippoint(request *QueryDigitalkeyRen
 	return _result, _err
 }
 
-/**
- * Description: 行程轨迹点接口
- * Summary: 行程轨迹点接口
- */
+// Description:
+//
+// Description: 行程轨迹点接口
+//
+// Summary: 行程轨迹点接口
 func (client *Client) QueryDigitalkeyRentaltrippointEx(request *QueryDigitalkeyRentaltrippointRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryDigitalkeyRentaltrippointResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15592,10 +18423,11 @@ func (client *Client) QueryDigitalkeyRentaltrippointEx(request *QueryDigitalkeyR
 	return _result, _err
 }
 
-/**
- * Description: 积分充值
- * Summary: 积分充值
- */
+// Description:
+//
+// Description: 积分充值
+//
+// Summary: 积分充值
 func (client *Client) RechargeMallPoint(request *RechargeMallPointRequest) (_result *RechargeMallPointResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15608,10 +18440,11 @@ func (client *Client) RechargeMallPoint(request *RechargeMallPointRequest) (_res
 	return _result, _err
 }
 
-/**
- * Description: 积分充值
- * Summary: 积分充值
- */
+// Description:
+//
+// Description: 积分充值
+//
+// Summary: 积分充值
 func (client *Client) RechargeMallPointEx(request *RechargeMallPointRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *RechargeMallPointResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15626,10 +18459,11 @@ func (client *Client) RechargeMallPointEx(request *RechargeMallPointRequest, hea
 	return _result, _err
 }
 
-/**
- * Description: 逾期通知
- * Summary: 逾期通知
- */
+// Description:
+//
+// Description: 逾期通知
+//
+// Summary: 逾期通知
 func (client *Client) OverdueTermination(request *OverdueTerminationRequest) (_result *OverdueTerminationResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15642,10 +18476,11 @@ func (client *Client) OverdueTermination(request *OverdueTerminationRequest) (_r
 	return _result, _err
 }
 
-/**
- * Description: 逾期通知
- * Summary: 逾期通知
- */
+// Description:
+//
+// Description: 逾期通知
+//
+// Summary: 逾期通知
 func (client *Client) OverdueTerminationEx(request *OverdueTerminationRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *OverdueTerminationResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15660,10 +18495,11 @@ func (client *Client) OverdueTerminationEx(request *OverdueTerminationRequest, h
 	return _result, _err
 }
 
-/**
- * Description: 余额查询
- * Summary: 余额查询
- */
+// Description:
+//
+// Description: 余额查询
+//
+// Summary: 余额查询
 func (client *Client) QueryMallPointbalance(request *QueryMallPointbalanceRequest) (_result *QueryMallPointbalanceResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15676,10 +18512,11 @@ func (client *Client) QueryMallPointbalance(request *QueryMallPointbalanceReques
 	return _result, _err
 }
 
-/**
- * Description: 余额查询
- * Summary: 余额查询
- */
+// Description:
+//
+// Description: 余额查询
+//
+// Summary: 余额查询
 func (client *Client) QueryMallPointbalanceEx(request *QueryMallPointbalanceRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryMallPointbalanceResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15694,10 +18531,11 @@ func (client *Client) QueryMallPointbalanceEx(request *QueryMallPointbalanceRequ
 	return _result, _err
 }
 
-/**
- * Description: 解约信息查询
- * Summary: 解约信息查询
- */
+// Description:
+//
+// Description: 解约信息查询
+//
+// Summary: 解约信息查询
 func (client *Client) QueryTermination(request *QueryTerminationRequest) (_result *QueryTerminationResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15710,10 +18548,11 @@ func (client *Client) QueryTermination(request *QueryTerminationRequest) (_resul
 	return _result, _err
 }
 
-/**
- * Description: 解约信息查询
- * Summary: 解约信息查询
- */
+// Description:
+//
+// Description: 解约信息查询
+//
+// Summary: 解约信息查询
 func (client *Client) QueryTerminationEx(request *QueryTerminationRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryTerminationResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15728,10 +18567,11 @@ func (client *Client) QueryTerminationEx(request *QueryTerminationRequest, heade
 	return _result, _err
 }
 
-/**
- * Description: 解约
- * Summary: 解约
- */
+// Description:
+//
+// Description: 解约
+//
+// Summary: 解约
 func (client *Client) ApplyTermination(request *ApplyTerminationRequest) (_result *ApplyTerminationResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15744,10 +18584,11 @@ func (client *Client) ApplyTermination(request *ApplyTerminationRequest) (_resul
 	return _result, _err
 }
 
-/**
- * Description: 解约
- * Summary: 解约
- */
+// Description:
+//
+// Description: 解约
+//
+// Summary: 解约
 func (client *Client) ApplyTerminationEx(request *ApplyTerminationRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *ApplyTerminationResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15762,10 +18603,11 @@ func (client *Client) ApplyTerminationEx(request *ApplyTerminationRequest, heade
 	return _result, _err
 }
 
-/**
- * Description: 账户查询
- * Summary: 账户查询
- */
+// Description:
+//
+// Description: 账户查询
+//
+// Summary: 账户查询
 func (client *Client) QueryMallPointaccount(request *QueryMallPointaccountRequest) (_result *QueryMallPointaccountResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15778,10 +18620,11 @@ func (client *Client) QueryMallPointaccount(request *QueryMallPointaccountReques
 	return _result, _err
 }
 
-/**
- * Description: 账户查询
- * Summary: 账户查询
- */
+// Description:
+//
+// Description: 账户查询
+//
+// Summary: 账户查询
 func (client *Client) QueryMallPointaccountEx(request *QueryMallPointaccountRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryMallPointaccountResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15796,10 +18639,11 @@ func (client *Client) QueryMallPointaccountEx(request *QueryMallPointaccountRequ
 	return _result, _err
 }
 
-/**
- * Description: 积分冻结
- * Summary: 积分冻结
- */
+// Description:
+//
+// Description: 积分冻结
+//
+// Summary: 积分冻结
 func (client *Client) FreezeMallPoint(request *FreezeMallPointRequest) (_result *FreezeMallPointResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15812,10 +18656,11 @@ func (client *Client) FreezeMallPoint(request *FreezeMallPointRequest) (_result 
 	return _result, _err
 }
 
-/**
- * Description: 积分冻结
- * Summary: 积分冻结
- */
+// Description:
+//
+// Description: 积分冻结
+//
+// Summary: 积分冻结
 func (client *Client) FreezeMallPointEx(request *FreezeMallPointRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *FreezeMallPointResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15830,10 +18675,11 @@ func (client *Client) FreezeMallPointEx(request *FreezeMallPointRequest, headers
 	return _result, _err
 }
 
-/**
- * Description: 积分解冻
- * Summary: 积分解冻
- */
+// Description:
+//
+// Description: 积分解冻
+//
+// Summary: 积分解冻
 func (client *Client) UnfreezeMallPoint(request *UnfreezeMallPointRequest) (_result *UnfreezeMallPointResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15846,10 +18692,11 @@ func (client *Client) UnfreezeMallPoint(request *UnfreezeMallPointRequest) (_res
 	return _result, _err
 }
 
-/**
- * Description: 积分解冻
- * Summary: 积分解冻
- */
+// Description:
+//
+// Description: 积分解冻
+//
+// Summary: 积分解冻
 func (client *Client) UnfreezeMallPointEx(request *UnfreezeMallPointRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *UnfreezeMallPointResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15864,10 +18711,11 @@ func (client *Client) UnfreezeMallPointEx(request *UnfreezeMallPointRequest, hea
 	return _result, _err
 }
 
-/**
- * Description: 积分扣减
- * Summary: 积分扣减
- */
+// Description:
+//
+// Description: 积分扣减
+//
+// Summary: 积分扣减
 func (client *Client) DeductMallPoint(request *DeductMallPointRequest) (_result *DeductMallPointResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15880,10 +18728,11 @@ func (client *Client) DeductMallPoint(request *DeductMallPointRequest) (_result 
 	return _result, _err
 }
 
-/**
- * Description: 积分扣减
- * Summary: 积分扣减
- */
+// Description:
+//
+// Description: 积分扣减
+//
+// Summary: 积分扣减
 func (client *Client) DeductMallPointEx(request *DeductMallPointRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *DeductMallPointResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15898,10 +18747,11 @@ func (client *Client) DeductMallPointEx(request *DeductMallPointRequest, headers
 	return _result, _err
 }
 
-/**
- * Description: 订单状态查询接口
- * Summary: 订单状态查询接口
- */
+// Description:
+//
+// Description: 订单状态查询接口
+//
+// Summary: 订单状态查询接口
 func (client *Client) QueryPoiOrder(request *QueryPoiOrderRequest) (_result *QueryPoiOrderResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15914,10 +18764,11 @@ func (client *Client) QueryPoiOrder(request *QueryPoiOrderRequest) (_result *Que
 	return _result, _err
 }
 
-/**
- * Description: 订单状态查询接口
- * Summary: 订单状态查询接口
- */
+// Description:
+//
+// Description: 订单状态查询接口
+//
+// Summary: 订单状态查询接口
 func (client *Client) QueryPoiOrderEx(request *QueryPoiOrderRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryPoiOrderResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15932,10 +18783,11 @@ func (client *Client) QueryPoiOrderEx(request *QueryPoiOrderRequest, headers map
 	return _result, _err
 }
 
-/**
- * Description: 积分充值
- * Summary: 积分充值
- */
+// Description:
+//
+// Description: 积分充值
+//
+// Summary: 积分充值
 func (client *Client) RechargePoiMallpoint(request *RechargePoiMallpointRequest) (_result *RechargePoiMallpointResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15948,10 +18800,11 @@ func (client *Client) RechargePoiMallpoint(request *RechargePoiMallpointRequest)
 	return _result, _err
 }
 
-/**
- * Description: 积分充值
- * Summary: 积分充值
- */
+// Description:
+//
+// Description: 积分充值
+//
+// Summary: 积分充值
 func (client *Client) RechargePoiMallpointEx(request *RechargePoiMallpointRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *RechargePoiMallpointResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -15966,10 +18819,11 @@ func (client *Client) RechargePoiMallpointEx(request *RechargePoiMallpointReques
 	return _result, _err
 }
 
-/**
- * Description: 逾期通知
- * Summary: 逾期通知
- */
+// Description:
+//
+// Description: 逾期通知
+//
+// Summary: 逾期通知
 func (client *Client) OverduePoiTermination(request *OverduePoiTerminationRequest) (_result *OverduePoiTerminationResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -15982,10 +18836,11 @@ func (client *Client) OverduePoiTermination(request *OverduePoiTerminationReques
 	return _result, _err
 }
 
-/**
- * Description: 逾期通知
- * Summary: 逾期通知
- */
+// Description:
+//
+// Description: 逾期通知
+//
+// Summary: 逾期通知
 func (client *Client) OverduePoiTerminationEx(request *OverduePoiTerminationRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *OverduePoiTerminationResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16000,10 +18855,11 @@ func (client *Client) OverduePoiTerminationEx(request *OverduePoiTerminationRequ
 	return _result, _err
 }
 
-/**
- * Description: 余额查询
- * Summary: 余额查询
- */
+// Description:
+//
+// Description: 余额查询
+//
+// Summary: 余额查询
 func (client *Client) QueryPoiMallpointbalance(request *QueryPoiMallpointbalanceRequest) (_result *QueryPoiMallpointbalanceResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16016,10 +18872,11 @@ func (client *Client) QueryPoiMallpointbalance(request *QueryPoiMallpointbalance
 	return _result, _err
 }
 
-/**
- * Description: 余额查询
- * Summary: 余额查询
- */
+// Description:
+//
+// Description: 余额查询
+//
+// Summary: 余额查询
 func (client *Client) QueryPoiMallpointbalanceEx(request *QueryPoiMallpointbalanceRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryPoiMallpointbalanceResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16034,10 +18891,11 @@ func (client *Client) QueryPoiMallpointbalanceEx(request *QueryPoiMallpointbalan
 	return _result, _err
 }
 
-/**
- * Description: 解约信息查询
- * Summary: 解约信息查询
- */
+// Description:
+//
+// Description: 解约信息查询
+//
+// Summary: 解约信息查询
 func (client *Client) QueryPoiTermination(request *QueryPoiTerminationRequest) (_result *QueryPoiTerminationResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16050,10 +18908,11 @@ func (client *Client) QueryPoiTermination(request *QueryPoiTerminationRequest) (
 	return _result, _err
 }
 
-/**
- * Description: 解约信息查询
- * Summary: 解约信息查询
- */
+// Description:
+//
+// Description: 解约信息查询
+//
+// Summary: 解约信息查询
 func (client *Client) QueryPoiTerminationEx(request *QueryPoiTerminationRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryPoiTerminationResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16068,10 +18927,11 @@ func (client *Client) QueryPoiTerminationEx(request *QueryPoiTerminationRequest,
 	return _result, _err
 }
 
-/**
- * Description: 解约
- * Summary: 解约
- */
+// Description:
+//
+// Description: 解约
+//
+// Summary: 解约
 func (client *Client) ApplyPoiTermination(request *ApplyPoiTerminationRequest) (_result *ApplyPoiTerminationResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16084,10 +18944,11 @@ func (client *Client) ApplyPoiTermination(request *ApplyPoiTerminationRequest) (
 	return _result, _err
 }
 
-/**
- * Description: 解约
- * Summary: 解约
- */
+// Description:
+//
+// Description: 解约
+//
+// Summary: 解约
 func (client *Client) ApplyPoiTerminationEx(request *ApplyPoiTerminationRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *ApplyPoiTerminationResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16102,10 +18963,11 @@ func (client *Client) ApplyPoiTerminationEx(request *ApplyPoiTerminationRequest,
 	return _result, _err
 }
 
-/**
- * Description: 账户查询
- * Summary: 账户查询
- */
+// Description:
+//
+// Description: 账户查询
+//
+// Summary: 账户查询
 func (client *Client) QueryPoiMallpointaccount(request *QueryPoiMallpointaccountRequest) (_result *QueryPoiMallpointaccountResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16118,10 +18980,11 @@ func (client *Client) QueryPoiMallpointaccount(request *QueryPoiMallpointaccount
 	return _result, _err
 }
 
-/**
- * Description: 账户查询
- * Summary: 账户查询
- */
+// Description:
+//
+// Description: 账户查询
+//
+// Summary: 账户查询
 func (client *Client) QueryPoiMallpointaccountEx(request *QueryPoiMallpointaccountRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryPoiMallpointaccountResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16136,10 +18999,11 @@ func (client *Client) QueryPoiMallpointaccountEx(request *QueryPoiMallpointaccou
 	return _result, _err
 }
 
-/**
- * Description: 积分冻结
- * Summary: 积分冻结
- */
+// Description:
+//
+// Description: 积分冻结
+//
+// Summary: 积分冻结
 func (client *Client) FreezePoiMallpoint(request *FreezePoiMallpointRequest) (_result *FreezePoiMallpointResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16152,10 +19016,11 @@ func (client *Client) FreezePoiMallpoint(request *FreezePoiMallpointRequest) (_r
 	return _result, _err
 }
 
-/**
- * Description: 积分冻结
- * Summary: 积分冻结
- */
+// Description:
+//
+// Description: 积分冻结
+//
+// Summary: 积分冻结
 func (client *Client) FreezePoiMallpointEx(request *FreezePoiMallpointRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *FreezePoiMallpointResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16170,10 +19035,11 @@ func (client *Client) FreezePoiMallpointEx(request *FreezePoiMallpointRequest, h
 	return _result, _err
 }
 
-/**
- * Description: 积分解冻
- * Summary: 积分解冻
- */
+// Description:
+//
+// Description: 积分解冻
+//
+// Summary: 积分解冻
 func (client *Client) UnfreezePoiMallpoint(request *UnfreezePoiMallpointRequest) (_result *UnfreezePoiMallpointResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16186,10 +19052,11 @@ func (client *Client) UnfreezePoiMallpoint(request *UnfreezePoiMallpointRequest)
 	return _result, _err
 }
 
-/**
- * Description: 积分解冻
- * Summary: 积分解冻
- */
+// Description:
+//
+// Description: 积分解冻
+//
+// Summary: 积分解冻
 func (client *Client) UnfreezePoiMallpointEx(request *UnfreezePoiMallpointRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *UnfreezePoiMallpointResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16204,10 +19071,11 @@ func (client *Client) UnfreezePoiMallpointEx(request *UnfreezePoiMallpointReques
 	return _result, _err
 }
 
-/**
- * Description: 积分扣减
- * Summary: 积分扣减
- */
+// Description:
+//
+// Description: 积分扣减
+//
+// Summary: 积分扣减
 func (client *Client) DeductPoiMallpoint(request *DeductPoiMallpointRequest) (_result *DeductPoiMallpointResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16220,10 +19088,11 @@ func (client *Client) DeductPoiMallpoint(request *DeductPoiMallpointRequest) (_r
 	return _result, _err
 }
 
-/**
- * Description: 积分扣减
- * Summary: 积分扣减
- */
+// Description:
+//
+// Description: 积分扣减
+//
+// Summary: 积分扣减
 func (client *Client) DeductPoiMallpointEx(request *DeductPoiMallpointRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *DeductPoiMallpointResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16238,10 +19107,11 @@ func (client *Client) DeductPoiMallpointEx(request *DeductPoiMallpointRequest, h
 	return _result, _err
 }
 
-/**
- * Description: ISV取消订单接口
- * Summary: ISV取消订单接口
- */
+// Description:
+//
+// Description: ISV取消订单接口
+//
+// Summary: ISV取消订单接口
 func (client *Client) CancelPoiOrder(request *CancelPoiOrderRequest) (_result *CancelPoiOrderResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16254,10 +19124,11 @@ func (client *Client) CancelPoiOrder(request *CancelPoiOrderRequest) (_result *C
 	return _result, _err
 }
 
-/**
- * Description: ISV取消订单接口
- * Summary: ISV取消订单接口
- */
+// Description:
+//
+// Description: ISV取消订单接口
+//
+// Summary: ISV取消订单接口
 func (client *Client) CancelPoiOrderEx(request *CancelPoiOrderRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *CancelPoiOrderResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16272,10 +19143,293 @@ func (client *Client) CancelPoiOrderEx(request *CancelPoiOrderRequest, headers m
 	return _result, _err
 }
 
-/**
- * Description: 蓝盾安全图片生成
- * Summary: 蓝盾安全图片生成
- */
+// Description:
+//
+// Description: 天枢交易状态变更时回调 eKYT
+//
+// Summary: 天枢交易状态变更时回调 eKYT
+func (client *Client) NotifyPoiTrade(request *NotifyPoiTradeRequest) (_result *NotifyPoiTradeResponse, _err error) {
+	runtime := &util.RuntimeOptions{}
+	headers := make(map[string]*string)
+	_result = &NotifyPoiTradeResponse{}
+	_body, _err := client.NotifyPoiTradeEx(request, headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = _body
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 天枢交易状态变更时回调 eKYT
+//
+// Summary: 天枢交易状态变更时回调 eKYT
+func (client *Client) NotifyPoiTradeEx(request *NotifyPoiTradeRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *NotifyPoiTradeResponse, _err error) {
+	_err = util.ValidateModel(request)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = &NotifyPoiTradeResponse{}
+	_body, _err := client.DoRequest(tea.String("1.0"), tea.String("antsecuritytech.gateway.poi.trade.notify"), tea.String("HTTPS"), tea.String("POST"), tea.String("/gateway.do"), tea.ToMap(request), headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_err = tea.Convert(_body, &_result)
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 商户入驻申请
+//
+// Summary: 商户入驻申请
+func (client *Client) CreateMerchantApply(request *CreateMerchantApplyRequest) (_result *CreateMerchantApplyResponse, _err error) {
+	runtime := &util.RuntimeOptions{}
+	headers := make(map[string]*string)
+	_result = &CreateMerchantApplyResponse{}
+	_body, _err := client.CreateMerchantApplyEx(request, headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = _body
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 商户入驻申请
+//
+// Summary: 商户入驻申请
+func (client *Client) CreateMerchantApplyEx(request *CreateMerchantApplyRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *CreateMerchantApplyResponse, _err error) {
+	_err = util.ValidateModel(request)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = &CreateMerchantApplyResponse{}
+	_body, _err := client.DoRequest(tea.String("1.0"), tea.String("antsecuritytech.gateway.merchant.apply.create"), tea.String("HTTPS"), tea.String("POST"), tea.String("/gateway.do"), tea.ToMap(request), headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_err = tea.Convert(_body, &_result)
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 商户信息修改
+//
+// Summary: 商户信息修改
+func (client *Client) UpdateMerchantApply(request *UpdateMerchantApplyRequest) (_result *UpdateMerchantApplyResponse, _err error) {
+	runtime := &util.RuntimeOptions{}
+	headers := make(map[string]*string)
+	_result = &UpdateMerchantApplyResponse{}
+	_body, _err := client.UpdateMerchantApplyEx(request, headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = _body
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 商户信息修改
+//
+// Summary: 商户信息修改
+func (client *Client) UpdateMerchantApplyEx(request *UpdateMerchantApplyRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *UpdateMerchantApplyResponse, _err error) {
+	_err = util.ValidateModel(request)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = &UpdateMerchantApplyResponse{}
+	_body, _err := client.DoRequest(tea.String("1.0"), tea.String("antsecuritytech.gateway.merchant.apply.update"), tea.String("HTTPS"), tea.String("POST"), tea.String("/gateway.do"), tea.ToMap(request), headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_err = tea.Convert(_body, &_result)
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 商户信息查询
+//
+// Summary: 商户信息查询
+func (client *Client) QueryMerchant(request *QueryMerchantRequest) (_result *QueryMerchantResponse, _err error) {
+	runtime := &util.RuntimeOptions{}
+	headers := make(map[string]*string)
+	_result = &QueryMerchantResponse{}
+	_body, _err := client.QueryMerchantEx(request, headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = _body
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 商户信息查询
+//
+// Summary: 商户信息查询
+func (client *Client) QueryMerchantEx(request *QueryMerchantRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryMerchantResponse, _err error) {
+	_err = util.ValidateModel(request)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = &QueryMerchantResponse{}
+	_body, _err := client.DoRequest(tea.String("1.0"), tea.String("antsecuritytech.gateway.merchant.query"), tea.String("HTTPS"), tea.String("POST"), tea.String("/gateway.do"), tea.ToMap(request), headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_err = tea.Convert(_body, &_result)
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 商户信息批量查询
+//
+// Summary: 商户信息批量查询
+func (client *Client) QueryMerchantBatch(request *QueryMerchantBatchRequest) (_result *QueryMerchantBatchResponse, _err error) {
+	runtime := &util.RuntimeOptions{}
+	headers := make(map[string]*string)
+	_result = &QueryMerchantBatchResponse{}
+	_body, _err := client.QueryMerchantBatchEx(request, headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = _body
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 商户信息批量查询
+//
+// Summary: 商户信息批量查询
+func (client *Client) QueryMerchantBatchEx(request *QueryMerchantBatchRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryMerchantBatchResponse, _err error) {
+	_err = util.ValidateModel(request)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = &QueryMerchantBatchResponse{}
+	_body, _err := client.DoRequest(tea.String("1.0"), tea.String("antsecuritytech.gateway.merchant.batch.query"), tea.String("HTTPS"), tea.String("POST"), tea.String("/gateway.do"), tea.ToMap(request), headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_err = tea.Convert(_body, &_result)
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 审核结果回调接收
+//
+// Summary: 审核结果回调接收
+func (client *Client) CallbackMerchantRisk(request *CallbackMerchantRiskRequest) (_result *CallbackMerchantRiskResponse, _err error) {
+	runtime := &util.RuntimeOptions{}
+	headers := make(map[string]*string)
+	_result = &CallbackMerchantRiskResponse{}
+	_body, _err := client.CallbackMerchantRiskEx(request, headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = _body
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 审核结果回调接收
+//
+// Summary: 审核结果回调接收
+func (client *Client) CallbackMerchantRiskEx(request *CallbackMerchantRiskRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *CallbackMerchantRiskResponse, _err error) {
+	_err = util.ValidateModel(request)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = &CallbackMerchantRiskResponse{}
+	_body, _err := client.DoRequest(tea.String("1.0"), tea.String("antsecuritytech.gateway.merchant.risk.callback"), tea.String("HTTPS"), tea.String("POST"), tea.String("/gateway.do"), tea.ToMap(request), headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_err = tea.Convert(_body, &_result)
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 文件file_id回调
+//
+// Summary: 文件file_id回调
+func (client *Client) ReceiveFileidCallback(request *ReceiveFileidCallbackRequest) (_result *ReceiveFileidCallbackResponse, _err error) {
+	runtime := &util.RuntimeOptions{}
+	headers := make(map[string]*string)
+	_result = &ReceiveFileidCallbackResponse{}
+	_body, _err := client.ReceiveFileidCallbackEx(request, headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = _body
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 文件file_id回调
+//
+// Summary: 文件file_id回调
+func (client *Client) ReceiveFileidCallbackEx(request *ReceiveFileidCallbackRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *ReceiveFileidCallbackResponse, _err error) {
+	if !tea.BoolValue(util.IsUnset(request.FileObject)) {
+		uploadReq := &CreateAntcloudGatewayxFileUploadRequest{
+			AuthToken: request.AuthToken,
+			ApiCode:   tea.String("antsecuritytech.gateway.fileid.callback.receive"),
+			FileName:  request.FileObjectName,
+		}
+		uploadResp, _err := client.CreateAntcloudGatewayxFileUploadEx(uploadReq, headers, runtime)
+		if _err != nil {
+			return _result, _err
+		}
+
+		if !tea.BoolValue(antchainutil.IsSuccess(uploadResp.ResultCode, tea.String("ok"))) {
+			receiveFileidCallbackResponse := &ReceiveFileidCallbackResponse{
+				ReqMsgId:   uploadResp.ReqMsgId,
+				ResultCode: uploadResp.ResultCode,
+				ResultMsg:  uploadResp.ResultMsg,
+			}
+			_result = receiveFileidCallbackResponse
+			return _result, _err
+		}
+
+		uploadHeaders := antchainutil.ParseUploadHeaders(uploadResp.UploadHeaders)
+		_err = antchainutil.PutObject(request.FileObject, uploadHeaders, uploadResp.UploadUrl)
+		if _err != nil {
+			return _result, _err
+		}
+		request.FileId = uploadResp.FileId
+		request.FileObject = nil
+	}
+
+	_err = util.ValidateModel(request)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = &ReceiveFileidCallbackResponse{}
+	_body, _err := client.DoRequest(tea.String("1.0"), tea.String("antsecuritytech.gateway.fileid.callback.receive"), tea.String("HTTPS"), tea.String("POST"), tea.String("/gateway.do"), tea.ToMap(request), headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_err = tea.Convert(_body, &_result)
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 蓝盾安全图片生成
+//
+// Summary: 蓝盾安全图片生成
 func (client *Client) CreateBssecpic(request *CreateBssecpicRequest) (_result *CreateBssecpicResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16288,10 +19442,11 @@ func (client *Client) CreateBssecpic(request *CreateBssecpicRequest) (_result *C
 	return _result, _err
 }
 
-/**
- * Description: 蓝盾安全图片生成
- * Summary: 蓝盾安全图片生成
- */
+// Description:
+//
+// Description: 蓝盾安全图片生成
+//
+// Summary: 蓝盾安全图片生成
 func (client *Client) CreateBssecpicEx(request *CreateBssecpicRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *CreateBssecpicResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16306,10 +19461,11 @@ func (client *Client) CreateBssecpicEx(request *CreateBssecpicRequest, headers m
 	return _result, _err
 }
 
-/**
- * Description: 蓝盾安全图片生成
- * Summary: 蓝盾安全图片生成
- */
+// Description:
+//
+// Description: 蓝盾安全图片生成
+//
+// Summary: 蓝盾安全图片生成
 func (client *Client) CreateBlueshieldSecuritypicture(request *CreateBlueshieldSecuritypictureRequest) (_result *CreateBlueshieldSecuritypictureResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16322,10 +19478,11 @@ func (client *Client) CreateBlueshieldSecuritypicture(request *CreateBlueshieldS
 	return _result, _err
 }
 
-/**
- * Description: 蓝盾安全图片生成
- * Summary: 蓝盾安全图片生成
- */
+// Description:
+//
+// Description: 蓝盾安全图片生成
+//
+// Summary: 蓝盾安全图片生成
 func (client *Client) CreateBlueshieldSecuritypictureEx(request *CreateBlueshieldSecuritypictureRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *CreateBlueshieldSecuritypictureResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16340,10 +19497,11 @@ func (client *Client) CreateBlueshieldSecuritypictureEx(request *CreateBlueshiel
 	return _result, _err
 }
 
-/**
- * Description: 终端安全人脸盾Native查询
- * Summary: 人脸盾Native查询
- */
+// Description:
+//
+// Description: 终端安全人脸盾Native查询
+//
+// Summary: 人脸盾Native查询
 func (client *Client) QueryFaceshieldNative(request *QueryFaceshieldNativeRequest) (_result *QueryFaceshieldNativeResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16356,10 +19514,11 @@ func (client *Client) QueryFaceshieldNative(request *QueryFaceshieldNativeReques
 	return _result, _err
 }
 
-/**
- * Description: 终端安全人脸盾Native查询
- * Summary: 人脸盾Native查询
- */
+// Description:
+//
+// Description: 终端安全人脸盾Native查询
+//
+// Summary: 人脸盾Native查询
 func (client *Client) QueryFaceshieldNativeEx(request *QueryFaceshieldNativeRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryFaceshieldNativeResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16374,10 +19533,11 @@ func (client *Client) QueryFaceshieldNativeEx(request *QueryFaceshieldNativeRequ
 	return _result, _err
 }
 
-/**
- * Description: 终端安全人脸盾Web查询
- * Summary: 人脸盾Web查询
- */
+// Description:
+//
+// Description: 终端安全人脸盾Web查询
+//
+// Summary: 人脸盾Web查询
 func (client *Client) QueryFaceshieldWeb(request *QueryFaceshieldWebRequest) (_result *QueryFaceshieldWebResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16390,10 +19550,11 @@ func (client *Client) QueryFaceshieldWeb(request *QueryFaceshieldWebRequest) (_r
 	return _result, _err
 }
 
-/**
- * Description: 终端安全人脸盾Web查询
- * Summary: 人脸盾Web查询
- */
+// Description:
+//
+// Description: 终端安全人脸盾Web查询
+//
+// Summary: 人脸盾Web查询
 func (client *Client) QueryFaceshieldWebEx(request *QueryFaceshieldWebRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryFaceshieldWebResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16408,10 +19569,11 @@ func (client *Client) QueryFaceshieldWebEx(request *QueryFaceshieldWebRequest, h
 	return _result, _err
 }
 
-/**
- * Description: 设备激活
- * Summary: 可信设备认证设备初始化，设备激活
- */
+// Description:
+//
+// Description: 设备激活
+//
+// Summary: 可信设备认证设备初始化，设备激活
 func (client *Client) InitIifaaDevice(request *InitIifaaDeviceRequest) (_result *InitIifaaDeviceResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16424,10 +19586,11 @@ func (client *Client) InitIifaaDevice(request *InitIifaaDeviceRequest) (_result 
 	return _result, _err
 }
 
-/**
- * Description: 设备激活
- * Summary: 可信设备认证设备初始化，设备激活
- */
+// Description:
+//
+// Description: 设备激活
+//
+// Summary: 可信设备认证设备初始化，设备激活
 func (client *Client) InitIifaaDeviceEx(request *InitIifaaDeviceRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *InitIifaaDeviceResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16442,10 +19605,11 @@ func (client *Client) InitIifaaDeviceEx(request *InitIifaaDeviceRequest, headers
 	return _result, _err
 }
 
-/**
- * Description: 可信设备认证风险咨询，获取预认证数据
- * Summary: 可信设备认证风险咨询，获取预认证数据
- */
+// Description:
+//
+// Description: 可信设备认证风险咨询，获取预认证数据
+//
+// Summary: 可信设备认证风险咨询，获取预认证数据
 func (client *Client) RecognizeIifaaDevice(request *RecognizeIifaaDeviceRequest) (_result *RecognizeIifaaDeviceResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16458,10 +19622,11 @@ func (client *Client) RecognizeIifaaDevice(request *RecognizeIifaaDeviceRequest)
 	return _result, _err
 }
 
-/**
- * Description: 可信设备认证风险咨询，获取预认证数据
- * Summary: 可信设备认证风险咨询，获取预认证数据
- */
+// Description:
+//
+// Description: 可信设备认证风险咨询，获取预认证数据
+//
+// Summary: 可信设备认证风险咨询，获取预认证数据
 func (client *Client) RecognizeIifaaDeviceEx(request *RecognizeIifaaDeviceRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *RecognizeIifaaDeviceResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16476,10 +19641,11 @@ func (client *Client) RecognizeIifaaDeviceEx(request *RecognizeIifaaDeviceReques
 	return _result, _err
 }
 
-/**
- * Description: 可信设备认证，设备验证
- * Summary: 可信设备认证，设备验证
- */
+// Description:
+//
+// Description: 可信设备认证，设备验证
+//
+// Summary: 可信设备认证，设备验证
 func (client *Client) VerifyIifaaDevice(request *VerifyIifaaDeviceRequest) (_result *VerifyIifaaDeviceResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16492,10 +19658,11 @@ func (client *Client) VerifyIifaaDevice(request *VerifyIifaaDeviceRequest) (_res
 	return _result, _err
 }
 
-/**
- * Description: 可信设备认证，设备验证
- * Summary: 可信设备认证，设备验证
- */
+// Description:
+//
+// Description: 可信设备认证，设备验证
+//
+// Summary: 可信设备认证，设备验证
 func (client *Client) VerifyIifaaDeviceEx(request *VerifyIifaaDeviceRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *VerifyIifaaDeviceResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16510,10 +19677,11 @@ func (client *Client) VerifyIifaaDeviceEx(request *VerifyIifaaDeviceRequest, hea
 	return _result, _err
 }
 
-/**
- * Description: 可信设备认证，产商注册
- * Summary: 可信设备认证，产商注册
- */
+// Description:
+//
+// Description: 可信设备认证，产商注册
+//
+// Summary: 可信设备认证，产商注册
 func (client *Client) RegisterIifaaCorp(request *RegisterIifaaCorpRequest) (_result *RegisterIifaaCorpResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16526,10 +19694,11 @@ func (client *Client) RegisterIifaaCorp(request *RegisterIifaaCorpRequest) (_res
 	return _result, _err
 }
 
-/**
- * Description: 可信设备认证，产商注册
- * Summary: 可信设备认证，产商注册
- */
+// Description:
+//
+// Description: 可信设备认证，产商注册
+//
+// Summary: 可信设备认证，产商注册
 func (client *Client) RegisterIifaaCorpEx(request *RegisterIifaaCorpRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *RegisterIifaaCorpResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16544,10 +19713,11 @@ func (client *Client) RegisterIifaaCorpEx(request *RegisterIifaaCorpRequest, hea
 	return _result, _err
 }
 
-/**
- * Description: 可信设备认证，擦除设备信息
- * Summary: 可信设备认证，擦除设备信息
- */
+// Description:
+//
+// Description: 可信设备认证，擦除设备信息
+//
+// Summary: 可信设备认证，擦除设备信息
 func (client *Client) DeprecateIifaaDevice(request *DeprecateIifaaDeviceRequest) (_result *DeprecateIifaaDeviceResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16560,10 +19730,11 @@ func (client *Client) DeprecateIifaaDevice(request *DeprecateIifaaDeviceRequest)
 	return _result, _err
 }
 
-/**
- * Description: 可信设备认证，擦除设备信息
- * Summary: 可信设备认证，擦除设备信息
- */
+// Description:
+//
+// Description: 可信设备认证，擦除设备信息
+//
+// Summary: 可信设备认证，擦除设备信息
 func (client *Client) DeprecateIifaaDeviceEx(request *DeprecateIifaaDeviceRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *DeprecateIifaaDeviceResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16578,10 +19749,11 @@ func (client *Client) DeprecateIifaaDeviceEx(request *DeprecateIifaaDeviceReques
 	return _result, _err
 }
 
-/**
- * Description: 巡检商业化
- * Summary: 巡检商业化
- */
+// Description:
+//
+// Description: 巡检商业化
+//
+// Summary: 巡检商业化
 func (client *Client) RunXhunterSpi(request *RunXhunterSpiRequest) (_result *RunXhunterSpiResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16594,10 +19766,11 @@ func (client *Client) RunXhunterSpi(request *RunXhunterSpiRequest) (_result *Run
 	return _result, _err
 }
 
-/**
- * Description: 巡检商业化
- * Summary: 巡检商业化
- */
+// Description:
+//
+// Description: 巡检商业化
+//
+// Summary: 巡检商业化
 func (client *Client) RunXhunterSpiEx(request *RunXhunterSpiRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *RunXhunterSpiResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16612,10 +19785,11 @@ func (client *Client) RunXhunterSpiEx(request *RunXhunterSpiRequest, headers map
 	return _result, _err
 }
 
-/**
- * Description: 租凭住房保险产品，接口开放给租房平台
- * Summary: 租凭住房保险产品，接口开放给租房平台
- */
+// Description:
+//
+// Description: 租凭住房保险产品，接口开放给租房平台
+//
+// Summary: 租凭住房保险产品，接口开放给租房平台
 func (client *Client) ExecIifaaInsure(request *ExecIifaaInsureRequest) (_result *ExecIifaaInsureResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16628,10 +19802,11 @@ func (client *Client) ExecIifaaInsure(request *ExecIifaaInsureRequest) (_result 
 	return _result, _err
 }
 
-/**
- * Description: 租凭住房保险产品，接口开放给租房平台
- * Summary: 租凭住房保险产品，接口开放给租房平台
- */
+// Description:
+//
+// Description: 租凭住房保险产品，接口开放给租房平台
+//
+// Summary: 租凭住房保险产品，接口开放给租房平台
 func (client *Client) ExecIifaaInsureEx(request *ExecIifaaInsureRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *ExecIifaaInsureResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16646,10 +19821,11 @@ func (client *Client) ExecIifaaInsureEx(request *ExecIifaaInsureRequest, headers
 	return _result, _err
 }
 
-/**
- * Description: 内容安全图片同步检测
- * Summary: 内容安全图片同步检测
- */
+// Description:
+//
+// Description: 内容安全图片同步检测
+//
+// Summary: 内容安全图片同步检测
 func (client *Client) QueryCctPicture(request *QueryCctPictureRequest) (_result *QueryCctPictureResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16662,10 +19838,11 @@ func (client *Client) QueryCctPicture(request *QueryCctPictureRequest) (_result 
 	return _result, _err
 }
 
-/**
- * Description: 内容安全图片同步检测
- * Summary: 内容安全图片同步检测
- */
+// Description:
+//
+// Description: 内容安全图片同步检测
+//
+// Summary: 内容安全图片同步检测
 func (client *Client) QueryCctPictureEx(request *QueryCctPictureRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryCctPictureResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16680,10 +19857,11 @@ func (client *Client) QueryCctPictureEx(request *QueryCctPictureRequest, headers
 	return _result, _err
 }
 
-/**
- * Description: 内容安全主站同步检测
- * Summary: 内容安全主站同步检测
- */
+// Description:
+//
+// Description: 内容安全主站同步检测
+//
+// Summary: 内容安全主站同步检测
 func (client *Client) RecognizeCctAnalyze(request *RecognizeCctAnalyzeRequest) (_result *RecognizeCctAnalyzeResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16696,10 +19874,11 @@ func (client *Client) RecognizeCctAnalyze(request *RecognizeCctAnalyzeRequest) (
 	return _result, _err
 }
 
-/**
- * Description: 内容安全主站同步检测
- * Summary: 内容安全主站同步检测
- */
+// Description:
+//
+// Description: 内容安全主站同步检测
+//
+// Summary: 内容安全主站同步检测
 func (client *Client) RecognizeCctAnalyzeEx(request *RecognizeCctAnalyzeRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *RecognizeCctAnalyzeResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16714,10 +19893,11 @@ func (client *Client) RecognizeCctAnalyzeEx(request *RecognizeCctAnalyzeRequest,
 	return _result, _err
 }
 
-/**
- * Description: RAAS数据服务统一接口
- * Summary: RAAS数据服务统一接口
- */
+// Description:
+//
+// Description: RAAS数据服务统一接口
+//
+// Summary: RAAS数据服务统一接口
 func (client *Client) QueryRiskGeneral(request *QueryRiskGeneralRequest) (_result *QueryRiskGeneralResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16730,10 +19910,11 @@ func (client *Client) QueryRiskGeneral(request *QueryRiskGeneralRequest) (_resul
 	return _result, _err
 }
 
-/**
- * Description: RAAS数据服务统一接口
- * Summary: RAAS数据服务统一接口
- */
+// Description:
+//
+// Description: RAAS数据服务统一接口
+//
+// Summary: RAAS数据服务统一接口
 func (client *Client) QueryRiskGeneralEx(request *QueryRiskGeneralRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryRiskGeneralResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16748,10 +19929,11 @@ func (client *Client) QueryRiskGeneralEx(request *QueryRiskGeneralRequest, heade
 	return _result, _err
 }
 
-/**
- * Description: 设备指纹查询
- * Summary: 设备指纹查询
- */
+// Description:
+//
+// Description: 设备指纹查询
+//
+// Summary: 设备指纹查询
 func (client *Client) QueryDeviceriskFinger(request *QueryDeviceriskFingerRequest) (_result *QueryDeviceriskFingerResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16764,10 +19946,11 @@ func (client *Client) QueryDeviceriskFinger(request *QueryDeviceriskFingerReques
 	return _result, _err
 }
 
-/**
- * Description: 设备指纹查询
- * Summary: 设备指纹查询
- */
+// Description:
+//
+// Description: 设备指纹查询
+//
+// Summary: 设备指纹查询
 func (client *Client) QueryDeviceriskFingerEx(request *QueryDeviceriskFingerRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryDeviceriskFingerResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16782,10 +19965,11 @@ func (client *Client) QueryDeviceriskFingerEx(request *QueryDeviceriskFingerRequ
 	return _result, _err
 }
 
-/**
- * Description: 风险标签查询
- * Summary: 风险标签查询
- */
+// Description:
+//
+// Description: 风险标签查询
+//
+// Summary: 风险标签查询
 func (client *Client) QueryDeviceriskRisklabel(request *QueryDeviceriskRisklabelRequest) (_result *QueryDeviceriskRisklabelResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16798,10 +19982,11 @@ func (client *Client) QueryDeviceriskRisklabel(request *QueryDeviceriskRisklabel
 	return _result, _err
 }
 
-/**
- * Description: 风险标签查询
- * Summary: 风险标签查询
- */
+// Description:
+//
+// Description: 风险标签查询
+//
+// Summary: 风险标签查询
 func (client *Client) QueryDeviceriskRisklabelEx(request *QueryDeviceriskRisklabelRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryDeviceriskRisklabelResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16816,10 +20001,11 @@ func (client *Client) QueryDeviceriskRisklabelEx(request *QueryDeviceriskRisklab
 	return _result, _err
 }
 
-/**
- * Description: 设备风险查询
- * Summary: 设备风险查询
- */
+// Description:
+//
+// Description: 设备风险查询
+//
+// Summary: 设备风险查询
 func (client *Client) QueryDeviceriskDevicerisk(request *QueryDeviceriskDeviceriskRequest) (_result *QueryDeviceriskDeviceriskResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16832,10 +20018,11 @@ func (client *Client) QueryDeviceriskDevicerisk(request *QueryDeviceriskDeviceri
 	return _result, _err
 }
 
-/**
- * Description: 设备风险查询
- * Summary: 设备风险查询
- */
+// Description:
+//
+// Description: 设备风险查询
+//
+// Summary: 设备风险查询
 func (client *Client) QueryDeviceriskDeviceriskEx(request *QueryDeviceriskDeviceriskRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryDeviceriskDeviceriskResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16850,10 +20037,11 @@ func (client *Client) QueryDeviceriskDeviceriskEx(request *QueryDeviceriskDevice
 	return _result, _err
 }
 
-/**
- * Description: 设备信息上报
- * Summary: 设备信息上报
- */
+// Description:
+//
+// Description: 设备信息上报
+//
+// Summary: 设备信息上报
 func (client *Client) SubmitDeviceriskReport(request *SubmitDeviceriskReportRequest) (_result *SubmitDeviceriskReportResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16866,10 +20054,11 @@ func (client *Client) SubmitDeviceriskReport(request *SubmitDeviceriskReportRequ
 	return _result, _err
 }
 
-/**
- * Description: 设备信息上报
- * Summary: 设备信息上报
- */
+// Description:
+//
+// Description: 设备信息上报
+//
+// Summary: 设备信息上报
 func (client *Client) SubmitDeviceriskReportEx(request *SubmitDeviceriskReportRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *SubmitDeviceriskReportResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16884,10 +20073,11 @@ func (client *Client) SubmitDeviceriskReportEx(request *SubmitDeviceriskReportRe
 	return _result, _err
 }
 
-/**
- * Description: eKYT风险评估服务-出行场景司机
- * Summary: eKYT风险评估服务-出行场景司机
- */
+// Description:
+//
+// Description: eKYT风险评估服务-出行场景司机
+//
+// Summary: eKYT风险评估服务-出行场景司机
 func (client *Client) QueryEkytDriver(request *QueryEkytDriverRequest) (_result *QueryEkytDriverResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16900,10 +20090,11 @@ func (client *Client) QueryEkytDriver(request *QueryEkytDriverRequest) (_result 
 	return _result, _err
 }
 
-/**
- * Description: eKYT风险评估服务-出行场景司机
- * Summary: eKYT风险评估服务-出行场景司机
- */
+// Description:
+//
+// Description: eKYT风险评估服务-出行场景司机
+//
+// Summary: eKYT风险评估服务-出行场景司机
 func (client *Client) QueryEkytDriverEx(request *QueryEkytDriverRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryEkytDriverResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16918,10 +20109,11 @@ func (client *Client) QueryEkytDriverEx(request *QueryEkytDriverRequest, headers
 	return _result, _err
 }
 
-/**
- * Description: 申请设备设备密钥
- * Summary: 申请设备设备密钥
- */
+// Description:
+//
+// Description: 申请设备设备密钥
+//
+// Summary: 申请设备设备密钥
 func (client *Client) ApplyIifaaDevicekey(request *ApplyIifaaDevicekeyRequest) (_result *ApplyIifaaDevicekeyResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16934,10 +20126,11 @@ func (client *Client) ApplyIifaaDevicekey(request *ApplyIifaaDevicekeyRequest) (
 	return _result, _err
 }
 
-/**
- * Description: 申请设备设备密钥
- * Summary: 申请设备设备密钥
- */
+// Description:
+//
+// Description: 申请设备设备密钥
+//
+// Summary: 申请设备设备密钥
 func (client *Client) ApplyIifaaDevicekeyEx(request *ApplyIifaaDevicekeyRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *ApplyIifaaDevicekeyResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16952,10 +20145,11 @@ func (client *Client) ApplyIifaaDevicekeyEx(request *ApplyIifaaDevicekeyRequest,
 	return _result, _err
 }
 
-/**
- * Description: 设备风险咨询
- * Summary: 设备风险咨询
- */
+// Description:
+//
+// Description: 设备风险咨询
+//
+// Summary: 设备风险咨询
 func (client *Client) QueryDeviceplusRiskquery(request *QueryDeviceplusRiskqueryRequest) (_result *QueryDeviceplusRiskqueryResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -16968,10 +20162,11 @@ func (client *Client) QueryDeviceplusRiskquery(request *QueryDeviceplusRiskquery
 	return _result, _err
 }
 
-/**
- * Description: 设备风险咨询
- * Summary: 设备风险咨询
- */
+// Description:
+//
+// Description: 设备风险咨询
+//
+// Summary: 设备风险咨询
 func (client *Client) QueryDeviceplusRiskqueryEx(request *QueryDeviceplusRiskqueryRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryDeviceplusRiskqueryResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -16986,10 +20181,11 @@ func (client *Client) QueryDeviceplusRiskqueryEx(request *QueryDeviceplusRiskque
 	return _result, _err
 }
 
-/**
- * Description: 设备风险咨询mpaas
- * Summary: 设备风险咨询mpaas
- */
+// Description:
+//
+// Description: 设备风险咨询mpaas
+//
+// Summary: 设备风险咨询mpaas
 func (client *Client) QueryDeviceplusMpaas(request *QueryDeviceplusMpaasRequest) (_result *QueryDeviceplusMpaasResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -17002,10 +20198,11 @@ func (client *Client) QueryDeviceplusMpaas(request *QueryDeviceplusMpaasRequest)
 	return _result, _err
 }
 
-/**
- * Description: 设备风险咨询mpaas
- * Summary: 设备风险咨询mpaas
- */
+// Description:
+//
+// Description: 设备风险咨询mpaas
+//
+// Summary: 设备风险咨询mpaas
 func (client *Client) QueryDeviceplusMpaasEx(request *QueryDeviceplusMpaasRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryDeviceplusMpaasResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -17020,10 +20217,11 @@ func (client *Client) QueryDeviceplusMpaasEx(request *QueryDeviceplusMpaasReques
 	return _result, _err
 }
 
-/**
- * Description: 终端安全-Android应用加固-启动加固任务(包月)
- * Summary: 启动加固任务(包月)
- */
+// Description:
+//
+// Description: 终端安全-Android应用加固-启动加固任务(包月)
+//
+// Summary: 启动加固任务(包月)
 func (client *Client) SubmitAshieldPeriodhardeningtask(request *SubmitAshieldPeriodhardeningtaskRequest) (_result *SubmitAshieldPeriodhardeningtaskResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -17036,10 +20234,11 @@ func (client *Client) SubmitAshieldPeriodhardeningtask(request *SubmitAshieldPer
 	return _result, _err
 }
 
-/**
- * Description: 终端安全-Android应用加固-启动加固任务(包月)
- * Summary: 启动加固任务(包月)
- */
+// Description:
+//
+// Description: 终端安全-Android应用加固-启动加固任务(包月)
+//
+// Summary: 启动加固任务(包月)
 func (client *Client) SubmitAshieldPeriodhardeningtaskEx(request *SubmitAshieldPeriodhardeningtaskRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *SubmitAshieldPeriodhardeningtaskResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -17054,10 +20253,11 @@ func (client *Client) SubmitAshieldPeriodhardeningtaskEx(request *SubmitAshieldP
 	return _result, _err
 }
 
-/**
- * Description: 终端安全-Android应用加固-获取上传文件的临时URL
- * Summary: 获取上传文件的临时URL
- */
+// Description:
+//
+// Description: 终端安全-Android应用加固-获取上传文件的临时URL
+//
+// Summary: 获取上传文件的临时URL
 func (client *Client) GetAshieldFiletoken(request *GetAshieldFiletokenRequest) (_result *GetAshieldFiletokenResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -17070,10 +20270,11 @@ func (client *Client) GetAshieldFiletoken(request *GetAshieldFiletokenRequest) (
 	return _result, _err
 }
 
-/**
- * Description: 终端安全-Android应用加固-获取上传文件的临时URL
- * Summary: 获取上传文件的临时URL
- */
+// Description:
+//
+// Description: 终端安全-Android应用加固-获取上传文件的临时URL
+//
+// Summary: 获取上传文件的临时URL
 func (client *Client) GetAshieldFiletokenEx(request *GetAshieldFiletokenRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *GetAshieldFiletokenResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -17088,10 +20289,11 @@ func (client *Client) GetAshieldFiletokenEx(request *GetAshieldFiletokenRequest,
 	return _result, _err
 }
 
-/**
- * Description: 终端安全-Android应用加固-启动加固任务
- * Summary: 启动加固任务(按次计费)
- */
+// Description:
+//
+// Description: 终端安全-Android应用加固-启动加固任务
+//
+// Summary: 启动加固任务(按次计费)
 func (client *Client) SubmitAshieldHardeningtask(request *SubmitAshieldHardeningtaskRequest) (_result *SubmitAshieldHardeningtaskResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -17104,10 +20306,11 @@ func (client *Client) SubmitAshieldHardeningtask(request *SubmitAshieldHardening
 	return _result, _err
 }
 
-/**
- * Description: 终端安全-Android应用加固-启动加固任务
- * Summary: 启动加固任务(按次计费)
- */
+// Description:
+//
+// Description: 终端安全-Android应用加固-启动加固任务
+//
+// Summary: 启动加固任务(按次计费)
 func (client *Client) SubmitAshieldHardeningtaskEx(request *SubmitAshieldHardeningtaskRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *SubmitAshieldHardeningtaskResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -17122,10 +20325,11 @@ func (client *Client) SubmitAshieldHardeningtaskEx(request *SubmitAshieldHardeni
 	return _result, _err
 }
 
-/**
- * Description: 终端安全-Android应用加固-查询加固任务进度
- * Summary: 查询加固任务进度
- */
+// Description:
+//
+// Description: 终端安全-Android应用加固-查询加固任务进度
+//
+// Summary: 查询加固任务进度
 func (client *Client) GetAshieldHardeningtaskprocess(request *GetAshieldHardeningtaskprocessRequest) (_result *GetAshieldHardeningtaskprocessResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -17138,10 +20342,11 @@ func (client *Client) GetAshieldHardeningtaskprocess(request *GetAshieldHardenin
 	return _result, _err
 }
 
-/**
- * Description: 终端安全-Android应用加固-查询加固任务进度
- * Summary: 查询加固任务进度
- */
+// Description:
+//
+// Description: 终端安全-Android应用加固-查询加固任务进度
+//
+// Summary: 查询加固任务进度
 func (client *Client) GetAshieldHardeningtaskprocessEx(request *GetAshieldHardeningtaskprocessRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *GetAshieldHardeningtaskprocessResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -17156,10 +20361,11 @@ func (client *Client) GetAshieldHardeningtaskprocessEx(request *GetAshieldHarden
 	return _result, _err
 }
 
-/**
- * Description: 终端安全-Android应用加固-查询加固后的产物下载链接
- * Summary: 查询加固后的产物下载链接
- */
+// Description:
+//
+// Description: 终端安全-Android应用加固-查询加固后的产物下载链接
+//
+// Summary: 查询加固后的产物下载链接
 func (client *Client) GetAshieldHardeningresult(request *GetAshieldHardeningresultRequest) (_result *GetAshieldHardeningresultResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -17172,10 +20378,11 @@ func (client *Client) GetAshieldHardeningresult(request *GetAshieldHardeningresu
 	return _result, _err
 }
 
-/**
- * Description: 终端安全-Android应用加固-查询加固后的产物下载链接
- * Summary: 查询加固后的产物下载链接
- */
+// Description:
+//
+// Description: 终端安全-Android应用加固-查询加固后的产物下载链接
+//
+// Summary: 查询加固后的产物下载链接
 func (client *Client) GetAshieldHardeningresultEx(request *GetAshieldHardeningresultRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *GetAshieldHardeningresultResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -17190,10 +20397,11 @@ func (client *Client) GetAshieldHardeningresultEx(request *GetAshieldHardeningre
 	return _result, _err
 }
 
-/**
- * Description: 终端安全-Android应用加固-查询加固后的日志下载链接
- * Summary: 查询加固后的日志下载链接
- */
+// Description:
+//
+// Description: 终端安全-Android应用加固-查询加固后的日志下载链接
+//
+// Summary: 查询加固后的日志下载链接
 func (client *Client) GetAshieldHardeninglog(request *GetAshieldHardeninglogRequest) (_result *GetAshieldHardeninglogResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -17206,10 +20414,11 @@ func (client *Client) GetAshieldHardeninglog(request *GetAshieldHardeninglogRequ
 	return _result, _err
 }
 
-/**
- * Description: 终端安全-Android应用加固-查询加固后的日志下载链接
- * Summary: 查询加固后的日志下载链接
- */
+// Description:
+//
+// Description: 终端安全-Android应用加固-查询加固后的日志下载链接
+//
+// Summary: 查询加固后的日志下载链接
 func (client *Client) GetAshieldHardeninglogEx(request *GetAshieldHardeninglogRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *GetAshieldHardeninglogResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -17224,10 +20433,11 @@ func (client *Client) GetAshieldHardeninglogEx(request *GetAshieldHardeninglogRe
 	return _result, _err
 }
 
-/**
- * Description: eKYT可信签约初始化
- * Summary: eKYT可信签约-初始化
- */
+// Description:
+//
+// Description: eKYT可信签约初始化
+//
+// Summary: eKYT可信签约-初始化
 func (client *Client) InitEkytTrustsign(request *InitEkytTrustsignRequest) (_result *InitEkytTrustsignResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -17240,10 +20450,11 @@ func (client *Client) InitEkytTrustsign(request *InitEkytTrustsignRequest) (_res
 	return _result, _err
 }
 
-/**
- * Description: eKYT可信签约初始化
- * Summary: eKYT可信签约-初始化
- */
+// Description:
+//
+// Description: eKYT可信签约初始化
+//
+// Summary: eKYT可信签约-初始化
 func (client *Client) InitEkytTrustsignEx(request *InitEkytTrustsignRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *InitEkytTrustsignResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -17258,10 +20469,11 @@ func (client *Client) InitEkytTrustsignEx(request *InitEkytTrustsignRequest, hea
 	return _result, _err
 }
 
-/**
- * Description: eKYT可信签约签约单查询
- * Summary: eKYT可信签约-签约单查询
- */
+// Description:
+//
+// Description: eKYT可信签约签约单查询
+//
+// Summary: eKYT可信签约-签约单查询
 func (client *Client) QueryEkytTrustsign(request *QueryEkytTrustsignRequest) (_result *QueryEkytTrustsignResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -17274,10 +20486,11 @@ func (client *Client) QueryEkytTrustsign(request *QueryEkytTrustsignRequest) (_r
 	return _result, _err
 }
 
-/**
- * Description: eKYT可信签约签约单查询
- * Summary: eKYT可信签约-签约单查询
- */
+// Description:
+//
+// Description: eKYT可信签约签约单查询
+//
+// Summary: eKYT可信签约-签约单查询
 func (client *Client) QueryEkytTrustsignEx(request *QueryEkytTrustsignRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryEkytTrustsignResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -17292,10 +20505,11 @@ func (client *Client) QueryEkytTrustsignEx(request *QueryEkytTrustsignRequest, h
 	return _result, _err
 }
 
-/**
- * Description: eKYT人脸核身初始化
- * Summary: eKYT人脸核身-初始化
- */
+// Description:
+//
+// Description: eKYT人脸核身初始化
+//
+// Summary: eKYT人脸核身-初始化
 func (client *Client) InitEkytFaceverify(request *InitEkytFaceverifyRequest) (_result *InitEkytFaceverifyResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -17308,10 +20522,11 @@ func (client *Client) InitEkytFaceverify(request *InitEkytFaceverifyRequest) (_r
 	return _result, _err
 }
 
-/**
- * Description: eKYT人脸核身初始化
- * Summary: eKYT人脸核身-初始化
- */
+// Description:
+//
+// Description: eKYT人脸核身初始化
+//
+// Summary: eKYT人脸核身-初始化
 func (client *Client) InitEkytFaceverifyEx(request *InitEkytFaceverifyRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *InitEkytFaceverifyResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -17326,10 +20541,11 @@ func (client *Client) InitEkytFaceverifyEx(request *InitEkytFaceverifyRequest, h
 	return _result, _err
 }
 
-/**
- * Description: eKYT人脸核身结果查询
- * Summary: eKYT人脸核身-结果查询
- */
+// Description:
+//
+// Description: eKYT人脸核身结果查询
+//
+// Summary: eKYT人脸核身-结果查询
 func (client *Client) QueryEkytFaceverify(request *QueryEkytFaceverifyRequest) (_result *QueryEkytFaceverifyResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -17342,10 +20558,11 @@ func (client *Client) QueryEkytFaceverify(request *QueryEkytFaceverifyRequest) (
 	return _result, _err
 }
 
-/**
- * Description: eKYT人脸核身结果查询
- * Summary: eKYT人脸核身-结果查询
- */
+// Description:
+//
+// Description: eKYT人脸核身结果查询
+//
+// Summary: eKYT人脸核身-结果查询
 func (client *Client) QueryEkytFaceverifyEx(request *QueryEkytFaceverifyRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryEkytFaceverifyResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -17360,10 +20577,11 @@ func (client *Client) QueryEkytFaceverifyEx(request *QueryEkytFaceverifyRequest,
 	return _result, _err
 }
 
-/**
- * Description: 友活来了创建任务api
- * Summary: 友活来了创建任务api
- */
+// Description:
+//
+// Description: 友活来了创建任务api
+//
+// Summary: 友活来了创建任务api
 func (client *Client) ImportYhll(request *ImportYhllRequest) (_result *ImportYhllResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -17376,10 +20594,11 @@ func (client *Client) ImportYhll(request *ImportYhllRequest) (_result *ImportYhl
 	return _result, _err
 }
 
-/**
- * Description: 友活来了创建任务api
- * Summary: 友活来了创建任务api
- */
+// Description:
+//
+// Description: 友活来了创建任务api
+//
+// Summary: 友活来了创建任务api
 func (client *Client) ImportYhllEx(request *ImportYhllRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *ImportYhllResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -17394,10 +20613,11 @@ func (client *Client) ImportYhllEx(request *ImportYhllRequest, headers map[strin
 	return _result, _err
 }
 
-/**
- * Description: 友活来了任务查询api
- * Summary: 友活来了任务查询api
- */
+// Description:
+//
+// Description: 友活来了任务查询api
+//
+// Summary: 友活来了任务查询api
 func (client *Client) QueryYhll(request *QueryYhllRequest) (_result *QueryYhllResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -17410,10 +20630,11 @@ func (client *Client) QueryYhll(request *QueryYhllRequest) (_result *QueryYhllRe
 	return _result, _err
 }
 
-/**
- * Description: 友活来了任务查询api
- * Summary: 友活来了任务查询api
- */
+// Description:
+//
+// Description: 友活来了任务查询api
+//
+// Summary: 友活来了任务查询api
 func (client *Client) QueryYhllEx(request *QueryYhllRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryYhllResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -17428,10 +20649,11 @@ func (client *Client) QueryYhllEx(request *QueryYhllRequest, headers map[string]
 	return _result, _err
 }
 
-/**
- * Description: 天鉴ask接口
- * Summary: 天鉴ask接口
- */
+// Description:
+//
+// Description: 天鉴ask接口
+//
+// Summary: 天鉴ask接口
 func (client *Client) QueryGuardAsk(request *QueryGuardAskRequest) (_result *QueryGuardAskResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -17444,10 +20666,11 @@ func (client *Client) QueryGuardAsk(request *QueryGuardAskRequest) (_result *Que
 	return _result, _err
 }
 
-/**
- * Description: 天鉴ask接口
- * Summary: 天鉴ask接口
- */
+// Description:
+//
+// Description: 天鉴ask接口
+//
+// Summary: 天鉴ask接口
 func (client *Client) QueryGuardAskEx(request *QueryGuardAskRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryGuardAskResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -17462,10 +20685,11 @@ func (client *Client) QueryGuardAskEx(request *QueryGuardAskRequest, headers map
 	return _result, _err
 }
 
-/**
- * Description: 天鉴answer接口
- * Summary: 天鉴answer接口
- */
+// Description:
+//
+// Description: 天鉴answer接口
+//
+// Summary: 天鉴answer接口
 func (client *Client) QueryGuardAnswer(request *QueryGuardAnswerRequest) (_result *QueryGuardAnswerResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -17478,10 +20702,11 @@ func (client *Client) QueryGuardAnswer(request *QueryGuardAnswerRequest) (_resul
 	return _result, _err
 }
 
-/**
- * Description: 天鉴answer接口
- * Summary: 天鉴answer接口
- */
+// Description:
+//
+// Description: 天鉴answer接口
+//
+// Summary: 天鉴answer接口
 func (client *Client) QueryGuardAnswerEx(request *QueryGuardAnswerRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryGuardAnswerResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -17496,10 +20721,11 @@ func (client *Client) QueryGuardAnswerEx(request *QueryGuardAnswerRequest, heade
 	return _result, _err
 }
 
-/**
- * Description: 开放给设备产商，删除数字钥匙
- * Summary: 删除数字钥匙
- */
+// Description:
+//
+// Description: 开放给设备产商，删除数字钥匙
+//
+// Summary: 删除数字钥匙
 func (client *Client) DeleteIifaaDigitalkey(request *DeleteIifaaDigitalkeyRequest) (_result *DeleteIifaaDigitalkeyResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -17512,10 +20738,11 @@ func (client *Client) DeleteIifaaDigitalkey(request *DeleteIifaaDigitalkeyReques
 	return _result, _err
 }
 
-/**
- * Description: 开放给设备产商，删除数字钥匙
- * Summary: 删除数字钥匙
- */
+// Description:
+//
+// Description: 开放给设备产商，删除数字钥匙
+//
+// Summary: 删除数字钥匙
 func (client *Client) DeleteIifaaDigitalkeyEx(request *DeleteIifaaDigitalkeyRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *DeleteIifaaDigitalkeyResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -17530,10 +20757,11 @@ func (client *Client) DeleteIifaaDigitalkeyEx(request *DeleteIifaaDigitalkeyRequ
 	return _result, _err
 }
 
-/**
- * Description: 光鉴智能凭证
- * Summary: 光鉴智能凭证
- */
+// Description:
+//
+// Description: 光鉴智能凭证
+//
+// Summary: 光鉴智能凭证
 func (client *Client) CheckOpticalIdentify(request *CheckOpticalIdentifyRequest) (_result *CheckOpticalIdentifyResponse, _err error) {
 	runtime := &util.RuntimeOptions{}
 	headers := make(map[string]*string)
@@ -17546,10 +20774,11 @@ func (client *Client) CheckOpticalIdentify(request *CheckOpticalIdentifyRequest)
 	return _result, _err
 }
 
-/**
- * Description: 光鉴智能凭证
- * Summary: 光鉴智能凭证
- */
+// Description:
+//
+// Description: 光鉴智能凭证
+//
+// Summary: 光鉴智能凭证
 func (client *Client) CheckOpticalIdentifyEx(request *CheckOpticalIdentifyRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *CheckOpticalIdentifyResponse, _err error) {
 	_err = util.ValidateModel(request)
 	if _err != nil {
@@ -17557,6 +20786,42 @@ func (client *Client) CheckOpticalIdentifyEx(request *CheckOpticalIdentifyReques
 	}
 	_result = &CheckOpticalIdentifyResponse{}
 	_body, _err := client.DoRequest(tea.String("1.0"), tea.String("antsecuritytech.gateway.optical.identify.check"), tea.String("HTTPS"), tea.String("POST"), tea.String("/gateway.do"), tea.ToMap(request), headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_err = tea.Convert(_body, &_result)
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 创建HTTP PUT提交的文件上传
+//
+// Summary: 文件上传创建
+func (client *Client) CreateAntcloudGatewayxFileUpload(request *CreateAntcloudGatewayxFileUploadRequest) (_result *CreateAntcloudGatewayxFileUploadResponse, _err error) {
+	runtime := &util.RuntimeOptions{}
+	headers := make(map[string]*string)
+	_result = &CreateAntcloudGatewayxFileUploadResponse{}
+	_body, _err := client.CreateAntcloudGatewayxFileUploadEx(request, headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = _body
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 创建HTTP PUT提交的文件上传
+//
+// Summary: 文件上传创建
+func (client *Client) CreateAntcloudGatewayxFileUploadEx(request *CreateAntcloudGatewayxFileUploadRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *CreateAntcloudGatewayxFileUploadResponse, _err error) {
+	_err = util.ValidateModel(request)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = &CreateAntcloudGatewayxFileUploadResponse{}
+	_body, _err := client.DoRequest(tea.String("1.0"), tea.String("antcloud.gatewayx.file.upload.create"), tea.String("HTTPS"), tea.String("POST"), tea.String("/gateway.do"), tea.ToMap(request), headers, runtime)
 	if _err != nil {
 		return _result, _err
 	}
