@@ -3438,6 +3438,98 @@ func (s *FaceShieldResult) SetSugAction(v string) *FaceShieldResult {
 	return s
 }
 
+// 资金体
+type FundItem struct {
+	// 业务订单号（天枢biz_order_no转名；订单不存在时为空）
+	// example:
+	//
+	// METL202004041220123456
+	OrderId *string `json:"order_id,omitempty" xml:"order_id,omitempty" require:"true"`
+	// 关联交易单号（天枢原样透传）
+	// example:
+	//
+	// TN1001
+	TradeNo *string `json:"trade_no,omitempty" xml:"trade_no,omitempty" require:"true"`
+	// 订单支付金额（订单实收；无单=0）单位元两位小数
+	// example:
+	//
+	// 1300.00
+	Amount *string `json:"amount,omitempty" xml:"amount,omitempty" require:"true"`
+	// 活体金额（明细PET行商品金额聚合，下单口径不可变事实；无明细=0）
+	// example:
+	//
+	// 800.00
+	PetAmount *string `json:"pet_amount,omitempty" xml:"pet_amount,omitempty" require:"true"`
+	// 商城金额（明细POINT_PACKAGE/GOODS行商品金额聚合；无明细=0）
+	// example:
+	//
+	// 500.00
+	MallAmount *string `json:"mall_amount,omitempty" xml:"mall_amount,omitempty"`
+	// 活体可用金额（该笔PET账户行available；无行=0）
+	// example:
+	//
+	// 795.06
+	PetAvailableAmount *string `json:"pet_available_amount,omitempty" xml:"pet_available_amount,omitempty"`
+	// 商城可用余额（POINT_PACKAGE/GOODS行available合计，不含冻结；无行=0）
+	// example:
+	//
+	// 200.00
+	MallAvailableAmount *string `json:"mall_available_amount,omitempty" xml:"mall_available_amount,omitempty"`
+	// 商城冻结金额（POINT_PACKAGE行frozen；无冻结=0）
+	// example:
+	//
+	// 0.00
+	MallFrozenAmount *string `json:"mall_frozen_amount,omitempty" xml:"mall_frozen_amount,omitempty"`
+}
+
+func (s FundItem) String() string {
+	return tea.Prettify(s)
+}
+
+func (s FundItem) GoString() string {
+	return s.String()
+}
+
+func (s *FundItem) SetOrderId(v string) *FundItem {
+	s.OrderId = &v
+	return s
+}
+
+func (s *FundItem) SetTradeNo(v string) *FundItem {
+	s.TradeNo = &v
+	return s
+}
+
+func (s *FundItem) SetAmount(v string) *FundItem {
+	s.Amount = &v
+	return s
+}
+
+func (s *FundItem) SetPetAmount(v string) *FundItem {
+	s.PetAmount = &v
+	return s
+}
+
+func (s *FundItem) SetMallAmount(v string) *FundItem {
+	s.MallAmount = &v
+	return s
+}
+
+func (s *FundItem) SetPetAvailableAmount(v string) *FundItem {
+	s.PetAvailableAmount = &v
+	return s
+}
+
+func (s *FundItem) SetMallAvailableAmount(v string) *FundItem {
+	s.MallAvailableAmount = &v
+	return s
+}
+
+func (s *FundItem) SetMallFrozenAmount(v string) *FundItem {
+	s.MallFrozenAmount = &v
+	return s
+}
+
 // 订单信息
 type PoiMallPointOrderInfo struct {
 	// 订单号
@@ -12184,6 +12276,755 @@ func (s *ReceiveFileidCallbackResponse) SetResultMsg(v string) *ReceiveFileidCal
 	return s
 }
 
+type CreatePoiMallorderRequest struct {
+	// OAuth模式下的授权token
+	AuthToken         *string `json:"auth_token,omitempty" xml:"auth_token,omitempty"`
+	ProductInstanceId *string `json:"product_instance_id,omitempty" xml:"product_instance_id,omitempty"`
+	// 支付宝小程序用户唯一ID
+	OpenId *string `json:"open_id,omitempty" xml:"open_id,omitempty" require:"true"`
+	// 商户入驻主体ID（商城主体）
+	MerchantId *string `json:"merchant_id,omitempty" xml:"merchant_id,omitempty" require:"true"`
+	// 商城积分消费订单号，由商城生成保证唯一（幂等键）
+	OrderId *string `json:"order_id,omitempty" xml:"order_id,omitempty" require:"true"`
+	// 预充值来源订单号（某笔支付订单的order_id，内部反查trade_no）
+	SourceOrderId *string `json:"source_order_id,omitempty" xml:"source_order_id,omitempty" require:"true"`
+	// 订单类型：PET_PACKAGE/PET/GOODS/MEMBER
+	ProductMode *string `json:"product_mode,omitempty" xml:"product_mode,omitempty" require:"true"`
+	// 商品名称
+	GoodsName *string `json:"goods_name,omitempty" xml:"goods_name,omitempty" require:"true"`
+	// 结算金额（元，两位小数，≤point_amount）
+	SettleAmount *string `json:"settle_amount,omitempty" xml:"settle_amount,omitempty" require:"true"`
+	// 冻结金额（元，两位小数，冻结/出账/分账基数）
+	PointAmount *string `json:"point_amount,omitempty" xml:"point_amount,omitempty" require:"true"`
+}
+
+func (s CreatePoiMallorderRequest) String() string {
+	return tea.Prettify(s)
+}
+
+func (s CreatePoiMallorderRequest) GoString() string {
+	return s.String()
+}
+
+func (s *CreatePoiMallorderRequest) SetAuthToken(v string) *CreatePoiMallorderRequest {
+	s.AuthToken = &v
+	return s
+}
+
+func (s *CreatePoiMallorderRequest) SetProductInstanceId(v string) *CreatePoiMallorderRequest {
+	s.ProductInstanceId = &v
+	return s
+}
+
+func (s *CreatePoiMallorderRequest) SetOpenId(v string) *CreatePoiMallorderRequest {
+	s.OpenId = &v
+	return s
+}
+
+func (s *CreatePoiMallorderRequest) SetMerchantId(v string) *CreatePoiMallorderRequest {
+	s.MerchantId = &v
+	return s
+}
+
+func (s *CreatePoiMallorderRequest) SetOrderId(v string) *CreatePoiMallorderRequest {
+	s.OrderId = &v
+	return s
+}
+
+func (s *CreatePoiMallorderRequest) SetSourceOrderId(v string) *CreatePoiMallorderRequest {
+	s.SourceOrderId = &v
+	return s
+}
+
+func (s *CreatePoiMallorderRequest) SetProductMode(v string) *CreatePoiMallorderRequest {
+	s.ProductMode = &v
+	return s
+}
+
+func (s *CreatePoiMallorderRequest) SetGoodsName(v string) *CreatePoiMallorderRequest {
+	s.GoodsName = &v
+	return s
+}
+
+func (s *CreatePoiMallorderRequest) SetSettleAmount(v string) *CreatePoiMallorderRequest {
+	s.SettleAmount = &v
+	return s
+}
+
+func (s *CreatePoiMallorderRequest) SetPointAmount(v string) *CreatePoiMallorderRequest {
+	s.PointAmount = &v
+	return s
+}
+
+type CreatePoiMallorderResponse struct {
+	// 请求唯一ID，用于链路跟踪和问题排查
+	ReqMsgId *string `json:"req_msg_id,omitempty" xml:"req_msg_id,omitempty"`
+	// 结果码，一般OK表示调用成功
+	ResultCode *string `json:"result_code,omitempty" xml:"result_code,omitempty"`
+	// 异常信息的文本描述
+	ResultMsg *string `json:"result_msg,omitempty" xml:"result_msg,omitempty"`
+	// 商城积分消费订单号（回显）
+	OrderId *string `json:"order_id,omitempty" xml:"order_id,omitempty" require:"true"`
+	// 创建结果：Y-创建成功金额已冻结 / N-创建失败
+	CreateResult *string `json:"create_result,omitempty" xml:"create_result,omitempty" require:"true"`
+	// 失败原因（成功为空）：M4余额不足/M5来源行校验失败等
+	FailReason *string `json:"fail_reason,omitempty" xml:"fail_reason,omitempty"`
+}
+
+func (s CreatePoiMallorderResponse) String() string {
+	return tea.Prettify(s)
+}
+
+func (s CreatePoiMallorderResponse) GoString() string {
+	return s.String()
+}
+
+func (s *CreatePoiMallorderResponse) SetReqMsgId(v string) *CreatePoiMallorderResponse {
+	s.ReqMsgId = &v
+	return s
+}
+
+func (s *CreatePoiMallorderResponse) SetResultCode(v string) *CreatePoiMallorderResponse {
+	s.ResultCode = &v
+	return s
+}
+
+func (s *CreatePoiMallorderResponse) SetResultMsg(v string) *CreatePoiMallorderResponse {
+	s.ResultMsg = &v
+	return s
+}
+
+func (s *CreatePoiMallorderResponse) SetOrderId(v string) *CreatePoiMallorderResponse {
+	s.OrderId = &v
+	return s
+}
+
+func (s *CreatePoiMallorderResponse) SetCreateResult(v string) *CreatePoiMallorderResponse {
+	s.CreateResult = &v
+	return s
+}
+
+func (s *CreatePoiMallorderResponse) SetFailReason(v string) *CreatePoiMallorderResponse {
+	s.FailReason = &v
+	return s
+}
+
+type UpdatePoiOrderRequest struct {
+	// OAuth模式下的授权token
+	AuthToken         *string `json:"auth_token,omitempty" xml:"auth_token,omitempty"`
+	ProductInstanceId *string `json:"product_instance_id,omitempty" xml:"product_instance_id,omitempty"`
+	// 支付宝小程序用户唯一ID
+	OpenId *string `json:"open_id,omitempty" xml:"open_id,omitempty" require:"true"`
+	// 商户入驻主体ID
+	MerchantId *string `json:"merchant_id,omitempty" xml:"merchant_id,omitempty"`
+	// 商城订单号
+	OrderId *string `json:"order_id,omitempty" xml:"order_id,omitempty" require:"true"`
+	// 订单状态：SHIPPED-已发货 / RECEIVED-已确认收货 / CANCELED-已取消
+	Status *string `json:"status,omitempty" xml:"status,omitempty" require:"true"`
+	// 状态发生业务时间，格式yyyy-MM-dd HH:mm:ss，建议传入便于对账
+	StatusGmt *string `json:"status_gmt,omitempty" xml:"status_gmt,omitempty"`
+}
+
+func (s UpdatePoiOrderRequest) String() string {
+	return tea.Prettify(s)
+}
+
+func (s UpdatePoiOrderRequest) GoString() string {
+	return s.String()
+}
+
+func (s *UpdatePoiOrderRequest) SetAuthToken(v string) *UpdatePoiOrderRequest {
+	s.AuthToken = &v
+	return s
+}
+
+func (s *UpdatePoiOrderRequest) SetProductInstanceId(v string) *UpdatePoiOrderRequest {
+	s.ProductInstanceId = &v
+	return s
+}
+
+func (s *UpdatePoiOrderRequest) SetOpenId(v string) *UpdatePoiOrderRequest {
+	s.OpenId = &v
+	return s
+}
+
+func (s *UpdatePoiOrderRequest) SetMerchantId(v string) *UpdatePoiOrderRequest {
+	s.MerchantId = &v
+	return s
+}
+
+func (s *UpdatePoiOrderRequest) SetOrderId(v string) *UpdatePoiOrderRequest {
+	s.OrderId = &v
+	return s
+}
+
+func (s *UpdatePoiOrderRequest) SetStatus(v string) *UpdatePoiOrderRequest {
+	s.Status = &v
+	return s
+}
+
+func (s *UpdatePoiOrderRequest) SetStatusGmt(v string) *UpdatePoiOrderRequest {
+	s.StatusGmt = &v
+	return s
+}
+
+type UpdatePoiOrderResponse struct {
+	// 请求唯一ID，用于链路跟踪和问题排查
+	ReqMsgId *string `json:"req_msg_id,omitempty" xml:"req_msg_id,omitempty"`
+	// 结果码，一般OK表示调用成功
+	ResultCode *string `json:"result_code,omitempty" xml:"result_code,omitempty"`
+	// 异常信息的文本描述
+	ResultMsg *string `json:"result_msg,omitempty" xml:"result_msg,omitempty"`
+	// 商城订单号（回显）
+	OrderId *string `json:"order_id,omitempty" xml:"order_id,omitempty" require:"true"`
+	// 更新结果：Y-更新成功 / N-更新失败
+	UpdateResult *string `json:"update_result,omitempty" xml:"update_result,omitempty" require:"true"`
+	// 失败原因（成功为空）：状态非法/在途拦截等
+	FailReason *string `json:"fail_reason,omitempty" xml:"fail_reason,omitempty"`
+}
+
+func (s UpdatePoiOrderResponse) String() string {
+	return tea.Prettify(s)
+}
+
+func (s UpdatePoiOrderResponse) GoString() string {
+	return s.String()
+}
+
+func (s *UpdatePoiOrderResponse) SetReqMsgId(v string) *UpdatePoiOrderResponse {
+	s.ReqMsgId = &v
+	return s
+}
+
+func (s *UpdatePoiOrderResponse) SetResultCode(v string) *UpdatePoiOrderResponse {
+	s.ResultCode = &v
+	return s
+}
+
+func (s *UpdatePoiOrderResponse) SetResultMsg(v string) *UpdatePoiOrderResponse {
+	s.ResultMsg = &v
+	return s
+}
+
+func (s *UpdatePoiOrderResponse) SetOrderId(v string) *UpdatePoiOrderResponse {
+	s.OrderId = &v
+	return s
+}
+
+func (s *UpdatePoiOrderResponse) SetUpdateResult(v string) *UpdatePoiOrderResponse {
+	s.UpdateResult = &v
+	return s
+}
+
+func (s *UpdatePoiOrderResponse) SetFailReason(v string) *UpdatePoiOrderResponse {
+	s.FailReason = &v
+	return s
+}
+
+type ApplyPoiRefundRequest struct {
+	// OAuth模式下的授权token
+	AuthToken         *string `json:"auth_token,omitempty" xml:"auth_token,omitempty"`
+	ProductInstanceId *string `json:"product_instance_id,omitempty" xml:"product_instance_id,omitempty"`
+	// 退款单号，由发起方生成保证唯一（幂等键）
+	RefundNo *string `json:"refund_no,omitempty" xml:"refund_no,omitempty" require:"true"`
+	// 被退款的支付订单号（内部反查trade_no）
+	OrderId *string `json:"order_id,omitempty" xml:"order_id,omitempty" require:"true"`
+	// 活体部分退款金额（元，两位小数）；与mall_refund_amount至少一项必填且>0
+	PetRefundAmount *string `json:"pet_refund_amount,omitempty" xml:"pet_refund_amount,omitempty"`
+	// 商城部分退款金额（元，两位小数），即退回的预充值余额
+	MallRefundAmount *string `json:"mall_refund_amount,omitempty" xml:"mall_refund_amount,omitempty"`
+	// 退款原因
+	RefundReason *string `json:"refund_reason,omitempty" xml:"refund_reason,omitempty"`
+}
+
+func (s ApplyPoiRefundRequest) String() string {
+	return tea.Prettify(s)
+}
+
+func (s ApplyPoiRefundRequest) GoString() string {
+	return s.String()
+}
+
+func (s *ApplyPoiRefundRequest) SetAuthToken(v string) *ApplyPoiRefundRequest {
+	s.AuthToken = &v
+	return s
+}
+
+func (s *ApplyPoiRefundRequest) SetProductInstanceId(v string) *ApplyPoiRefundRequest {
+	s.ProductInstanceId = &v
+	return s
+}
+
+func (s *ApplyPoiRefundRequest) SetRefundNo(v string) *ApplyPoiRefundRequest {
+	s.RefundNo = &v
+	return s
+}
+
+func (s *ApplyPoiRefundRequest) SetOrderId(v string) *ApplyPoiRefundRequest {
+	s.OrderId = &v
+	return s
+}
+
+func (s *ApplyPoiRefundRequest) SetPetRefundAmount(v string) *ApplyPoiRefundRequest {
+	s.PetRefundAmount = &v
+	return s
+}
+
+func (s *ApplyPoiRefundRequest) SetMallRefundAmount(v string) *ApplyPoiRefundRequest {
+	s.MallRefundAmount = &v
+	return s
+}
+
+func (s *ApplyPoiRefundRequest) SetRefundReason(v string) *ApplyPoiRefundRequest {
+	s.RefundReason = &v
+	return s
+}
+
+type ApplyPoiRefundResponse struct {
+	// 请求唯一ID，用于链路跟踪和问题排查
+	ReqMsgId *string `json:"req_msg_id,omitempty" xml:"req_msg_id,omitempty"`
+	// 结果码，一般OK表示调用成功
+	ResultCode *string `json:"result_code,omitempty" xml:"result_code,omitempty"`
+	// 异常信息的文本描述
+	ResultMsg *string `json:"result_msg,omitempty" xml:"result_msg,omitempty"`
+	// 退款单号（回显）
+	RefundNo *string `json:"refund_no,omitempty" xml:"refund_no,omitempty" require:"true"`
+	// 退款状态：INIT-已受理 / PROCESSING-处理中 / SUCCESS-退款成功 / FAILED-退款失败
+	RefundStatus *string `json:"refund_status,omitempty" xml:"refund_status,omitempty" require:"true"`
+	// 受理/拒绝说明（在途拦截整单拒绝时携带拆分提示；成功受理为空）
+	Remark *string `json:"remark,omitempty" xml:"remark,omitempty"`
+}
+
+func (s ApplyPoiRefundResponse) String() string {
+	return tea.Prettify(s)
+}
+
+func (s ApplyPoiRefundResponse) GoString() string {
+	return s.String()
+}
+
+func (s *ApplyPoiRefundResponse) SetReqMsgId(v string) *ApplyPoiRefundResponse {
+	s.ReqMsgId = &v
+	return s
+}
+
+func (s *ApplyPoiRefundResponse) SetResultCode(v string) *ApplyPoiRefundResponse {
+	s.ResultCode = &v
+	return s
+}
+
+func (s *ApplyPoiRefundResponse) SetResultMsg(v string) *ApplyPoiRefundResponse {
+	s.ResultMsg = &v
+	return s
+}
+
+func (s *ApplyPoiRefundResponse) SetRefundNo(v string) *ApplyPoiRefundResponse {
+	s.RefundNo = &v
+	return s
+}
+
+func (s *ApplyPoiRefundResponse) SetRefundStatus(v string) *ApplyPoiRefundResponse {
+	s.RefundStatus = &v
+	return s
+}
+
+func (s *ApplyPoiRefundResponse) SetRemark(v string) *ApplyPoiRefundResponse {
+	s.Remark = &v
+	return s
+}
+
+type QueryPoiRefundRequest struct {
+	// OAuth模式下的授权token
+	AuthToken         *string `json:"auth_token,omitempty" xml:"auth_token,omitempty"`
+	ProductInstanceId *string `json:"product_instance_id,omitempty" xml:"product_instance_id,omitempty"`
+	// 退款单号
+	RefundNo *string `json:"refund_no,omitempty" xml:"refund_no,omitempty" require:"true"`
+	// 被退款的支付订单号（内部反查trade_no）
+	OrderId *string `json:"order_id,omitempty" xml:"order_id,omitempty" require:"true"`
+}
+
+func (s QueryPoiRefundRequest) String() string {
+	return tea.Prettify(s)
+}
+
+func (s QueryPoiRefundRequest) GoString() string {
+	return s.String()
+}
+
+func (s *QueryPoiRefundRequest) SetAuthToken(v string) *QueryPoiRefundRequest {
+	s.AuthToken = &v
+	return s
+}
+
+func (s *QueryPoiRefundRequest) SetProductInstanceId(v string) *QueryPoiRefundRequest {
+	s.ProductInstanceId = &v
+	return s
+}
+
+func (s *QueryPoiRefundRequest) SetRefundNo(v string) *QueryPoiRefundRequest {
+	s.RefundNo = &v
+	return s
+}
+
+func (s *QueryPoiRefundRequest) SetOrderId(v string) *QueryPoiRefundRequest {
+	s.OrderId = &v
+	return s
+}
+
+type QueryPoiRefundResponse struct {
+	// 请求唯一ID，用于链路跟踪和问题排查
+	ReqMsgId *string `json:"req_msg_id,omitempty" xml:"req_msg_id,omitempty"`
+	// 结果码，一般OK表示调用成功
+	ResultCode *string `json:"result_code,omitempty" xml:"result_code,omitempty"`
+	// 异常信息的文本描述
+	ResultMsg *string `json:"result_msg,omitempty" xml:"result_msg,omitempty"`
+	// 退款单号
+	RefundNo *string `json:"refund_no,omitempty" xml:"refund_no,omitempty" require:"true"`
+	// 退款状态：INIT/PROCESSING/SUCCESS/FAILED
+	RefundStatus *string `json:"refund_status,omitempty" xml:"refund_status,omitempty" require:"true"`
+	// 活体部分退款金额
+	PetRefundAmount *string `json:"pet_refund_amount,omitempty" xml:"pet_refund_amount,omitempty"`
+	// 商城部分退款金额
+	MallRefundAmount *string `json:"mall_refund_amount,omitempty" xml:"mall_refund_amount,omitempty"`
+	// 说明（与退款申请响应同口径）
+	Remark *string `json:"remark,omitempty" xml:"remark,omitempty"`
+}
+
+func (s QueryPoiRefundResponse) String() string {
+	return tea.Prettify(s)
+}
+
+func (s QueryPoiRefundResponse) GoString() string {
+	return s.String()
+}
+
+func (s *QueryPoiRefundResponse) SetReqMsgId(v string) *QueryPoiRefundResponse {
+	s.ReqMsgId = &v
+	return s
+}
+
+func (s *QueryPoiRefundResponse) SetResultCode(v string) *QueryPoiRefundResponse {
+	s.ResultCode = &v
+	return s
+}
+
+func (s *QueryPoiRefundResponse) SetResultMsg(v string) *QueryPoiRefundResponse {
+	s.ResultMsg = &v
+	return s
+}
+
+func (s *QueryPoiRefundResponse) SetRefundNo(v string) *QueryPoiRefundResponse {
+	s.RefundNo = &v
+	return s
+}
+
+func (s *QueryPoiRefundResponse) SetRefundStatus(v string) *QueryPoiRefundResponse {
+	s.RefundStatus = &v
+	return s
+}
+
+func (s *QueryPoiRefundResponse) SetPetRefundAmount(v string) *QueryPoiRefundResponse {
+	s.PetRefundAmount = &v
+	return s
+}
+
+func (s *QueryPoiRefundResponse) SetMallRefundAmount(v string) *QueryPoiRefundResponse {
+	s.MallRefundAmount = &v
+	return s
+}
+
+func (s *QueryPoiRefundResponse) SetRemark(v string) *QueryPoiRefundResponse {
+	s.Remark = &v
+	return s
+}
+
+type NotifyPoiTransferRequest struct {
+	// OAuth模式下的授权token
+	AuthToken         *string `json:"auth_token,omitempty" xml:"auth_token,omitempty"`
+	ProductInstanceId *string `json:"product_instance_id,omitempty" xml:"product_instance_id,omitempty"`
+	// 关联交易单号（天枢内部，eKYT接收不透出商城）
+	TradeNo *string `json:"trade_no,omitempty" xml:"trade_no,omitempty" require:"true"`
+	// 商城订单号
+	BizOrderNo *string `json:"biz_order_no,omitempty" xml:"biz_order_no,omitempty" require:"true"`
+	// 原始正向订单号（仅MALL携带，余额来源业务订单号）
+	OriginalOrderNo *string `json:"original_order_no,omitempty" xml:"original_order_no,omitempty"`
+	// 分账时间，格式yyyy-MM-dd HH:mm:ss
+	GmtTransfer *string `json:"gmt_transfer,omitempty" xml:"gmt_transfer,omitempty" require:"true"`
+	// 结算类型：PET-活体 / MALL-商城消费 / SCORE-充值余额整笔 / MEMBER-会员
+	SettleType *string `json:"settle_type,omitempty" xml:"settle_type,omitempty" require:"true"`
+	// 分账明细JSON数组（天枢每批次收款主体唯一，单元素数组；元素：cert_no收款主体社信码、transfer_amount结算金额元）
+	TransferDetails *string `json:"transfer_details,omitempty" xml:"transfer_details,omitempty" require:"true"`
+}
+
+func (s NotifyPoiTransferRequest) String() string {
+	return tea.Prettify(s)
+}
+
+func (s NotifyPoiTransferRequest) GoString() string {
+	return s.String()
+}
+
+func (s *NotifyPoiTransferRequest) SetAuthToken(v string) *NotifyPoiTransferRequest {
+	s.AuthToken = &v
+	return s
+}
+
+func (s *NotifyPoiTransferRequest) SetProductInstanceId(v string) *NotifyPoiTransferRequest {
+	s.ProductInstanceId = &v
+	return s
+}
+
+func (s *NotifyPoiTransferRequest) SetTradeNo(v string) *NotifyPoiTransferRequest {
+	s.TradeNo = &v
+	return s
+}
+
+func (s *NotifyPoiTransferRequest) SetBizOrderNo(v string) *NotifyPoiTransferRequest {
+	s.BizOrderNo = &v
+	return s
+}
+
+func (s *NotifyPoiTransferRequest) SetOriginalOrderNo(v string) *NotifyPoiTransferRequest {
+	s.OriginalOrderNo = &v
+	return s
+}
+
+func (s *NotifyPoiTransferRequest) SetGmtTransfer(v string) *NotifyPoiTransferRequest {
+	s.GmtTransfer = &v
+	return s
+}
+
+func (s *NotifyPoiTransferRequest) SetSettleType(v string) *NotifyPoiTransferRequest {
+	s.SettleType = &v
+	return s
+}
+
+func (s *NotifyPoiTransferRequest) SetTransferDetails(v string) *NotifyPoiTransferRequest {
+	s.TransferDetails = &v
+	return s
+}
+
+type NotifyPoiTransferResponse struct {
+	// 请求唯一ID，用于链路跟踪和问题排查
+	ReqMsgId *string `json:"req_msg_id,omitempty" xml:"req_msg_id,omitempty"`
+	// 结果码，一般OK表示调用成功
+	ResultCode *string `json:"result_code,omitempty" xml:"result_code,omitempty"`
+	// 异常信息的文本描述
+	ResultMsg *string `json:"result_msg,omitempty" xml:"result_msg,omitempty"`
+}
+
+func (s NotifyPoiTransferResponse) String() string {
+	return tea.Prettify(s)
+}
+
+func (s NotifyPoiTransferResponse) GoString() string {
+	return s.String()
+}
+
+func (s *NotifyPoiTransferResponse) SetReqMsgId(v string) *NotifyPoiTransferResponse {
+	s.ReqMsgId = &v
+	return s
+}
+
+func (s *NotifyPoiTransferResponse) SetResultCode(v string) *NotifyPoiTransferResponse {
+	s.ResultCode = &v
+	return s
+}
+
+func (s *NotifyPoiTransferResponse) SetResultMsg(v string) *NotifyPoiTransferResponse {
+	s.ResultMsg = &v
+	return s
+}
+
+type NotifyPoiRefundRequest struct {
+	// OAuth模式下的授权token
+	AuthToken         *string `json:"auth_token,omitempty" xml:"auth_token,omitempty"`
+	ProductInstanceId *string `json:"product_instance_id,omitempty" xml:"product_instance_id,omitempty"`
+	// 退款单号
+	RefundNo *string `json:"refund_no,omitempty" xml:"refund_no,omitempty" require:"true"`
+	// 关联交易单号（天枢内部）
+	TradeNo *string `json:"trade_no,omitempty" xml:"trade_no,omitempty" require:"true"`
+	// 活体部分退款金额（渠道报文）
+	PetRefundAmount *string `json:"pet_refund_amount,omitempty" xml:"pet_refund_amount,omitempty"`
+	// 商城部分退款金额
+	MallRefundAmount *string `json:"mall_refund_amount,omitempty" xml:"mall_refund_amount,omitempty" require:"true"`
+	// 退款状态：SUCCESS / FAILED（FAILED时金额恢复可用余额）
+	RefundStatus *string `json:"refund_status,omitempty" xml:"refund_status,omitempty" require:"true"`
+	// 买家用户id（商城报文携带）
+	BuyerId *string `json:"buyer_id,omitempty" xml:"buyer_id,omitempty"`
+	// 商城订单号（模式4商品订单取消携带）
+	BizOrderNo *string `json:"biz_order_no,omitempty" xml:"biz_order_no,omitempty"`
+}
+
+func (s NotifyPoiRefundRequest) String() string {
+	return tea.Prettify(s)
+}
+
+func (s NotifyPoiRefundRequest) GoString() string {
+	return s.String()
+}
+
+func (s *NotifyPoiRefundRequest) SetAuthToken(v string) *NotifyPoiRefundRequest {
+	s.AuthToken = &v
+	return s
+}
+
+func (s *NotifyPoiRefundRequest) SetProductInstanceId(v string) *NotifyPoiRefundRequest {
+	s.ProductInstanceId = &v
+	return s
+}
+
+func (s *NotifyPoiRefundRequest) SetRefundNo(v string) *NotifyPoiRefundRequest {
+	s.RefundNo = &v
+	return s
+}
+
+func (s *NotifyPoiRefundRequest) SetTradeNo(v string) *NotifyPoiRefundRequest {
+	s.TradeNo = &v
+	return s
+}
+
+func (s *NotifyPoiRefundRequest) SetPetRefundAmount(v string) *NotifyPoiRefundRequest {
+	s.PetRefundAmount = &v
+	return s
+}
+
+func (s *NotifyPoiRefundRequest) SetMallRefundAmount(v string) *NotifyPoiRefundRequest {
+	s.MallRefundAmount = &v
+	return s
+}
+
+func (s *NotifyPoiRefundRequest) SetRefundStatus(v string) *NotifyPoiRefundRequest {
+	s.RefundStatus = &v
+	return s
+}
+
+func (s *NotifyPoiRefundRequest) SetBuyerId(v string) *NotifyPoiRefundRequest {
+	s.BuyerId = &v
+	return s
+}
+
+func (s *NotifyPoiRefundRequest) SetBizOrderNo(v string) *NotifyPoiRefundRequest {
+	s.BizOrderNo = &v
+	return s
+}
+
+type NotifyPoiRefundResponse struct {
+	// 请求唯一ID，用于链路跟踪和问题排查
+	ReqMsgId *string `json:"req_msg_id,omitempty" xml:"req_msg_id,omitempty"`
+	// 结果码，一般OK表示调用成功
+	ResultCode *string `json:"result_code,omitempty" xml:"result_code,omitempty"`
+	// 异常信息的文本描述
+	ResultMsg *string `json:"result_msg,omitempty" xml:"result_msg,omitempty"`
+}
+
+func (s NotifyPoiRefundResponse) String() string {
+	return tea.Prettify(s)
+}
+
+func (s NotifyPoiRefundResponse) GoString() string {
+	return s.String()
+}
+
+func (s *NotifyPoiRefundResponse) SetReqMsgId(v string) *NotifyPoiRefundResponse {
+	s.ReqMsgId = &v
+	return s
+}
+
+func (s *NotifyPoiRefundResponse) SetResultCode(v string) *NotifyPoiRefundResponse {
+	s.ResultCode = &v
+	return s
+}
+
+func (s *NotifyPoiRefundResponse) SetResultMsg(v string) *NotifyPoiRefundResponse {
+	s.ResultMsg = &v
+	return s
+}
+
+type QueryPoiFundRequest struct {
+	// OAuth模式下的授权token
+	AuthToken         *string `json:"auth_token,omitempty" xml:"auth_token,omitempty"`
+	ProductInstanceId *string `json:"product_instance_id,omitempty" xml:"product_instance_id,omitempty"`
+	// 订单 id
+	OrderId *string `json:"order_id,omitempty" xml:"order_id,omitempty"`
+	// 用户 open_id
+	OpenId *string `json:"open_id,omitempty" xml:"open_id,omitempty" require:"true"`
+	// 商户 id
+	MerchantId *string `json:"merchant_id,omitempty" xml:"merchant_id,omitempty"`
+}
+
+func (s QueryPoiFundRequest) String() string {
+	return tea.Prettify(s)
+}
+
+func (s QueryPoiFundRequest) GoString() string {
+	return s.String()
+}
+
+func (s *QueryPoiFundRequest) SetAuthToken(v string) *QueryPoiFundRequest {
+	s.AuthToken = &v
+	return s
+}
+
+func (s *QueryPoiFundRequest) SetProductInstanceId(v string) *QueryPoiFundRequest {
+	s.ProductInstanceId = &v
+	return s
+}
+
+func (s *QueryPoiFundRequest) SetOrderId(v string) *QueryPoiFundRequest {
+	s.OrderId = &v
+	return s
+}
+
+func (s *QueryPoiFundRequest) SetOpenId(v string) *QueryPoiFundRequest {
+	s.OpenId = &v
+	return s
+}
+
+func (s *QueryPoiFundRequest) SetMerchantId(v string) *QueryPoiFundRequest {
+	s.MerchantId = &v
+	return s
+}
+
+type QueryPoiFundResponse struct {
+	// 请求唯一ID，用于链路跟踪和问题排查
+	ReqMsgId *string `json:"req_msg_id,omitempty" xml:"req_msg_id,omitempty"`
+	// 结果码，一般OK表示调用成功
+	ResultCode *string `json:"result_code,omitempty" xml:"result_code,omitempty"`
+	// 异常信息的文本描述
+	ResultMsg *string `json:"result_msg,omitempty" xml:"result_msg,omitempty"`
+	// 资金列表
+	FundList []*FundItem `json:"fund_list,omitempty" xml:"fund_list,omitempty" type:"Repeated"`
+}
+
+func (s QueryPoiFundResponse) String() string {
+	return tea.Prettify(s)
+}
+
+func (s QueryPoiFundResponse) GoString() string {
+	return s.String()
+}
+
+func (s *QueryPoiFundResponse) SetReqMsgId(v string) *QueryPoiFundResponse {
+	s.ReqMsgId = &v
+	return s
+}
+
+func (s *QueryPoiFundResponse) SetResultCode(v string) *QueryPoiFundResponse {
+	s.ResultCode = &v
+	return s
+}
+
+func (s *QueryPoiFundResponse) SetResultMsg(v string) *QueryPoiFundResponse {
+	s.ResultMsg = &v
+	return s
+}
+
+func (s *QueryPoiFundResponse) SetFundList(v []*FundItem) *QueryPoiFundResponse {
+	s.FundList = v
+	return s
+}
+
 type CreateBssecpicRequest struct {
 	// OAuth模式下的授权token
 	AuthToken         *string `json:"auth_token,omitempty" xml:"auth_token,omitempty"`
@@ -16741,7 +17582,7 @@ func (client *Client) DoRequest(version *string, action *string, protocol *strin
 				"req_msg_id":       antchainutil.GetNonce(),
 				"access_key":       client.AccessKeyId,
 				"base_sdk_version": tea.String("TeaSDK-2.0"),
-				"sdk_version":      tea.String("1.7.23"),
+				"sdk_version":      tea.String("1.7.29"),
 				"_prod_code":       tea.String("SECURITYTECH"),
 				"_prod_channel":    tea.String("undefined"),
 			}
@@ -19418,6 +20259,258 @@ func (client *Client) ReceiveFileidCallbackEx(request *ReceiveFileidCallbackRequ
 	}
 	_result = &ReceiveFileidCallbackResponse{}
 	_body, _err := client.DoRequest(tea.String("1.0"), tea.String("antsecuritytech.gateway.fileid.callback.receive"), tea.String("HTTPS"), tea.String("POST"), tea.String("/gateway.do"), tea.ToMap(request), headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_err = tea.Convert(_body, &_result)
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 积分订单创建
+//
+// Summary: 积分订单创建
+func (client *Client) CreatePoiMallorder(request *CreatePoiMallorderRequest) (_result *CreatePoiMallorderResponse, _err error) {
+	runtime := &util.RuntimeOptions{}
+	headers := make(map[string]*string)
+	_result = &CreatePoiMallorderResponse{}
+	_body, _err := client.CreatePoiMallorderEx(request, headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = _body
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 积分订单创建
+//
+// Summary: 积分订单创建
+func (client *Client) CreatePoiMallorderEx(request *CreatePoiMallorderRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *CreatePoiMallorderResponse, _err error) {
+	_err = util.ValidateModel(request)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = &CreatePoiMallorderResponse{}
+	_body, _err := client.DoRequest(tea.String("1.0"), tea.String("antsecuritytech.gateway.poi.mallorder.create"), tea.String("HTTPS"), tea.String("POST"), tea.String("/gateway.do"), tea.ToMap(request), headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_err = tea.Convert(_body, &_result)
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 订单状态更新
+//
+// Summary: 订单状态更新
+func (client *Client) UpdatePoiOrder(request *UpdatePoiOrderRequest) (_result *UpdatePoiOrderResponse, _err error) {
+	runtime := &util.RuntimeOptions{}
+	headers := make(map[string]*string)
+	_result = &UpdatePoiOrderResponse{}
+	_body, _err := client.UpdatePoiOrderEx(request, headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = _body
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 订单状态更新
+//
+// Summary: 订单状态更新
+func (client *Client) UpdatePoiOrderEx(request *UpdatePoiOrderRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *UpdatePoiOrderResponse, _err error) {
+	_err = util.ValidateModel(request)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = &UpdatePoiOrderResponse{}
+	_body, _err := client.DoRequest(tea.String("1.0"), tea.String("antsecuritytech.gateway.poi.order.update"), tea.String("HTTPS"), tea.String("POST"), tea.String("/gateway.do"), tea.ToMap(request), headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_err = tea.Convert(_body, &_result)
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 订单退款申请
+//
+// Summary: 订单退款申请
+func (client *Client) ApplyPoiRefund(request *ApplyPoiRefundRequest) (_result *ApplyPoiRefundResponse, _err error) {
+	runtime := &util.RuntimeOptions{}
+	headers := make(map[string]*string)
+	_result = &ApplyPoiRefundResponse{}
+	_body, _err := client.ApplyPoiRefundEx(request, headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = _body
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 订单退款申请
+//
+// Summary: 订单退款申请
+func (client *Client) ApplyPoiRefundEx(request *ApplyPoiRefundRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *ApplyPoiRefundResponse, _err error) {
+	_err = util.ValidateModel(request)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = &ApplyPoiRefundResponse{}
+	_body, _err := client.DoRequest(tea.String("1.0"), tea.String("antsecuritytech.gateway.poi.refund.apply"), tea.String("HTTPS"), tea.String("POST"), tea.String("/gateway.do"), tea.ToMap(request), headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_err = tea.Convert(_body, &_result)
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 退款结果查询
+//
+// Summary: 退款结果查询
+func (client *Client) QueryPoiRefund(request *QueryPoiRefundRequest) (_result *QueryPoiRefundResponse, _err error) {
+	runtime := &util.RuntimeOptions{}
+	headers := make(map[string]*string)
+	_result = &QueryPoiRefundResponse{}
+	_body, _err := client.QueryPoiRefundEx(request, headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = _body
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 退款结果查询
+//
+// Summary: 退款结果查询
+func (client *Client) QueryPoiRefundEx(request *QueryPoiRefundRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryPoiRefundResponse, _err error) {
+	_err = util.ValidateModel(request)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = &QueryPoiRefundResponse{}
+	_body, _err := client.DoRequest(tea.String("1.0"), tea.String("antsecuritytech.gateway.poi.refund.query"), tea.String("HTTPS"), tea.String("POST"), tea.String("/gateway.do"), tea.ToMap(request), headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_err = tea.Convert(_body, &_result)
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 分账结果通知
+//
+// Summary: 分账结果通知
+func (client *Client) NotifyPoiTransfer(request *NotifyPoiTransferRequest) (_result *NotifyPoiTransferResponse, _err error) {
+	runtime := &util.RuntimeOptions{}
+	headers := make(map[string]*string)
+	_result = &NotifyPoiTransferResponse{}
+	_body, _err := client.NotifyPoiTransferEx(request, headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = _body
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 分账结果通知
+//
+// Summary: 分账结果通知
+func (client *Client) NotifyPoiTransferEx(request *NotifyPoiTransferRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *NotifyPoiTransferResponse, _err error) {
+	_err = util.ValidateModel(request)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = &NotifyPoiTransferResponse{}
+	_body, _err := client.DoRequest(tea.String("1.0"), tea.String("antsecuritytech.gateway.poi.transfer.notify"), tea.String("HTTPS"), tea.String("POST"), tea.String("/gateway.do"), tea.ToMap(request), headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_err = tea.Convert(_body, &_result)
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 退款结果通知
+//
+// Summary: 退款结果通知
+func (client *Client) NotifyPoiRefund(request *NotifyPoiRefundRequest) (_result *NotifyPoiRefundResponse, _err error) {
+	runtime := &util.RuntimeOptions{}
+	headers := make(map[string]*string)
+	_result = &NotifyPoiRefundResponse{}
+	_body, _err := client.NotifyPoiRefundEx(request, headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = _body
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 退款结果通知
+//
+// Summary: 退款结果通知
+func (client *Client) NotifyPoiRefundEx(request *NotifyPoiRefundRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *NotifyPoiRefundResponse, _err error) {
+	_err = util.ValidateModel(request)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = &NotifyPoiRefundResponse{}
+	_body, _err := client.DoRequest(tea.String("1.0"), tea.String("antsecuritytech.gateway.poi.refund.notify"), tea.String("HTTPS"), tea.String("POST"), tea.String("/gateway.do"), tea.ToMap(request), headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_err = tea.Convert(_body, &_result)
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 余额查询
+//
+// Summary: 余额查询
+func (client *Client) QueryPoiFund(request *QueryPoiFundRequest) (_result *QueryPoiFundResponse, _err error) {
+	runtime := &util.RuntimeOptions{}
+	headers := make(map[string]*string)
+	_result = &QueryPoiFundResponse{}
+	_body, _err := client.QueryPoiFundEx(request, headers, runtime)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = _body
+	return _result, _err
+}
+
+// Description:
+//
+// Description: 余额查询
+//
+// Summary: 余额查询
+func (client *Client) QueryPoiFundEx(request *QueryPoiFundRequest, headers map[string]*string, runtime *util.RuntimeOptions) (_result *QueryPoiFundResponse, _err error) {
+	_err = util.ValidateModel(request)
+	if _err != nil {
+		return _result, _err
+	}
+	_result = &QueryPoiFundResponse{}
+	_body, _err := client.DoRequest(tea.String("1.0"), tea.String("antsecuritytech.gateway.poi.fund.query"), tea.String("HTTPS"), tea.String("POST"), tea.String("/gateway.do"), tea.ToMap(request), headers, runtime)
 	if _err != nil {
 		return _result, _err
 	}
