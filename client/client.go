@@ -1130,6 +1130,58 @@ func (s *RiskResult) SetSolutionCode(v string) *RiskResult {
 	return s
 }
 
+// 资金体
+type FundItem struct {
+	// fund_type
+	// example:
+	//
+	// PET
+	FundType *string `json:"fund_type,omitempty" xml:"fund_type,omitempty" require:"true"`
+	// available_amount
+	// example:
+	//
+	// 300.00
+	AvailableAmount *string `json:"available_amount,omitempty" xml:"available_amount,omitempty" require:"true"`
+	// frozen_amount
+	// example:
+	//
+	// 300.00
+	CanRefundAmount *string `json:"can_refund_amount,omitempty" xml:"can_refund_amount,omitempty"`
+	// frozen_amount
+	// example:
+	//
+	// 300.00
+	FrozenAmount *string `json:"frozen_amount,omitempty" xml:"frozen_amount,omitempty" require:"true"`
+}
+
+func (s FundItem) String() string {
+	return tea.Prettify(s)
+}
+
+func (s FundItem) GoString() string {
+	return s.String()
+}
+
+func (s *FundItem) SetFundType(v string) *FundItem {
+	s.FundType = &v
+	return s
+}
+
+func (s *FundItem) SetAvailableAmount(v string) *FundItem {
+	s.AvailableAmount = &v
+	return s
+}
+
+func (s *FundItem) SetCanRefundAmount(v string) *FundItem {
+	s.CanRefundAmount = &v
+	return s
+}
+
+func (s *FundItem) SetFrozenAmount(v string) *FundItem {
+	s.FrozenAmount = &v
+	return s
+}
+
 // 业务参数
 type BizParam struct {
 	// 参数类型枚举，mobile、cert、biz_license
@@ -3304,6 +3356,55 @@ func (s *SimCampaignInfo) SetContent(v string) *SimCampaignInfo {
 	return s
 }
 
+// 订单资金明细
+type OrderFundItem struct {
+	// order_id
+	// example:
+	//
+	// METL202004041220123456
+	OrderId *string `json:"order_id,omitempty" xml:"order_id,omitempty" require:"true"`
+	// trade_no
+	// example:
+	//
+	// METL202004041220123456
+	TradeNo *string `json:"trade_no,omitempty" xml:"trade_no,omitempty" require:"true"`
+	// amount
+	// example:
+	//
+	// 300.00
+	Amount *string `json:"amount,omitempty" xml:"amount,omitempty" require:"true"`
+	// 详细
+	Details []*FundItem `json:"details,omitempty" xml:"details,omitempty" require:"true" type:"Repeated"`
+}
+
+func (s OrderFundItem) String() string {
+	return tea.Prettify(s)
+}
+
+func (s OrderFundItem) GoString() string {
+	return s.String()
+}
+
+func (s *OrderFundItem) SetOrderId(v string) *OrderFundItem {
+	s.OrderId = &v
+	return s
+}
+
+func (s *OrderFundItem) SetTradeNo(v string) *OrderFundItem {
+	s.TradeNo = &v
+	return s
+}
+
+func (s *OrderFundItem) SetAmount(v string) *OrderFundItem {
+	s.Amount = &v
+	return s
+}
+
+func (s *OrderFundItem) SetDetails(v []*FundItem) *OrderFundItem {
+	s.Details = v
+	return s
+}
+
 // 终端安全-Android应用加固-RuntimeProtectConfig
 type RuntimeProtectConfig struct {
 	// 重打包,签名校验,AndroidManifest防篡改,签名文件保护,0为检测到风险退出,1不处理
@@ -3435,98 +3536,6 @@ func (s *FaceShieldResult) SetRiskDesc(v string) *FaceShieldResult {
 
 func (s *FaceShieldResult) SetSugAction(v string) *FaceShieldResult {
 	s.SugAction = &v
-	return s
-}
-
-// 资金体
-type FundItem struct {
-	// 业务订单号（天枢biz_order_no转名；订单不存在时为空）
-	// example:
-	//
-	// METL202004041220123456
-	OrderId *string `json:"order_id,omitempty" xml:"order_id,omitempty" require:"true"`
-	// 关联交易单号（天枢原样透传）
-	// example:
-	//
-	// TN1001
-	TradeNo *string `json:"trade_no,omitempty" xml:"trade_no,omitempty" require:"true"`
-	// 订单支付金额（订单实收；无单=0）单位元两位小数
-	// example:
-	//
-	// 1300.00
-	Amount *string `json:"amount,omitempty" xml:"amount,omitempty" require:"true"`
-	// 活体金额（明细PET行商品金额聚合，下单口径不可变事实；无明细=0）
-	// example:
-	//
-	// 800.00
-	PetAmount *string `json:"pet_amount,omitempty" xml:"pet_amount,omitempty" require:"true"`
-	// 商城金额（明细POINT_PACKAGE/GOODS行商品金额聚合；无明细=0）
-	// example:
-	//
-	// 500.00
-	MallAmount *string `json:"mall_amount,omitempty" xml:"mall_amount,omitempty"`
-	// 活体可用金额（该笔PET账户行available；无行=0）
-	// example:
-	//
-	// 795.06
-	PetAvailableAmount *string `json:"pet_available_amount,omitempty" xml:"pet_available_amount,omitempty"`
-	// 商城可用余额（POINT_PACKAGE/GOODS行available合计，不含冻结；无行=0）
-	// example:
-	//
-	// 200.00
-	MallAvailableAmount *string `json:"mall_available_amount,omitempty" xml:"mall_available_amount,omitempty"`
-	// 商城冻结金额（POINT_PACKAGE行frozen；无冻结=0）
-	// example:
-	//
-	// 0.00
-	MallFrozenAmount *string `json:"mall_frozen_amount,omitempty" xml:"mall_frozen_amount,omitempty"`
-}
-
-func (s FundItem) String() string {
-	return tea.Prettify(s)
-}
-
-func (s FundItem) GoString() string {
-	return s.String()
-}
-
-func (s *FundItem) SetOrderId(v string) *FundItem {
-	s.OrderId = &v
-	return s
-}
-
-func (s *FundItem) SetTradeNo(v string) *FundItem {
-	s.TradeNo = &v
-	return s
-}
-
-func (s *FundItem) SetAmount(v string) *FundItem {
-	s.Amount = &v
-	return s
-}
-
-func (s *FundItem) SetPetAmount(v string) *FundItem {
-	s.PetAmount = &v
-	return s
-}
-
-func (s *FundItem) SetMallAmount(v string) *FundItem {
-	s.MallAmount = &v
-	return s
-}
-
-func (s *FundItem) SetPetAvailableAmount(v string) *FundItem {
-	s.PetAvailableAmount = &v
-	return s
-}
-
-func (s *FundItem) SetMallAvailableAmount(v string) *FundItem {
-	s.MallAvailableAmount = &v
-	return s
-}
-
-func (s *FundItem) SetMallFrozenAmount(v string) *FundItem {
-	s.MallFrozenAmount = &v
 	return s
 }
 
@@ -12293,7 +12302,7 @@ type CreatePoiMallorderRequest struct {
 	// 商品名称
 	GoodsName *string `json:"goods_name,omitempty" xml:"goods_name,omitempty" require:"true"`
 	// 结算金额（元，两位小数，≤point_amount）
-	SettleAmount *string `json:"settle_amount,omitempty" xml:"settle_amount,omitempty" require:"true"`
+	ProductAmount *string `json:"product_amount,omitempty" xml:"product_amount,omitempty" require:"true"`
 	// 冻结金额（元，两位小数，冻结/出账/分账基数）
 	PointAmount *string `json:"point_amount,omitempty" xml:"point_amount,omitempty" require:"true"`
 }
@@ -12346,8 +12355,8 @@ func (s *CreatePoiMallorderRequest) SetGoodsName(v string) *CreatePoiMallorderRe
 	return s
 }
 
-func (s *CreatePoiMallorderRequest) SetSettleAmount(v string) *CreatePoiMallorderRequest {
-	s.SettleAmount = &v
+func (s *CreatePoiMallorderRequest) SetProductAmount(v string) *CreatePoiMallorderRequest {
+	s.ProductAmount = &v
 	return s
 }
 
@@ -12419,8 +12428,8 @@ type UpdatePoiOrderRequest struct {
 	MerchantId *string `json:"merchant_id,omitempty" xml:"merchant_id,omitempty"`
 	// 商城订单号
 	OrderId *string `json:"order_id,omitempty" xml:"order_id,omitempty" require:"true"`
-	// 订单状态：SHIPPED-已发货 / RECEIVED-已确认收货 / CANCELED-已取消
-	Status *string `json:"status,omitempty" xml:"status,omitempty" require:"true"`
+	// 履约状态：SHIPPED-已发货 / RECEIVED-已确认收货
+	FulfillStatus *string `json:"fulfill_status,omitempty" xml:"fulfill_status,omitempty" require:"true"`
 	// 状态发生业务时间，格式yyyy-MM-dd HH:mm:ss，建议传入便于对账
 	StatusGmt *string `json:"status_gmt,omitempty" xml:"status_gmt,omitempty"`
 }
@@ -12458,8 +12467,8 @@ func (s *UpdatePoiOrderRequest) SetOrderId(v string) *UpdatePoiOrderRequest {
 	return s
 }
 
-func (s *UpdatePoiOrderRequest) SetStatus(v string) *UpdatePoiOrderRequest {
-	s.Status = &v
+func (s *UpdatePoiOrderRequest) SetFulfillStatus(v string) *UpdatePoiOrderRequest {
+	s.FulfillStatus = &v
 	return s
 }
 
@@ -12477,7 +12486,7 @@ type UpdatePoiOrderResponse struct {
 	ResultMsg *string `json:"result_msg,omitempty" xml:"result_msg,omitempty"`
 	// 商城订单号（回显）
 	OrderId *string `json:"order_id,omitempty" xml:"order_id,omitempty" require:"true"`
-	// 更新结果：Y-更新成功 / N-更新失败
+	// 更新结果
 	UpdateResult *string `json:"update_result,omitempty" xml:"update_result,omitempty" require:"true"`
 	// 失败原因（成功为空）：状态非法/在途拦截等
 	FailReason *string `json:"fail_reason,omitempty" xml:"fail_reason,omitempty"`
@@ -12993,8 +13002,8 @@ type QueryPoiFundResponse struct {
 	ResultCode *string `json:"result_code,omitempty" xml:"result_code,omitempty"`
 	// 异常信息的文本描述
 	ResultMsg *string `json:"result_msg,omitempty" xml:"result_msg,omitempty"`
-	// 资金列表
-	FundList []*FundItem `json:"fund_list,omitempty" xml:"fund_list,omitempty" type:"Repeated"`
+	// 订单列表
+	FundList []*OrderFundItem `json:"fund_list,omitempty" xml:"fund_list,omitempty" type:"Repeated"`
 }
 
 func (s QueryPoiFundResponse) String() string {
@@ -13020,7 +13029,7 @@ func (s *QueryPoiFundResponse) SetResultMsg(v string) *QueryPoiFundResponse {
 	return s
 }
 
-func (s *QueryPoiFundResponse) SetFundList(v []*FundItem) *QueryPoiFundResponse {
+func (s *QueryPoiFundResponse) SetFundList(v []*OrderFundItem) *QueryPoiFundResponse {
 	s.FundList = v
 	return s
 }
@@ -17582,7 +17591,7 @@ func (client *Client) DoRequest(version *string, action *string, protocol *strin
 				"req_msg_id":       antchainutil.GetNonce(),
 				"access_key":       client.AccessKeyId,
 				"base_sdk_version": tea.String("TeaSDK-2.0"),
-				"sdk_version":      tea.String("1.7.29"),
+				"sdk_version":      tea.String("1.7.30"),
 				"_prod_code":       tea.String("SECURITYTECH"),
 				"_prod_channel":    tea.String("undefined"),
 			}
