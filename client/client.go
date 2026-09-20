@@ -1152,6 +1152,11 @@ type FundItem struct {
 	//
 	// 300.00
 	FrozenAmount *string `json:"frozen_amount,omitempty" xml:"frozen_amount,omitempty" require:"true"`
+	// 原价
+	// example:
+	//
+	// 300.00
+	OriginalAmount *string `json:"original_amount,omitempty" xml:"original_amount,omitempty" require:"true"`
 }
 
 func (s FundItem) String() string {
@@ -1179,6 +1184,11 @@ func (s *FundItem) SetCanRefundAmount(v string) *FundItem {
 
 func (s *FundItem) SetFrozenAmount(v string) *FundItem {
 	s.FrozenAmount = &v
+	return s
+}
+
+func (s *FundItem) SetOriginalAmount(v string) *FundItem {
+	s.OriginalAmount = &v
 	return s
 }
 
@@ -12856,7 +12866,7 @@ type NotifyPoiRefundRequest struct {
 	// 活体部分退款金额（渠道报文）
 	PetRefundAmount *string `json:"pet_refund_amount,omitempty" xml:"pet_refund_amount,omitempty"`
 	// 商城部分退款金额
-	MallRefundAmount *string `json:"mall_refund_amount,omitempty" xml:"mall_refund_amount,omitempty" require:"true"`
+	MallRefundAmount *string `json:"mall_refund_amount,omitempty" xml:"mall_refund_amount,omitempty"`
 	// 退款状态：SUCCESS / FAILED（FAILED时金额恢复可用余额）
 	RefundStatus *string `json:"refund_status,omitempty" xml:"refund_status,omitempty" require:"true"`
 	// 买家用户id（商城报文携带）
@@ -17591,7 +17601,7 @@ func (client *Client) DoRequest(version *string, action *string, protocol *strin
 				"req_msg_id":       antchainutil.GetNonce(),
 				"access_key":       client.AccessKeyId,
 				"base_sdk_version": tea.String("TeaSDK-2.0"),
-				"sdk_version":      tea.String("1.7.30"),
+				"sdk_version":      tea.String("1.7.31"),
 				"_prod_code":       tea.String("SECURITYTECH"),
 				"_prod_channel":    tea.String("undefined"),
 			}
